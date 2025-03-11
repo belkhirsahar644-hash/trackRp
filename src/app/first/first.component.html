@@ -1,0 +1,11 @@
+<app-header></app-header>
+
+<div class="layout">
+  <app-sider (sidebarToggle)="handleSidebarToggle($event)"></app-sider> <!-- Sidebar -->
+
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<app-footer></app-footer>

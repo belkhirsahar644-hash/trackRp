@@ -1,0 +1,51 @@
+<div class="container">
+  <div class=" d-flex justify-content-between">
+    <h3>Liste des Véhicules</h3>
+    <button class="btn btn-primary" (click)="toggleForm()">Ajouter un véhicule</button>
+  </div>
+  <div >
+    <table class="table table-striped" width="100%">
+      <thead>
+        <tr>
+          <th>Matricule</th>
+          <th>Marque</th>
+          <th>Modèle</th>
+          <th>Statut</th>
+          <th>Conducteur</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let device of vehicules">
+          <td>{{ device.uniqueId }}</td>
+          <td> {{ device.name }}</td>
+          <td>{{ device.model }}</td>
+          <td>
+            <span [ngClass]="{
+              'badge bg-success': device.status === 'online',
+              'badge bg-warning': device.status === 'unknown',
+              'badge bg-danger': device.status === 'offline'
+            }">
+              {{ device.status }}
+            </span>
+          </td>
+          <td>
+            <span *ngIf="false; else noDriver">
+              Conducteur ID: 123
+            </span>
+            <ng-template #noDriver>
+              <span class="badge bg-secondary">Aucun conducteur</span>
+            </ng-template>
+          </td>
+          <td>
+            <button (click)="editVehicle(device)">modifier</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="showForm">
+    <app-add-vehicule [device]="selectedDevice" (addEvent)="loadDevices()"></app-add-vehicule>
+  </div>
+</div>
+

@@ -1,0 +1,45 @@
+  <div class="container">
+    <div class=" d-flex justify-content-between">
+      <h3>Liste des Véhicules</h3>
+      <button class="btn btn-primary" (click)="toggleForm()">Ajouter un véhicule</button>
+    </div>
+    <div class="">
+      <table class="table table-striped" width="100%">
+        <thead>
+          <tr>
+            <th>Matricule</th>
+            <th>Modèle</th>
+            <th>Statut</th>
+            <th>Conducteur</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let conducteur of conducteurs">
+            <td>{{ conducteur.matricule }}</td>
+            <td>{{ conducteur.model }}</td>
+            <td>
+              <span [ngClass]="{
+                'badge bg-success': conducteur.statut === 'online',
+                'badge bg-warning': conducteur.statut === 'unknown',
+                'badge bg-danger': conducteur.statut === 'offline'
+              }">
+                {{ conducteur.statut }}
+              </span>
+            </td>
+            <td>
+              <span *ngIf="conducteur.driverId; else noDriver">
+                Conducteur ID: {{ conducteur.driverId }}
+              </span>
+              <ng-template #noDriver>
+                <span class="badge bg-secondary">Aucun conducteur</span>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="showForm">
+      <app-addconducteur></app-addconducteur>
+    </div>
+  </div>
+

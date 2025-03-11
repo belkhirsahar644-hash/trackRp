@@ -1,0 +1,14 @@
+<div class="container">
+  <h2>Ajouter un Conducteur</h2>
+  <form (submit)="addDriver(); $event.preventDefault()">
+    <label for="name">Nom du conducteur:</label>
+    <input type="text" id="name" [(ngModel)]="driverName" name="name" required>
+
+    <label for="uniqueId">Identifiant Unique:</label>
+    <input type="text" id="uniqueId" [(ngModel)]="uniqueId" name="uniqueId" required>
+
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <p *ngIf="message">{{ message }}</p>
+</div>
