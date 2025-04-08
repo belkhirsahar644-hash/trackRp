@@ -2,12 +2,12 @@ import {Component} from '@angular/core';
 
 
 @Component({
-  selector: 'app-first',
+  selector: 'app-layout',
   standalone: false,
-  templateUrl: './first.component.html',
-  styleUrl: './first.component.scss'
+  templateUrl: './layout.component.html',
+  styleUrl: './layout.component.scss'
 })
-export class FirstComponent {
+export class LayoutComponent {
   isSiderOpen: boolean = false; // Déclarez et initialisez la propriété
 
 

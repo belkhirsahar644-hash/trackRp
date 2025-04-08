@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FirstComponent } from './first/first.component';
 import { RouterModule } from '@angular/router';
 import { DashboardsModule } from './dashboards/dashboards.module';
 import { FormulaireModule } from "./formulaire/formulaire.module";
@@ -26,6 +25,7 @@ import {registerLocaleData} from '@angular/common';
 import fr from '@angular/common/locales/fr';
 const icons = [UserOutline, VideoCameraOutline, UploadOutline];
 import { provideNzI18n, fr_FR } from 'ng-zorro-antd/i18n';
+import {LayoutComponent} from './layout/layout.component';
 registerLocaleData(fr);
 
 
@@ -35,7 +35,7 @@ registerLocaleData(fr);
   declarations: [
     AppComponent,
     LoginComponent,
-    FirstComponent,
+    LayoutComponent,
 
 
 
