@@ -48,6 +48,3 @@
   <app-add-superviseur [isVisibleS]="showForm" [superviseur]="selectedSup" (addEvent)="loadSuperviseur() ; showForm=false" (cancelEvent)="showForm =false"></app-add-superviseur>
 
 </div>
-<div *ngIf="showdeleteModalS">
-  <app-delete-superviseur [superviseurs]="selectedSup" (deleteSEvent)="loadSuperviseur(); showdeleteModalS= false"></app-delete-superviseur>
-</div>

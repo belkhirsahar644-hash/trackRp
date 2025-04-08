@@ -17,7 +17,6 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { RouterModule } from '@angular/router';
-import { DeleteModule } from '../delete/delete.module';
 
 @NgModule({
   declarations: [
@@ -27,12 +26,12 @@ import { DeleteModule } from '../delete/delete.module';
     SuperviseurComponent,
   ],
   imports: [
-    CommonModule,RouterModule, 
+    CommonModule,RouterModule,
     FormulaireModule,
     NzButtonModule,
     NzModalModule,
     BrowserAnimationsModule,
-    NzDividerModule, DeleteModule,NzModalModule, NzCardModule, NzGridModule,
+    NzDividerModule,NzModalModule, NzCardModule, NzGridModule,
 
     FormsModule, NzButtonModule, NzDropDownModule, NzIconModule, NzInputModule, NzTableModule
 

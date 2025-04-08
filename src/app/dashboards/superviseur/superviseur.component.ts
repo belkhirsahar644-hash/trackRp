@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Superviseur, SuperviseurService } from '../../superviseur.service';
+import { Superviseur, SuperviseurService } from '../../services/superviseur.service';
 import { Subject } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 

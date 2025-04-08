@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { CardsService } from '../../cards.service';
-import { Superviseur } from '../../superviseur.service';
-import { Device } from '../../vehicule.service';
-import { Driver } from '../../conducteurs.service';
+import { CardsService } from '../../services/cards.service';
+import { Superviseur } from '../../services/superviseur.service';
+import { Device } from '../../services/vehicule.service';
+import { Driver } from '../../services/conducteurs.service';
 import { catchError, of } from 'rxjs';
 
 @Component({

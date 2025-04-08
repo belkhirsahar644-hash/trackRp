@@ -46,7 +46,3 @@
 <div *ngIf="showForm">
     <app-addconducteur [isVisibleC]="showForm" [driver]= "selectedDriver" (addEvent)="loadDriver(); showForm=false" (cancelEvent)="showForm =false"></app-addconducteur>
 </div>
-
-<div *ngIf="showdeleteModal">
-    <app-delete-conducteur [driver]="selectedDriver" (deleteEvent)="loadDriver(); showdeleteModal= false" > </app-delete-conducteur>
-</div>

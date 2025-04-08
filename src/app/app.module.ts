@@ -20,7 +20,7 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { UserOutline, VideoCameraOutline, UploadOutline } from '@ant-design/icons-angular/icons';
-import { JwtInterceptorService } from './jwt-interceptor.service';
+import { JwtInterceptorService } from './services/jwt-interceptor.service';
 import { MapComponent } from './map/map.component';
 
 const icons = [UserOutline, VideoCameraOutline, UploadOutline];
@@ -35,7 +35,7 @@ const icons = [UserOutline, VideoCameraOutline, UploadOutline];
     AppComponent,
     LoginComponent,
     FirstComponent,
-    
+
 
 
   ],

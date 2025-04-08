@@ -45,10 +45,6 @@
 <div *ngIf="showForm">
   <app-add-vehicule [isVisibleV]="showForm" [device]="selectedDevice" (addEvent)="loadVehicule(); showForm=false " (cancelEvent)="showForm = false"></app-add-vehicule>
 </div>
-<div *ngIf="showdeleteModalV">
-  <app-delete-vehicule [device]="selectedDevice" (deleteEvent)="loadVehicule(); showdeleteModalV= false"> </app-delete-vehicule>
-
-</div>
 
 <!--<div class="container">
   <div class=" d-flex justify-content-between">

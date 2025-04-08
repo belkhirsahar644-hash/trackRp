@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-
+import {Component} from '@angular/core';
 
 
 @Component({
@@ -8,12 +7,12 @@ import { Component } from '@angular/core';
   templateUrl: './first.component.html',
   styleUrl: './first.component.scss'
 })
-export class FirstComponent  {
+export class FirstComponent {
   isSiderOpen: boolean = false; // Déclarez et initialisez la propriété
 
 
-   // Capturer l'état du sidebar et le transmettre au composant Cards
-    handleSidebarToggle(isOpen: boolean) {
+  // Capturer l'état du sidebar et le transmettre au composant Cards
+  handleSidebarToggle(isOpen: boolean) {
     this.isSiderOpen = isOpen;
   }
 }

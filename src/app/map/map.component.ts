@@ -5,7 +5,7 @@ import {Component, OnInit,
   OnDestroy
 } from '@angular/core';
 import { Map, NavigationControl, Marker } from 'maplibre-gl';
-import { MapService } from '../map.service';
+import { MapService } from '../services/map.service';
 
 @Component({
   selector: 'app-map',

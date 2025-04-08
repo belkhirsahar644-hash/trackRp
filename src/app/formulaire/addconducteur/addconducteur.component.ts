@@ -1,5 +1,5 @@
-import { AddconducteurService} from '../../addconducteur.service';
-import { Driver } from '../../conducteurs.service';
+import { AddconducteurService} from '../../services/addconducteur.service';
+import { Driver } from '../../services/conducteurs.service';
 import { Component, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {FormGroup,FormControl,NonNullableFormBuilder,Validators} from '@angular/forms';
 import { Subject } from 'rxjs';

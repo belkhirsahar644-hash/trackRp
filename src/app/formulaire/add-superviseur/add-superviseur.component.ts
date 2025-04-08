@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators, NonNullableFormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { AddsupervieurService } from '../../addsupervieur.service';
-import { Superviseur } from '../../superviseur.service';
+import { AddsupervieurService } from '../../services/addsupervieur.service';
+import { Superviseur } from '../../services/superviseur.service';
 
 @Component({
   standalone: false,

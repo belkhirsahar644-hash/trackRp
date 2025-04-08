@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, Input, Output, EventEmitter, model } from '@angular/core';
-import { AddvehiculeService } from '../../addvehicule.service';
-import { Device } from '../../vehicule.service';
+import { AddvehiculeService } from '../../services/addvehicule.service';
+import { Device } from '../../services/vehicule.service';
 import {FormGroup,FormControl,NonNullableFormBuilder,Validators} from '@angular/forms';
 import { Subject } from 'rxjs';
 

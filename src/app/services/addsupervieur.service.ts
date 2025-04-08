@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Superviseur } from './superviseur.service';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environment.development';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'

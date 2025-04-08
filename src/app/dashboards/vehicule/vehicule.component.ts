@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Device, VehiculeService } from '../../vehicule.service';
+import { Device, VehiculeService } from '../../services/vehicule.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
