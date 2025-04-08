@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { Subject } from 'rxjs';
-import { Device, VehiculeService } from '../../services/vehicule.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component} from '@angular/core';
+import {Subject} from 'rxjs';
+import {Device, VehiculeService} from '../../services/vehicule.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {DeletevehiculeService} from '../../services/deletevehicule.service';
 
 @Component({
   selector: 'app-vehicule',
@@ -9,9 +10,9 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   templateUrl: './vehicule.component.html',
   styleUrl: './vehicule.component.scss'
 })
-export class VehiculeComponent  {
+export class VehiculeComponent {
 
-  selectedDevice: Device =  {
+  selectedDevice: Device = {
     model: '',
     name: '',
     uniqueId: ''
@@ -24,7 +25,13 @@ export class VehiculeComponent  {
   private unsubscribe$ = new Subject<void>();
   listOfDisplayData = [...this.device];
 
-  constructor( private vehiculeService :VehiculeService, private modal: NzModalService ){}
+  constructor(
+    private vehiculeService: VehiculeService,
+    private modal: NzModalService,
+    private deletevehiculeService: DeletevehiculeService
+  ) {
+  }
+
   openDeleteModalV(device: Device): void {
     this.selectedDevice = device;
     this.showdeleteModalV = true;
@@ -42,6 +49,7 @@ export class VehiculeComponent  {
     console.log("Formulaire affiché:", this.showForm);
 
   }
+
   loadVehicule() {
     this.vehiculeService.getVehicule().subscribe(
       {
@@ -55,24 +63,27 @@ export class VehiculeComponent  {
       }
     )
   }
+
   reset(): void {
     this.searchValue = '';
     this.search();
   }
+
   search(): void {
     this.visible = false;
     this.listOfDisplayData = this.device.filter((item: Device) => item.uniqueId.indexOf(this.searchValue) !== -1);
   }
+
   // Fonction pour afficher ou cacher le formulaire
 
-toggleForm(): void {
-  this.selectedDevice = {
-    model: '',
-    name: '',
-    uniqueId: ''
-  };
-  this.showForm = !this.showForm;
-}
+  toggleForm(): void {
+    this.selectedDevice = {
+      model: '',
+      name: '',
+      uniqueId: ''
+    };
+    this.showForm = !this.showForm;
+  }
 
   ngOnDestroy(): void {
     this.unsubscribe$.next(); // Déclenche l'arrêt des abonnements
@@ -81,4 +92,13 @@ toggleForm(): void {
   }
 
 
+  deleteVehicle(data: Device) {
+    this.deletevehiculeService.deleteVehicule(data).subscribe(
+      {
+        next: (value) => {
+          this.loadVehicule()
+        }
+      }
+    )
+  }
 }

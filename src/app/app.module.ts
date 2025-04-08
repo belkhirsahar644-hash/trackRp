@@ -22,10 +22,11 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { UserOutline, VideoCameraOutline, UploadOutline } from '@ant-design/icons-angular/icons';
 import { JwtInterceptorService } from './services/jwt-interceptor.service';
 import { MapComponent } from './map/map.component';
-
+import {registerLocaleData} from '@angular/common';
+import fr from '@angular/common/locales/fr';
 const icons = [UserOutline, VideoCameraOutline, UploadOutline];
-
-
+import { provideNzI18n, fr_FR } from 'ng-zorro-antd/i18n';
+registerLocaleData(fr);
 
 
 
@@ -59,7 +60,7 @@ schemas: [CUSTOM_ELEMENTS_SCHEMA],
     provide: HTTP_INTERCEPTORS,
     useClass: JwtInterceptorService,
     multi: true
-}
+}, provideNzI18n(fr_FR)
   ],
   bootstrap: [AppComponent],
 

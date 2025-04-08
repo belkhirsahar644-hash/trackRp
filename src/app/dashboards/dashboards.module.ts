@@ -17,6 +17,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { RouterModule } from '@angular/router';
+import {NzPopconfirmModule} from 'ng-zorro-antd/popconfirm';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [
     CommonModule,RouterModule,
+    NzPopconfirmModule,
     FormulaireModule,
     NzButtonModule,
     NzModalModule,
