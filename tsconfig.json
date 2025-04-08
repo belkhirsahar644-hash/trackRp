@@ -3,6 +3,9 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,

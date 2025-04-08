@@ -1,24 +1,9 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { interval, Subscription } from 'rxjs';
+import { Component } from '@angular/core';
+import { CardsService } from '../../cards.service';
+import { Superviseur } from '../../superviseur.service';
+import { Device } from '../../vehicule.service';
+import { Driver } from '../../conducteurs.service';
 import { catchError, of } from 'rxjs';
-import { DashboardService } from '../../dashboard.service';
-// Interfaces pour typer les données reçues depuis Traccar
-interface Device {
-  id: number;
-  name: string;
-}
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  administrator: boolean;
-}
-
-interface Driver {
-  id: number;
-  name: string;
-}
 
 @Component({
   selector: 'app-cards',
@@ -26,33 +11,21 @@ interface Driver {
   templateUrl: './cards.component.html',
   styleUrls: ['./cards.component.scss']
 })
-export class CardsComponent implements OnInit, OnDestroy {
-  @Input() isSidebarOpen: boolean = false; // Propriété pour l'état de la sidebar
-
+export class CardsComponent  {
   vehicleCount = 0;
   supervisorCount = 0;
   driverCount = 0;
-  updateInterval = 10000; // Rafraîchissement toutes les 10 secondes
-  private subscription!: Subscription;
+  isLoading = true;  // Variable pour l'état de chargement
 
-  constructor(private dashboardService: DashboardService) {}
-
+  constructor(private cardsService:CardsService ) {}
   ngOnInit() {
+    console.log("🔄 CardsComponent chargé !");
     this.fetchData();
-    // Actualiser les données toutes les 10 secondes
-    this.subscription = interval(this.updateInterval).subscribe(() => this.fetchData());
-  }
-
-  ngOnDestroy() {
-    // Éviter les fuites mémoire
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 
   fetchData() {
     // Récupération du nombre de véhicules
-    this.dashboardService.getDevices()
+    this.cardsService.getVehicule()
       .pipe(
         catchError(error => {
           console.error('❌ Erreur API devices:', error);
@@ -62,23 +35,28 @@ export class CardsComponent implements OnInit, OnDestroy {
       .subscribe((devices: Device[]) => {
         console.log('✅ Véhicules récupérés:', devices);
         this.vehicleCount = devices.length;
+        this.checkLoadingStatus();  // Vérifie si toutes les données sont chargées
+
       });
 
     // Récupération du nombre d'utilisateurs
-    this.dashboardService.getUsers()
+    this.cardsService.getSuperviseur()
       .pipe(
         catchError(error => {
           console.error('❌ Erreur API users:', error);
           return of([]); // Retourne un tableau vide en cas d'erreur
         })
       )
-      .subscribe((users: User[]) => {
-        console.log('✅ Utilisateurs récupérés:', users);
-        this.supervisorCount = users.filter(user => user.administrator).length;
+      .subscribe((superviseur: Superviseur[]) => {
+        console.log('✅ Utilisateurs récupérés:', superviseur);
+        this.supervisorCount = superviseur.length;
+        this.checkLoadingStatus();  // Vérifie si toutes les données sont chargées
+
+        //this.supervisorCount = superviseur.filter(user => user.administrator).length;
       });
 
     // Récupération du nombre de conducteurs
-    this.dashboardService.getDrivers()
+    this.cardsService.getDriver()
       .pipe(
         catchError(error => {
           console.error('❌ Erreur API drivers:', error);
@@ -88,6 +66,14 @@ export class CardsComponent implements OnInit, OnDestroy {
       .subscribe((drivers: Driver[]) => {
         console.log('✅ Conducteurs récupérés:', drivers);
         this.driverCount = drivers.length;
+        this.checkLoadingStatus();  // Vérifie si toutes les données sont chargées
+
       });
+
+  }
+  checkLoadingStatus() {
+    if (this.vehicleCount && this.supervisorCount && this.driverCount) {
+      this.isLoading = false; // Désactive l'indicateur de chargement
+    }
   }
 }

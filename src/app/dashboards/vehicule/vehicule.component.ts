@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { interval, Subscription, Subject } from 'rxjs';
+import { Component } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Device, VehiculeService } from '../../vehicule.service';
-import { takeUntil } from 'rxjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
+
 @Component({
   selector: 'app-vehicule',
   standalone: false,
@@ -9,59 +10,60 @@ import { takeUntil } from 'rxjs';
   styleUrl: './vehicule.component.scss'
 })
 export class VehiculeComponent  {
-  //@Input() → Indique que cette variable provient du composant parent.
-  @Input() isSidebarOpen: boolean = false;
+
   selectedDevice: Device =  {
     model: '',
     name: '',
     uniqueId: ''
-  };
-  vehicules: Device[] = [];
-  private subscription!: Subscription;
-  private updateInterval = 5000;
-  private unsubscribe$ = new Subject<void>();
+  }
+  device: Device[] = [];
   showForm: boolean = false;
-  constructor( private vehiculeService :VehiculeService ){}
-  ngOnInit(): void {
-    this.loadDevices(); // 1️⃣ Charger les vehicules immédiatement
+  showdeleteModalV: boolean = false;
+  searchValue = '';
+  visible = false;
+  private unsubscribe$ = new Subject<void>();
+  listOfDisplayData = [...this.device];
 
+  constructor( private vehiculeService :VehiculeService, private modal: NzModalService ){}
+  openDeleteModalV(device: Device): void {
+    this.selectedDevice = device;
+    this.showdeleteModalV = true;
+  }
+
+  ngOnInit(): void {
+    this.loadVehicule();
 
   }
 
   editVehicle(device: Device) {
     this.selectedDevice = {...device};
+    console.log("Véhicule sélectionné:", this.selectedDevice);
     this.showForm = true;
-  }
-
-  ngOnDestroy(): void {
-    this.unsubscribe$.next(); // Déclenche l'arrêt des abonnements
-    this.unsubscribe$.complete(); // Libère la mémoire
+    console.log("Formulaire affiché:", this.showForm);
 
   }
-
-  loadDevices() {
-    this.vehiculeService.getDevices().subscribe(
+  loadVehicule() {
+    this.vehiculeService.getVehicule().subscribe(
       {
         next: (value) => {
-          this.vehicules = value;
+          this.device = value;
+          this.listOfDisplayData = [...this.device];
+        },
+        error: (err) => {
+          console.error('Erreur lors du chargement des véhicules:', err);
         }
       }
     )
   }
-
-
-
-   loadConducteurs(): void {
-    this.showForm = false;
-    this.vehiculeService.getVehicule().subscribe(([devices, permissions]) => {
-     // this.vehicules = this.vehiculeService.associer(devices, permissions);
-      console.log('✅ Conducteurs mis à jour:', this.vehicules);
-    });
-
-
-
-}
-// Fonction pour afficher ou cacher le formulaire
+  reset(): void {
+    this.searchValue = '';
+    this.search();
+  }
+  search(): void {
+    this.visible = false;
+    this.listOfDisplayData = this.device.filter((item: Device) => item.uniqueId.indexOf(this.searchValue) !== -1);
+  }
+  // Fonction pour afficher ou cacher le formulaire
 
 toggleForm(): void {
   this.selectedDevice = {
@@ -71,4 +73,12 @@ toggleForm(): void {
   };
   this.showForm = !this.showForm;
 }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(); // Déclenche l'arrêt des abonnements
+    this.unsubscribe$.complete(); // Libère la mémoire
+
+  }
+
+
 }

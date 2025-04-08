@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-export interface superviseur{
-  id: number;
+import { HttpClient , HttpParams} from '@angular/common/http';
+import { environment } from '../environments/environment.development';
+export interface Superviseur{
+  "id"?: number;
   name: string;
   email: string;
   phone: string;
-
+  password: string;
+  supervisor: true
 }
 
 @Injectable({
@@ -13,31 +15,10 @@ export interface superviseur{
 })
 export class SuperviseurService {
 
-  constructor() { }
-}
+  constructor(private http: HttpClient) { }
+  getSuperviseur( ){
+    const params = new HttpParams().set('supervisor', 'true');
 
-/*
-{
-  "id": 0,
-  "name": "string",
-  "email": "string",
-  "phone": "string",
-  "readonly": true,
-  "administrator": true,
-  "map": "string",
-  "latitude": 0,
-  "longitude": 0,
-  "zoom": 0,
-  "password": "string",
-  "coordinateFormat": "string",
-  "disabled": true,
-  "expirationTime": "2019-08-24T14:15:22Z",
-  "deviceLimit": 0,
-  "userLimit": 0,
-  "deviceReadonly": true,
-  "limitCommands": true,
-  "fixedEmail": true,
-  "poiLayer": "string",
-  "attributes": {}
+    return this.http.get<Superviseur[]>(`${environment.apiURL}users`, { params });
+  }
 }
-*/

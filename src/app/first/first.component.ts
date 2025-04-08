@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { MenuModule } from '../menu/menu.module';
-import { DashboardsModule } from '../dashboards/dashboards.module';
+
+
 
 @Component({
   selector: 'app-first',

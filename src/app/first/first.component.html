@@ -1,11 +1,45 @@
-<app-header></app-header>
+<!--<app-header></app-header>
 
 <div class="layout">
-  <app-sider (sidebarToggle)="handleSidebarToggle($event)"></app-sider> <!-- Sidebar -->
+  <app-sider (sidebarToggle)="handleSidebarToggle($event)"></app-sider>
 
   <div class="container">
     <router-outlet></router-outlet>
   </div>
 </div>
 
-<app-footer></app-footer>
+<app-footer></app-footer>-->
+<nz-layout class="layout">
+  <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
+    <div class="logo"></div>
+    <ul nz-menu nzTheme="dark" nzMode="inline">
+      <li nz-menu-item>
+        <nz-icon nzType="user" />
+        <a routerLink="/home">🏠 Accueil</a>
+
+      </li>
+      <li nz-menu-item>
+        <nz-icon nzType="user" />
+        <a routerLink="/superviseur">👨‍💼 Gestion des superviseurs</a>
+      </li>
+      <li nz-menu-item>
+        <nz-icon nzType="user" />
+        <a  routerLink="/conducteur">🚗 Gestion des conducteurs</a>
+      </li>
+      <li nz-menu-item>
+        <nz-icon nzType="user" />
+        <a routerLink="/vehicule"> 🚗 Gestion des Véhicules </a>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header></nz-header>
+    <nz-content>
+      <div class="inner-content"><router-outlet></router-outlet></div>
+
+    </nz-content>
+    <nz-footer>© 2025 Rapide Poste . Tous droits réservés.</nz-footer>
+  </nz-layout>
+</nz-layout>
+
+

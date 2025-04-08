@@ -1,19 +1,22 @@
-<div class="cards-container" [class.sidebar-open]="isSidebarOpen">
-
-  <div class="card s">
-    <h3>Superviseurs</h3>
-    <p>Total : {{ supervisorCount }}</p>
-    <a href="#">Voir les détails →</a>
+<div style="background: #ECECEC; padding:30px;">
+  <div *ngIf="isLoading">Chargement...</div>
+  <div *ngIf="!isLoading">
+  <div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="Superviseurs">
+        <p>Total : {{ supervisorCount }}</p>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="Conducteurs">
+        <p>Total : {{ driverCount }}</p>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="Véhicules">
+        <p>Total : {{ vehicleCount }}</p>
+      </nz-card>
+    </div>
   </div>
-  <div class="card c">
-    <h3>Conducteurs</h3>
-    <p>Total : {{ driverCount }}</p>
-    <a href="#">Voir les détails →</a>
   </div>
-  <div class="card v">
-    <h3>Véhicules</h3>
-    <p>Total : {{ vehicleCount }}</p>
-    <a href="#">Voir les détails →</a>
-  </div>
-
 </div>

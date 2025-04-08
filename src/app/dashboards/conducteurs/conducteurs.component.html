@@ -1,45 +1,52 @@
-  <div class="container">
-    <div class=" d-flex justify-content-between">
-      <h3>Liste des Véhicules</h3>
-      <button class="btn btn-primary" (click)="toggleForm()">Ajouter un véhicule</button>
-    </div>
-    <div class="">
-      <table class="table table-striped" width="100%">
-        <thead>
-          <tr>
-            <th>Matricule</th>
-            <th>Modèle</th>
-            <th>Statut</th>
-            <th>Conducteur</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let conducteur of conducteurs">
-            <td>{{ conducteur.matricule }}</td>
-            <td>{{ conducteur.model }}</td>
-            <td>
-              <span [ngClass]="{
-                'badge bg-success': conducteur.statut === 'online',
-                'badge bg-warning': conducteur.statut === 'unknown',
-                'badge bg-danger': conducteur.statut === 'offline'
-              }">
-                {{ conducteur.statut }}
-              </span>
-            </td>
-            <td>
-              <span *ngIf="conducteur.driverId; else noDriver">
-                Conducteur ID: {{ conducteur.driverId }}
-              </span>
-              <ng-template #noDriver>
-                <span class="badge bg-secondary">Aucun conducteur</span>
-              </ng-template>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div *ngIf="showForm">
-      <app-addconducteur></app-addconducteur>
+<div class=" d-flex justify-content-between">
+  <h3>Liste des Conducteurs</h3>
+  <button nz-button  nzType="dashed" (click)="toggleForm()">Ajouter</button>
+    <br /><br />
+</div>
+
+<nz-table #nzTable [nzData]="listOfDisplayData" nzTableLayout="fixed">
+  <thead>
+    <tr>
+      <th nzCustomFilter>
+        Nom
+        <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
+          <nz-icon nzType="search" />
+        </nz-filter-trigger>
+      </th>
+      <th>Email</th>
+      <th>Téléphone</th>
+      <th nzCellControl="action">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (data of nzTable.data; track data.id) {
+      <tr>
+        <td>{{ data.name }}</td>
+        <td>{{ data.email }}</td>
+        <td>{{ data.phone}}</td>
+        <td nzCellControl="action">
+          <button nz-button nzType="dashed" (click)="editConducteur(data)">   Modifier </button>
+          <nz-divider nzType="vertical"></nz-divider>
+          <button nz-button nzType="dashed" (click)="openDeleteModal(data)">Supprimer </button>
+          <nz-divider nzType="vertical"></nz-divider>
+          <button nz-button nzType="dashed" routerLink="/map" >Map </button>     </tr>
+        }
+
+  </tbody>
+</nz-table>
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" />
+      <button  nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+      <button nz-button nzSize="small" (click)="reset()">Reset</button>
     </div>
   </div>
+</nz-dropdown-menu>
+<div *ngIf="showForm">
+    <app-addconducteur [isVisibleC]="showForm" [driver]= "selectedDriver" (addEvent)="loadDriver(); showForm=false" (cancelEvent)="showForm =false"></app-addconducteur>
+</div>
 
+<div *ngIf="showdeleteModal">
+    <app-delete-conducteur [driver]="selectedDriver" (deleteEvent)="loadDriver(); showdeleteModal= false" > </app-delete-conducteur>
+</div>

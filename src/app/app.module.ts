@@ -4,21 +4,38 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FirstComponent } from './first/first.component';
 import { RouterModule } from '@angular/router';
-import { MenuModule } from './menu/menu.module';
 import { DashboardsModule } from './dashboards/dashboards.module';
-import { SupPageComponent } from './sup-page/sup-page.component';
 import { FormulaireModule } from "./formulaire/formulaire.module";
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { UserOutline, VideoCameraOutline, UploadOutline } from '@ant-design/icons-angular/icons';
+import { JwtInterceptorService } from './jwt-interceptor.service';
+import { MapComponent } from './map/map.component';
+
+const icons = [UserOutline, VideoCameraOutline, UploadOutline];
+
+
+
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     FirstComponent,
-    SupPageComponent,
-
+    
 
 
   ],
@@ -28,11 +45,22 @@ import { FormulaireModule } from "./formulaire/formulaire.module";
     AppRoutingModule,
     FormsModule,
     RouterModule,
-    MenuModule,
     DashboardsModule,
-    FormulaireModule
+    FormulaireModule,
+    NzButtonModule,
+    BrowserAnimationsModule,
+    FormsModule, NzButtonModule, NzDropDownModule, NzIconModule, NzInputModule, NzTableModule,
+    NzBreadCrumbModule, NzMenuModule, NzLayoutModule,
+    NzIconModule.forRoot(icons),
+    HttpClientModule
 ],
-  providers: [],
+schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [ {
+    provide: HTTP_INTERCEPTORS,
+    useClass: JwtInterceptorService,
+    multi: true
+}
+  ],
   bootstrap: [AppComponent],
 
 })

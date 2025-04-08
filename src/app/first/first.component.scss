@@ -1,25 +1,24 @@
-/* app.component.scss */
+/*
 .layout {
   display: flex;
-  flex-direction: row; /* Disposition horizontale : sidebar + contenu */
-  height: 100vh; /* Prendre toute la hauteur de la page */
+  flex-direction: row;
+  height: 100vh;
 }
 
 app-sider {
-  width: 250px; /* Largeur du sidebar */
-  transition: width 0.3s ease; /* Transition lors de l'ouverture/fermeture du sidebar */
+  width: 250px;
+  transition: width 0.3s ease;
 }
 
 .content {
-  flex-grow: 1; /* Prendre le reste de l'espace */
-       /* Utiliser flexbox pour le contenu */
-  flex-direction: row;     /* Disposition horizontale des cartes et autres éléments */
-  margin-left: 0px; /* Laisser de l'espace pour le sidebar */
+  flex-grow: 1;
+  flex-direction: row;
+  margin-left: 0px;
   transition: margin-left 0.3s ease;
 }
 
 .content.sidebar-open {
-  margin-left: 0; /* Si le sidebar est fermé, supprimer le décalage */
+  margin-left: 0;
 }
 
 .cards-container {
@@ -33,6 +32,35 @@ app-sider {
   padding: 20px;
   background-color: #f4f4f4;
   border-radius: 8px;
-  transition: width 0.3s ease; /* Transition de la largeur pour une animation fluide */
+  transition: width 0.3s ease;
 
+}*/
+.layout {
+  min-height: 100vh;
 }
+
+.logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
+
+nz-header {
+  background: #fff;
+  padding: 0;
+}
+
+nz-content {
+  margin: 24px 16px 0;
+}
+
+.inner-content {
+  padding: 24px;
+  background: #fff;
+  min-height: 360px;
+}
+
+nz-footer {
+  text-align: center;
+}
+

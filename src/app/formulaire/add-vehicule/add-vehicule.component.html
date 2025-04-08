@@ -1,21 +1,69 @@
-<div class="container">
-  <h2>{{device.id ? 'modifier' : 'Ajouter'}} un véhicule</h2>
+<nz-modal [(nzVisible)]="isVisibleV"
+nzTitle="{{device.id ? 'Modifier' : 'Ajouter'}} un véhicule"
+(nzOnCancel)="handleCancel()"
+(nzOnOk)="handleOk()"
+nzOkText="{{device.id ? 'Modifier' : 'Ajouter'}}"
+nzCancelText="Annuler">
 
-  <form #f="ngForm" (submit)="addveh();">
-
-    <label for="uniqueId">Matricule:</label>
-    <input type="text" [(ngModel)]="device.uniqueId" name="uniqueId" required #name="ngModel">
-    {{name.valid ? '': 'Matricule est obligatoire'}}
-    <label for="name">Marque :</label>
-    <input type="text" [(ngModel)]="device.name" name="name" required>
-
-    <label for="model">Modéle :</label>
-    <input type="text" [(ngModel)]="device.model" name="model" required>
-
-    <button id="btnsubmit" type="submit" [disabled]="!f.form.valid">Ajouter</button>
+<ng-container *nzModalContent>
+  <!--formulaire-->
+  <form nz-form  [formGroup]="VehiculForm" >
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" nzRequired>Matricule</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzValidatingTip="Validating...">
+        <input nz-input formControlName="uniqueId" placeholder="Matricule" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" nzRequired>Marque</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input nz-input formControlName="name" placeholder="Marque" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" nzRequired>Modéle</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input nz-input formControlName="model" placeholder="Modéle" />
+      </nz-form-control>
+    </nz-form-item>
   </form>
+</ng-container>
+</nz-modal>
+
+<!--<button nz-button [nzType]="'primary'" (click)="showModal()"><span> {{device.id ? 'Modifier' : 'Ajouter'}}  un véhicule</span></button>
+
+    <nz-modal [(nzVisible)]="isVisible"
+    nzTitle= " {{device.id ? 'Modifier' : 'Ajouter'}} un véhicule"
+    (nzOnCancel)="handleCancel()"
+    (nzOnOk)="handleOk()"
+    nzOkText="{{device.id ? 'Modifier' : 'Ajouter'}}"
+    nzCancelText="Annuler">
+      <ng-container *nzModalContent>
+
+        <div>
+
+          <form #f="ngForm" (submit)="addveh();">
+
+            <label for="uniqueId">Matricule:</label>
+
+            <input type="text" [(ngModel)]="device.uniqueId" name="uniqueId" required #name="ngModel">
+            {{name.valid ? '': 'Matricule est obligatoire'}}
+
+            <label for="name">Marque :</label>
+            <input type="text" [(ngModel)]="device.name" name="name" required>
 
 
-  <p *ngIf="message">{{ message }}</p>
-</div>
+            <label for="model">Modéle :</label>
+            <input type="text" [(ngModel)]="device.model" name="model" required>
+
+        <button id="btnsubmit" type="submit" [disabled]="!f.form.valid">{{device.id ? 'Modifier' : 'Ajouter'}}</button>
+
+          </form>
+        <p *ngIf="message">{{ message }}</p>
+      </div>
+
+
+      </ng-container>
+    </nz-modal>-->
+
 

@@ -1,10 +1,9 @@
-/*import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Subscription, interval, forkJoin, of } from 'rxjs';
-import { catchError, takeUntil } from 'rxjs/operators';
-import { DriverService } from '../../driver.service';
+import { AddconducteurService} from '../../addconducteur.service';
+import { Driver } from '../../conducteurs.service';
+import { Component, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {FormGroup,FormControl,NonNullableFormBuilder,Validators} from '@angular/forms';
 import { Subject } from 'rxjs';
+
 @Component({
   selector: 'app-addconducteur',
   standalone: false,
@@ -12,131 +11,158 @@ import { Subject } from 'rxjs';
   styleUrls: ['./addconducteur.component.scss']
 })
 export class AddconducteurComponent implements OnInit, OnDestroy {
-  conducteurForm: FormGroup; // Formulaire pour ajouter un conducteur
-  conducteurs: any[] = []; // Liste des conducteurs récupérés
-  private subscription!: Subscription;
-  private updateInterval = 5000; // Intervalle pour rafraîchir les données (5 secondes)
-  private unsubscribe$ = new Subject<void>(); // Pour gérer l'annulation de la souscription
+  @Input() driver: Driver={ name: '', email: '', phone: '', password: '', driver: true}
+  @Output() cancelEvent = new EventEmitter<void>();
+  @Output() addEvent = new EventEmitter<any>();
+  @Input() isVisibleC = true;
 
-  constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private driverService: DriverService
-  ) {
-    // Initialisation du formulaire avec validation
+  message: string= '';
+  private destroy$ = new Subject<void>();
+  conducteurForm: FormGroup;
+
+  constructor( private addconducteurService: AddconducteurService, private fb: NonNullableFormBuilder) {
     this.conducteurForm = this.fb.group({
-      name: ['', Validators.required], // Champ obligatoire
-      email: ['', [Validators.required, Validators.email]], // Email valide obligatoire
-      phone: ['', Validators.required], // Champ obligatoire
-      vehicleId: ['', Validators.required] // ID du véhicule obligatoire
+      name: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      phone: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required]),
+    })
+  }
+  ngOnInit(): void {
+    this.conducteurForm.patchValue({
+      name: this.driver?.name || '',
+      email: this.driver?.email || '',
+      phone: this.driver?.phone || '',
+      password: this.driver?.password || ''
     });
   }
-
-  ngOnInit(): void {
-    this.getConducteurs(); // Récupérer les conducteurs au chargement
-    this.subscription = interval(this.updateInterval)
-      .pipe(takeUntil(this.unsubscribe$)) // Arrête la souscription à l'intervalle si le composant est détruit
-      .subscribe(() => this.getConducteurs());
-  }
-
   ngOnDestroy(): void {
-    // Annuler la souscription à l'intervalle quand le composant est détruit
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  // Fonction pour récupérer les conducteurs et les associer aux véhicules
-  getConducteurs(): void {
-    const headers = new HttpHeaders().set('Authorization', 'Basic ' + btoa('admin@poste.tn:rp2025'));
+  handleOk(): void {
+    console.log('Button ok clicked!');
+    this.addCon();
 
-    const devicesRequest = this.http.get<any[]>('http://localhost:8082/api/devices', { headers })
-      .pipe(catchError(error => {
-        console.error('Erreur lors de la récupération des véhicules', error);
-        return of([]); // Retourner un tableau vide en cas d'erreur
-      }));
+  }
+  handleCancel(): void {
+    console.log('Button cancel clicked!');
+    this.cancelEvent.emit();
+  }
 
-    const permissionsRequest = this.http.get<any[]>('http://localhost:8082/api/permissions', { headers })
-      .pipe(catchError(error => {
-        console.error('Erreur lors de la récupération des permissions', error);
-        return of([]); // Retourner un tableau vide en cas d'erreur
-      }));
 
-    // Exécution des deux requêtes en parallèle
-    forkJoin([devicesRequest, permissionsRequest])
-      .pipe(takeUntil(this.unsubscribe$))  // Arrêter la souscription si le composant est détruit
-      .subscribe(([devices, permissions]) => {
-        console.log('Véhicules récupérés:', devices);
-        console.log('Permissions récupérées:', permissions);
 
-        // Associer chaque véhicule à un conducteur s'il existe
-        this.conducteurs = devices.map(device => {
-          const permission = permissions.find(p => p.deviceId === device.id);
-          return {
-            model: device.model,
-            centre: device.groupId,
-            matricule: device.uniqueId,
-            statut: device.status,
-            driverId: permission ? permission.driverId : null // Associer un conducteur
+        addCon(): void {
+          console.log('ID du conducteur:', this.driver.id);
+
+          const formData = this.conducteurForm.value;
+          const driverData = {
+            id: this.driver.id,
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+            phone: formData.phone,
+            driver: true as true
           };
-        });
+
+          console.log('Driver data to send:', driverData);
+
+          this.addconducteurService.addConducteur(driverData).subscribe({
+            next: () => {
+              this.addEvent.emit();
+              this.message = 'Conducteur ajouté avec succès!';
+            },
+            error: (error) => {
+              this.message = 'Erreur lors de l\'ajout du conducteur.';
+              console.error(error);
+            }
+          });
+        }
+
+  autoTips: Record<string, Record<string, string>> = {
+
+    en: {
+      required: 'Input is required'
+    },
+    default: {
+      email: '邮箱格式不正确/The input is not valid email'
+    }
+  };
+
+
+
+  submitForm(): void {
+    if (this.conducteurForm.valid) {
+      console.log('submit', this.conducteurForm.value);
+    } else {
+      Object.values(this.conducteurForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
       });
+    }
   }
 
-  // Fonction pour ajouter un conducteur via le formulaire
-  onSubmit(): void {
-    if (this.conducteurForm.valid) {
-      const headers = new HttpHeaders().set('Authorization', 'Basic ' + btoa('admin@poste.tn:rp2025'));
-
-      // Requête POST pour ajouter un conducteur
-      this.http.post('http://localhost:8082/api/drivers', this.conducteurForm.value, { headers })
-        .pipe(catchError(error => {
-          console.error('Erreur lors de l\'ajout du conducteur', error);
-          return of(null); // Retourne null en cas d'erreur pour éviter de bloquer le processus
-        }))
-        .subscribe(
-          (response: any) => {
-            console.log('Conducteur ajouté avec succès', response);
-            this.conducteurForm.reset(); // Réinitialiser le formulaire après succès
-          },
-          (error) => {
-            console.error('Erreur lors de l\'ajout du conducteur', error);
-          }
-        );
-    }
+  /*nameAsyncValidator(control: AbstractControl): Observable<ValidationErrors | null> {
+    return new Observable((observer: Observer<MyValidationErrors | null>) => {
+      setTimeout(() => {
+        if (control.value === 'JasonWood') {
+          observer.next({
+            duplicated: {  en: `The username is redundant!` }
+          });
+        } else {
+          observer.next(null);
+        }
+        observer.complete();
+      }, 1000);
+    });
   }
 }*/
 
-import { Component } from '@angular/core';
-import { DriverService } from '../../driver.service';
+/*export type MyErrorsOptions = { en: string } & Record<string, NzSafeAny>;
+export type MyValidationErrors = Record<string, MyErrorsOptions>;
 
-@Component({
-  selector: 'app-addconducteur',
-  standalone: false,
-  templateUrl: './addconducteur.component.html',
-  styleUrls: ['./addconducteur.component.scss']
-})
-export class AddconducteurComponent {
-  driverName: string = '';
-  uniqueId: string = '';
-  message: string = '';
+export class MyValidators extends Validators {
+  static override minLength(minLength: number): ValidatorFn {
+    return (control: AbstractControl): MyValidationErrors | null => {
+      if (Validators.minLength(minLength)(control) === null) {
+        return null;
+      }
+      return { minlength: { 'zh-cn': `最小长度为 ${minLength}`, en: `MinLength is ${minLength}` } };
+    };
+  }
 
-  constructor(private driverService: DriverService) {}
+  static override maxLength(maxLength: number): ValidatorFn {
+    return (control: AbstractControl): MyValidationErrors | null => {
+      if (Validators.maxLength(maxLength)(control) === null) {
+        return null;
+      }
+      return { maxlength: { 'zh-cn': `最大长度为 ${maxLength}`, en: `MaxLength is ${maxLength}` } };
+    };
+  }
 
-  addDriver() {
-    if (!this.driverName || !this.uniqueId) {
-      this.message = 'Veuillez remplir tous les champs.';
-      return;
+  static mobile(control: AbstractControl): MyValidationErrors | null {
+    const value = control.value;
+
+    if (isEmptyInputValue(value)) {
+      return null;
     }
 
-    this.driverService.addDriver(this.driverName, this.uniqueId).subscribe({
-      next: (response) => {
-        this.message = 'Conducteur ajouté avec succès !';
-        
-      },
-      error: (error) => {
-        this.message = 'Erreur lors de l\'ajout du conducteur.';
-        console.error(error);
-      }
-    });
+    return isMobile(value)
+      ? null
+      : { mobile: { en: `Mobile phone number is not valid` } };
   }
+}
+
+function isEmptyInputValue(value: NzSafeAny): boolean {
+  return value == null || value.length === 0;
+}*/
+
+/*function isMobile(value: string): boolean {
+  return typeof value === 'string' && /(^1\d{7}$)/.test(value);
+}*/
+
+
 }

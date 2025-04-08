@@ -1,48 +1,95 @@
+import { Component  } from '@angular/core';
+import { ConducteursService, Driver } from '../../conducteurs.service';
+import { Subject } from 'rxjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { interval, Subscription, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { ConducteursService } from '../../conducteurs.service';
-import { Input } from '@angular/core';
 @Component({
   selector: 'app-conducteurs',
   templateUrl: './conducteurs.component.html',
   standalone: false,
   styleUrls: ['./conducteurs.component.scss']
 })
-export class ConducteursComponent implements OnInit, OnDestroy {
-  @Input() isSidebarOpen: boolean = false;  
+export class ConducteursComponent  {
 
-  conducteurs: any[] = [];
-  private subscription!: Subscription;
-  private updateInterval = 5000;
-  private unsubscribe$ = new Subject<void>();
+  selectedDriver: Driver =  {
+    name: '',
+    email: '',
+    phone: '',
+    password: '',
+    driver: true,
+  }
+  driver: Driver[] = [];
   showForm: boolean = false;
+  showdeleteModal: boolean = false;
+  searchValue = '';
+  visible = false;
+  private unsubscribe$ = new Subject<void>();
+  listOfDisplayData = [...this.driver];
 
-  constructor(private conducteursService: ConducteursService) {}
+  constructor(private conducteursService: ConducteursService, private modal: NzModalService, ) {}
+
+  trackById(index: number, item: any): number {
+    return item.id;
+  }
+
+  openDeleteModal(driver: Driver): void {
+    this.selectedDriver = driver;
+    this.showdeleteModal = true;
+  }
 
   ngOnInit(): void {
-    this.loadConducteurs();
-    this.subscription = interval(this.updateInterval)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => this.loadConducteurs());
+    this.loadDriver();
+
+  }
+  editConducteur(driver: Driver){
+    this.selectedDriver= {...driver};
+    console.log("Conducteur sélectionné:", this.selectedDriver);
+    this.showForm = true;
+    console.log("Formulaire affiché:", this.showForm);
+
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+/*deleteCon(){
+  this.addconducteurService.deleteDriver().subscribe(
+
+  )
+}*/
+
+  loadDriver(){
+    this.conducteursService.getDriver().subscribe(
+      {
+        next: (value) => {
+          this.driver = value;
+          this.listOfDisplayData = [...this.driver];
+        },
+        error: (err) => {
+          console.error('Erreur lors du chargement des conducteurs:', err);
+        }
+      }
+    )
   }
 
-  private loadConducteurs(): void {
-    this.conducteursService.getConducteurs().subscribe(([devices, permissions]) => {
-      this.conducteurs = this.conducteursService.mapConducteurs(devices, permissions);
-      console.log('✅ Conducteurs mis à jour:', this.conducteurs);
-    });
+  reset(): void {
+    this.searchValue = '';
+    this.search();
   }
-// Fonction pour afficher ou cacher le formulaire
 
+  search(): void {
+    this.visible = false;
+    this.listOfDisplayData = this.driver.filter((item: Driver) => item.name.indexOf(this.searchValue) !== -1);
+  }
   toggleForm(): void {
-    this.showForm = !this.showForm;
+    this.selectedDriver ={
+      name: '',
+      email: '',
+      phone: '',
+      password: '',
+      driver: true,
+    }
+  this.showForm = !this.showForm;
+}
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(); // Déclenche l'arrêt des abonnements
+    this.unsubscribe$.complete(); // Libère la mémoire
   }
-
 }

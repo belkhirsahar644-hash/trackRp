@@ -1,31 +1,53 @@
-<div class="container">
+<div class=" d-flex justify-content-between">
+  <h3>Liste des Superviseurs</h3>
+  <!--<button class="btn btn-primary" (click)="toggleForm()">Ajouter </button>-->
+  <button nz-button  nzType="dashed" (click)="toggleForm()">Ajouter</button>
+    <br /> <br />
+</div>
 
-  <div class="d-flex justify-content-between">
-    <h3> Liste des Véhicules</h3>
+<nz-table #nzTable [nzData]="superviseurs" nzTableLayout="fixed">
+  <thead>
+    <tr>
+      <th nzCustomFilter>
+        Nom
+        <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
+          <nz-icon nzType="search" />
+        </nz-filter-trigger>
+      </th>
+      <th>Email</th>
+      <th>Téléphone</th>
+      <th nzCellControl="action">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (data of nzTable.data; track data.id) {
+      <tr>
+        <td>{{ data.name }}</td>
+        <td>{{ data.email }}</td>
+        <td>{{ data.phone }}</td>
+        <td nzCellControl="action">
+          <!-- <button nz-button [nzType]="'primary'" (click)="showModal()"><span>    {{selectedSup ? 'Modifier' : 'Ajouter'}}  un superviseur</span></button>-->
+          <button nz-button nzType="dashed" (click)="editSup(data)">   Modifier </button>
+          <nz-divider nzType="vertical"></nz-divider>
+          <button nz-button nzType="dashed" (click)="openDeleteModalS(data)">Supprimer </button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</nz-table>
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" />
+      <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+      <button nz-button nzSize="small" (click)="reset()">Reset</button>
+    </div>
   </div>
+</nz-dropdown-menu>
+<div *ngIf="showForm">
+  <app-add-superviseur [isVisibleS]="showForm" [superviseur]="selectedSup" (addEvent)="loadSuperviseur() ; showForm=false" (cancelEvent)="showForm =false"></app-add-superviseur>
 
-  <div>
-    <table class="table table-striped" width="100%">
-
-      <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Email</th>
-          <th>Téléphone</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div>
-
-  </div>
+</div>
+<div *ngIf="showdeleteModalS">
+  <app-delete-superviseur [superviseurs]="selectedSup" (deleteSEvent)="loadSuperviseur(); showdeleteModalS= false"></app-delete-superviseur>
 </div>
