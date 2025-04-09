@@ -19,7 +19,6 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { UserOutline, VideoCameraOutline, UploadOutline } from '@ant-design/icons-angular/icons';
 import { JwtInterceptorService } from './services/jwt-interceptor.service';
-import { MapComponent } from './map/map.component';
 import {registerLocaleData} from '@angular/common';
 import fr from '@angular/common/locales/fr';
 const icons = [UserOutline, VideoCameraOutline, UploadOutline];
