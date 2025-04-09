@@ -1,40 +1,45 @@
-/*
-.layout {
+nz-header {
+  background: #fff;
+  padding: 0 24px;
   display: flex;
-  flex-direction: row;
-  height: 100vh;
+  align-items: center;
+  height: 64px;
 }
 
-app-sider {
-  width: 250px;
-  transition: width 0.3s ease;
-}
-
-.content {
-  flex-grow: 1;
-  flex-direction: row;
-  margin-left: 0px;
-  transition: margin-left 0.3s ease;
-}
-
-.content.sidebar-open {
-  margin-left: 0;
-}
-
-.cards-container {
+.header-container {
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.card {
-  width: 200px;
-  margin: 10px;
-  padding: 20px;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  transition: width 0.3s ease;
 
-}*/
+.periode {
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
+  position: fixed;
+  right: 24px;
+
+  span {
+    font-size: 16px;
+    margin-right: 10px;
+  }
+
+  button {
+    margin-left: 10px;
+  }
+}
+
+
+
+
 .layout {
   min-height: 100vh;
 }
@@ -45,10 +50,6 @@ app-sider {
   margin: 16px;
 }
 
-nz-header {
-  background: #fff;
-  padding: 0;
-}
 
 nz-content {
   margin: 24px 16px 0;

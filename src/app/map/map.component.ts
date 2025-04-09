@@ -46,7 +46,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private loadRoute(): void {
     const deviceId = 77;
-    const from = '2025-04-08T00:00:00Z';
+    const from = '2025-04-08T17:00:00Z';
     const to = '2025-04-09T00:00:00Z';
 
     this.mapService.getRouteReport(deviceId, from, to).subscribe((positions) => {

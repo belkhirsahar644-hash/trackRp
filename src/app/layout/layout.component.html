@@ -1,14 +1,3 @@
-<!--<app-header></app-header>
-
-<div class="layout">
-  <app-sider (sidebarToggle)="handleSidebarToggle($event)"></app-sider>
-
-  <div class="container">
-    <router-outlet></router-outlet>
-  </div>
-</div>
-
-<app-footer></app-footer>-->
 <nz-layout class="layout">
   <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
     <div class="logo"></div>
@@ -33,7 +22,37 @@
     </ul>
   </nz-sider>
   <nz-layout>
-    <nz-header></nz-header>
+
+    <nz-header>
+      <div class="header-container">
+
+        <div class="periode" *ngIf="isMapRoute()">
+          <label for="period">Période :</label>
+          <nz-select
+            id="period"
+            style="width: 160px; margin-left: 8px;"
+            [(ngModel)]="selectedPeriod"
+            nzAllowClear
+            nzPlaceHolder="Choisir une période"
+          >
+            <nz-option nzValue="today" nzLabel="Aujourd'hui"></nz-option>
+            <nz-option nzValue="yesterday" nzLabel="Hier"></nz-option>
+            <nz-option nzValue="this_week" nzLabel="Cette semaine"></nz-option>
+            <nz-option nzValue="last_week" nzLabel="La semaine dernière"></nz-option>
+            <nz-option nzValue="this_month" nzLabel="Ce mois-ci"></nz-option>
+            <nz-option nzValue="last_month" nzLabel="Le mois dernier"></nz-option>
+            <nz-option nzValue="custom" nzLabel="Personnalisé"></nz-option>
+          </nz-select>
+        </div>
+
+        <div class="user-info">
+          <nz-avatar nzIcon="user" (click)="handleUserIconClick()"></nz-avatar>
+          <span>{{ userName }}</span>
+          <button *ngIf="showLogout" nz-button nzType="default" (click)="logout()">Se déconnecter</button>
+        </div>
+      </div>
+    </nz-header>
+
     <nz-content>
       <div class="inner-content">
         <router-outlet></router-outlet>
