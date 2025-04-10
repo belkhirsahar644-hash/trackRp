@@ -25,13 +25,13 @@
 
     <nz-header>
       <div class="header-container">
-
         <div class="periode" *ngIf="isMapRoute()">
           <label for="period">Période :</label>
           <nz-select
             id="period"
             style="width: 160px; margin-left: 8px;"
             [(ngModel)]="selectedPeriod"
+            (ngModelChange)="onPeriodChange($event)"
             nzAllowClear
             nzPlaceHolder="Choisir une période"
           >
@@ -55,7 +55,8 @@
 
     <nz-content>
       <div class="inner-content">
-        <router-outlet></router-outlet>
+       <router-outlet></router-outlet>
+
       </div>
 
     </nz-content>

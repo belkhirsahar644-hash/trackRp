@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {LayoutService} from '../services/layout.service';
 import {Session} from '../services/layout.service';
 import {Router} from '@angular/router';
+
+
 @Component({
   selector: 'app-layout',
   standalone: false,
@@ -52,4 +54,9 @@ export class LayoutComponent implements OnInit {
   isMapRoute(): boolean {
     return this.router.url.includes('/map');
   }
+  onPeriodChange(period: string): void {
+    this.selectedPeriod = period;
+    this.layoutService.setPeriod(period);
+  }
+
 }

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { MapComponent } from './map/map.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { DashboardsModule } from './dashboards/dashboards.module';
@@ -36,6 +37,7 @@ import { MenuService } from 'ng-zorro-antd/menu';
     AppComponent,
     LoginComponent,
     LayoutComponent,
+    MapComponent,
 
 
 
