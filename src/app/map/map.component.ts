@@ -4,6 +4,8 @@ import { MapService } from '../services/map.service';
 import { LayoutService } from '../services/layout.service';
 import { Subscription } from 'rxjs';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 @Component({
   selector: 'app-map',
@@ -44,17 +46,33 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     //Contrôles de la carte
-    this.map.addControl(new NavigationControl({}), 'top-right');
 
+    if (this.map){
+      this.map.addControl(new NavigationControl({}), 'top-right');
+
+    }
     //Marqueur de carte
-    this.marker = new Marker({ color: '#FF0000' })
+    /*this.marker = new Marker({ color: '#FF0000' })
       .setLngLat([initialState.lng, initialState.lat])
       .addTo(this.map);
-
+*/
     // Ajouter un écouteur pour s'assurer que la carte est complètement chargée
     this.map.on('load', () => {
-      this.loadRoute(); // charge les données et les ajoute à la carte
+      if (this.map) {
+        this.loadRoute(); // charge les données et les ajoute à la carte
+      }
     });
+  }
+  private clearPreviousRoute(): void {
+    // Retirer les anciennes couches si elles existent
+    if (this.map?.getSource('route')) {
+      this.map.removeLayer('route');
+      this.map.removeSource('route');
+    }
+    if (this.map?.getSource('points')) {
+      this.map.removeLayer('points');
+      this.map.removeSource('points');
+    }
   }
 
   private loadRoute(): void {
@@ -66,10 +84,21 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     const deviceId = 77;
     const { from, to } = this.getPeriodDates(this.selectedPeriod);
 
+    // Vider la route précédente avant de charger la nouvelle
+    this.clearPreviousRoute();
+
     this.mapService.getRouteReport(deviceId, from, to).subscribe((positions) => {
       if (positions && positions.length > 0) {
         const first = positions[0];
-        this.updateMarker(first.latitude, first.longitude);
+        if(this.marker){
+          this.updateMarker(first.latitude, first.longitude);
+        }else {
+          if (this.map){
+            this.marker = new Marker({ color: '#FF0000' })
+              .setLngLat([first.latitude, first.longitude])
+              .addTo(this.map);
+          }
+        }
 
         const coordinates = positions.map((p) => [p.longitude, p.latitude]);
 
@@ -109,9 +138,17 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
             }
           });
         }
+      }else {
+        alert("pas de position trouvé")
+        // Si aucune position n'est trouvée, supprimer le marqueur
+        if (this.marker) {
+          this.marker.remove();
+          this.marker = undefined;
+        }
       }
     });
   }
+
 
   private updateMarker(lat: number, lng: number): void {
     if (this.marker) {
@@ -122,42 +159,56 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private getPeriodDates(period: string): { from: string, to: string } {
 
-    const now = dayjs();//date et l'heure actuel
+    const now = dayjs().utc();//date et l'heure actuel
     let from = now.startOf('day');
     let to = now.endOf('day');
 
     switch (period) {
-      case 'yesterday':
-        from = now.subtract(1, 'day').startOf('day');
-        to = now.subtract(1, 'day').endOf('day');
+      case 'yesterday': {
+        const yesterday = dayjs().utc().subtract(1, 'day');
+        from = yesterday.startOf('day');
+        to = yesterday.endOf('day');
         break;
-      case 'this_week':
-        from = now.startOf('week');
-        to = now.endOf('week');
+      }
+      case 'this_week': {
+        const this_week = dayjs().utc();
+        from = this_week.startOf('week');
+        to = this_week.endOf('week');
         break;
-      case 'last_week':
-        from = now.subtract(1, 'week').startOf('week');
-        to = now.subtract(1, 'week').endOf('week');
+      }
+      case 'last_week': {
+        const last_week = dayjs().utc().subtract(1,'week');
+        from = last_week.startOf('week');
+        to = last_week.endOf('week');
         break;
-      case 'this_month':
-        from = now.startOf('month');
-        to = now.endOf('month');
+      }
+        case 'this_month': {
+          from = now.startOf('month');
+          to = now.endOf('month');
+          break;
+        }
+      case 'last_month': {
+        const lastMonth = now.subtract(1, 'month');
+        from = lastMonth.startOf('month');
+        to = lastMonth.endOf('month');
         break;
-      case 'last_month':
-        from = now.subtract(1, 'month').startOf('month');
-        to = now.subtract(1, 'month').endOf('month');
-        break;
+      }
       case 'custom':
         // Ici, tu pourrais gérer une date personnalisée (à implémenter plus tard)
         break;
     }
+    console.log(`[Période sélectionnée: ${period}]`);
+    console.log(`From: ${from.toISOString()}`);
+    console.log(`To:   ${to.toISOString()}`);
 
     //On renvoie les deux dates au format ISO 8601 (ex. 2025-04-10T00:00:00.000Z),
     return {
       from: from.toISOString(),
-      to: to.toISOString()
-    };
+      to: to.toISOString(),
+
+    }
   }
+
 
 
 
