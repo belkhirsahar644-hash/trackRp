@@ -31,6 +31,10 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { MenuService } from 'ng-zorro-antd/menu';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzInputNumberLegacyModule } from 'ng-zorro-antd/input-number-legacy';
+
 
 @NgModule({
   declarations: [
@@ -39,13 +43,11 @@ import { MenuService } from 'ng-zorro-antd/menu';
     LayoutComponent,
     MapComponent,
 
-
-
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
-    AppRoutingModule,
+    AppRoutingModule,NzDatePickerModule,NzGridModule,NzInputNumberLegacyModule,
     FormsModule,
     RouterModule,NzSelectModule,NzSpaceModule,NzIconModule,
     DashboardsModule,

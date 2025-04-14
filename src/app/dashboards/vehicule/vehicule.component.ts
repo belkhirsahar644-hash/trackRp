@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {Subject} from 'rxjs';
 import {Device, VehiculeService} from '../../services/vehicule.service';
 import {NzModalService} from 'ng-zorro-antd/modal';
-import {DeletevehiculeService} from '../../services/deletevehicule.service';
 
 @Component({
   selector: 'app-vehicule',
@@ -28,7 +27,6 @@ export class VehiculeComponent {
   constructor(
     private vehiculeService: VehiculeService,
     private modal: NzModalService,
-    private deletevehiculeService: DeletevehiculeService
   ) {
   }
 
@@ -93,7 +91,7 @@ export class VehiculeComponent {
 
 
   deleteVehicle(data: Device) {
-    this.deletevehiculeService.deleteVehicule(data).subscribe(
+    this.vehiculeService.deleteVehicule(data).subscribe(
       {
         next: (value) => {
           this.loadVehicule()

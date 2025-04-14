@@ -23,13 +23,13 @@ nzCancelText="Annuler">
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>E-mail</nz-form-label>
         <nz-form-control [nzSpan]="12" nzDisableAutoTips nzErrorTip="Please input your email!">
-          <input nz-input formControlName="email" placeholder="email" type="email" />
+          <input nz-input formControlName="email" placeholder="email" type="email" autocomplete="off" />
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Password</nz-form-label>
         <nz-form-control [nzSpan]="12" nzDisableAutoTips nzErrorTip="Please input your password!">
-          <input nz-input type="password" formControlName="password" />
+          <input nz-input type="password" formControlName="password" placeholder="password"  autocomplete="new-password" />
         </nz-form-control>
       </nz-form-item>
       <!--<nz-form-item>

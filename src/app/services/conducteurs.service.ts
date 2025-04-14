@@ -19,5 +19,8 @@ export class ConducteursService {
     const params = new HttpParams().set('driver', 'true');
     return this.http.get<Driver[]>(`${environment.apiURL}users`, { params } )
   }
+  deleteDriver(driver: Driver){
+    return this.http.delete(environment.apiURL + "users/" + driver.id,   );
+  }
 
 }

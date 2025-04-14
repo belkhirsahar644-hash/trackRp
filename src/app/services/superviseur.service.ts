@@ -21,4 +21,7 @@ export class SuperviseurService {
 
     return this.http.get<Superviseur[]>(`${environment.apiURL}users`, { params });
   }
+  deleteSup(superviseurs: Superviseur){
+    return this.http.delete(environment.apiURL + "users/" + superviseurs.id,  );
+  }
 }

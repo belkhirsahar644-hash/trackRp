@@ -49,11 +49,15 @@ export class ConducteursComponent  {
 
   }
 
-/*deleteCon(){
-  this.addconducteurService.deleteDriver().subscribe(
-
-  )
-}*/
+  deleteConducteur(data:Driver){
+    this.conducteursService.deleteDriver(data).subscribe(
+      {
+        next: () => {
+          this.loadDriver()
+        }
+      }
+    )
+  }
 
   loadDriver(){
     this.conducteursService.getDriver().subscribe(

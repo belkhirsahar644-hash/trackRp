@@ -27,8 +27,15 @@
         <td nzCellControl="action">
           <button nz-button nzType="dashed" (click)="editConducteur(data)">   Modifier </button>
           <nz-divider nzType="vertical"></nz-divider>
-          <button nz-button nzType="dashed" (click)="openDeleteModal(data)">Supprimer </button>
-
+          <button
+            nz-button
+            nz-popconfirm
+            nzPopconfirmTitle="Voulez vous vraiment supprimer ?"
+            nzPopconfirmPlacement="bottom"
+            nzType="dashed"
+            (nzOnConfirm)="deleteConducteur(data)">
+            Supprimer
+          </button>        </td>
         }
 
   </tbody>

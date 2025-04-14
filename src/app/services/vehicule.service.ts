@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, of } from 'rxjs';
-import { catchError } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 
 export interface Device {
@@ -20,5 +18,8 @@ export class VehiculeService {
   getVehicule(){
     return this.http.get<Device[]>(`${environment.apiURL}devices`,)
   }
+  deleteVehicule(device: Device){
+    return this.http.delete(environment.apiURL + "devices/" + device.id, );
+  }
 
-    }
+}

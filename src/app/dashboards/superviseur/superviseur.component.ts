@@ -85,4 +85,13 @@ toggleForm(): void {
     this.unsubscribe$.complete(); // Libère la mémoire
 
   }
+  deleteSuperviseur(data:Superviseur){
+    this.superviseurService.deleteSup(data).subscribe(
+      {
+        next: (value) => {
+          this.loadSuperviseur()
+        }
+      }
+    )
+  }
 }

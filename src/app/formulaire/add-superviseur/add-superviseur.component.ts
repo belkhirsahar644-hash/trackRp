@@ -25,13 +25,13 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
-     // confirm: new FormControl('')
     });
   }
 
 
 
   ngOnInit(): void{
+
     this.superviseurForm.patchValue({
       name: this.superviseur?.name || '',
       email: this.superviseur?.email || '',
@@ -46,22 +46,15 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
   }
 
 
-
-
   handleOk(): void {
     console.log('Button ok clicked!');
     this.addSuperviseur();
-    /*this.submitForm();
-    if (this.superviseurForm.valid) {
-      this.isVisible = false;
-      this.addSuperviseur();
-    }*/
+
   }
 
   handleCancel(): void {
 
     this.cancelEvent.emit();
-    //this.isVisible = false;
     console.log('Button cancel clicked!');
   }
   addSuperviseur(): void {
@@ -76,7 +69,6 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
             phone: formData.phone,
             supervisor: true as true
           };
-    //this.superviseur = this.superviseurForm.value;
 
     console.log('Superviseur data to send:', SuperviseurrData);
 

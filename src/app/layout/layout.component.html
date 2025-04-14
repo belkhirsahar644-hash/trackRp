@@ -43,7 +43,25 @@
             <nz-option nzValue="last_month" nzLabel="Le mois dernier"></nz-option>
             <nz-option nzValue="custom" nzLabel="Personnalisé"></nz-option>
           </nz-select>
+
+          <nz-date-picker
+            *ngIf="selectedPeriod === 'custom'"
+            [(ngModel)]="startDate"
+            [nzFormat]="'yyyy-MM-dd'"
+            [nzPlaceHolder]="'Date de début'"
+            (ngModelChange)="onCustomDateSelected()"
+          ></nz-date-picker>
+
+          <nz-date-picker
+            *ngIf="selectedPeriod === 'custom'"
+            [(ngModel)]="endDate"
+            [nzFormat]="'yyyy-MM-dd'"
+            [nzPlaceHolder]="'Date de fin'"
+            (ngModelChange)="onCustomDateSelected()"
+          ></nz-date-picker>
+
         </div>
+
 
         <div class="user-info">
           <nz-avatar nzIcon="user" (click)="handleUserIconClick()"></nz-avatar>
@@ -56,7 +74,6 @@
     <nz-content>
       <div class="inner-content">
        <router-outlet></router-outlet>
-
       </div>
 
     </nz-content>

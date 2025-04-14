@@ -9,6 +9,7 @@ import { SuperviseurComponent } from './dashboards/superviseur/superviseur.compo
 import { MapComponent } from './map/map.component';
 import {LayoutComponent} from './layout/layout.component';
 
+
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
@@ -18,7 +19,8 @@ const routes: Routes = [
          { path: 'adddriver', component: AddconducteurComponent},
          { path: 'vehicule', component: VehiculeComponent},
          { path: 'superviseur', component: SuperviseurComponent},
-         { path: 'map', component: MapComponent}
+         { path: 'map/:deviceId', component: MapComponent},
+
   ]
 },
   ];
