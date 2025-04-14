@@ -2,6 +2,10 @@
       nzTitle="{{superviseur.id ? 'Modifier' : 'Ajouter'}} un superviseur"
       (nzOnCancel)="handleCancel()"
       (nzOnOk)="handleOk()"
+
+
+
+              [nzOkDisabled]="!superviseurForm.valid"
       nzOkText="{{superviseur.id ? 'Modifier' : 'Ajouter'}}"
       nzCancelText="Annuler">
 

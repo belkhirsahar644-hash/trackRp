@@ -2,6 +2,7 @@
 nzTitle="{{device.id ? 'Modifier' : 'Ajouter'}} un véhicule"
 (nzOnCancel)="handleCancel()"
 (nzOnOk)="handleOk()"
+          [nzOkDisabled]="!VehiculForm.valid"
 nzOkText="{{device.id ? 'Modifier' : 'Ajouter'}}"
 nzCancelText="Annuler">
 

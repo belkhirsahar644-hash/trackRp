@@ -2,6 +2,7 @@
 nzTitle="{{driver.id ? 'Modifier' : 'Ajouter'}} un conducteur"
 (nzOnCancel)="handleCancel()"
 (nzOnOk)="handleOk()"
+          [nzOkDisabled]="!conducteurForm.valid"
 nzOkText="{{driver.id ? 'Modifier' : 'Ajouter'}}"
 nzCancelText="Annuler">
 
