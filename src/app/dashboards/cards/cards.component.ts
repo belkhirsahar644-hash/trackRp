@@ -19,7 +19,7 @@ export class CardsComponent  {
 
   constructor(private cardsService:CardsService ) {}
   ngOnInit() {
-    console.log("🔄 CardsComponent chargé !");
+    console.log(" CardsComponent chargé !");
     this.fetchData();
   }
 
@@ -28,12 +28,12 @@ export class CardsComponent  {
     this.cardsService.getVehicule()
       .pipe(
         catchError(error => {
-          console.error('❌ Erreur API devices:', error);
+          console.error(' Erreur API devices:', error);
           return of([]); // Retourne un tableau vide en cas d'erreur
         })
       )
       .subscribe((devices: Device[]) => {
-        console.log('✅ Véhicules récupérés:', devices);
+        console.log(' Véhicules récupérés:', devices);
         this.vehicleCount = devices.length;
         this.checkLoadingStatus();  // Vérifie si toutes les données sont chargées
 
@@ -43,12 +43,12 @@ export class CardsComponent  {
     this.cardsService.getSuperviseur()
       .pipe(
         catchError(error => {
-          console.error('❌ Erreur API users:', error);
+          console.error(' Erreur API users:', error);
           return of([]); // Retourne un tableau vide en cas d'erreur
         })
       )
       .subscribe((superviseur: Superviseur[]) => {
-        console.log('✅ Utilisateurs récupérés:', superviseur);
+        console.log(' Utilisateurs récupérés:', superviseur);
         this.supervisorCount = superviseur.length;
         this.checkLoadingStatus();  // Vérifie si toutes les données sont chargées
 
@@ -59,12 +59,12 @@ export class CardsComponent  {
     this.cardsService.getDriver()
       .pipe(
         catchError(error => {
-          console.error('❌ Erreur API drivers:', error);
+          console.error(' Erreur API drivers:', error);
           return of([]); // Retourne un tableau vide en cas d'erreur
         })
       )
       .subscribe((drivers: Driver[]) => {
-        console.log('✅ Conducteurs récupérés:', drivers);
+        console.log(' Conducteurs récupérés:', drivers);
         this.driverCount = drivers.length;
         this.checkLoadingStatus();  // Vérifie si toutes les données sont chargées
 

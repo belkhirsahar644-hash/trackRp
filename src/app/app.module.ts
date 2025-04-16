@@ -47,9 +47,9 @@ import { NzInputNumberLegacyModule } from 'ng-zorro-antd/input-number-legacy';
   imports: [
     HttpClientModule,
     BrowserModule,
-    AppRoutingModule,NzDatePickerModule,NzGridModule,NzInputNumberLegacyModule,
+    AppRoutingModule, NzDatePickerModule, NzGridModule, NzInputNumberLegacyModule,
     FormsModule,
-    RouterModule,NzSelectModule,NzSpaceModule,NzIconModule,
+    RouterModule, NzSelectModule, NzSpaceModule, NzIconModule,
     DashboardsModule,
     FormulaireModule,
     NzButtonModule,
@@ -60,16 +60,18 @@ import { NzInputNumberLegacyModule } from 'ng-zorro-antd/input-number-legacy';
     NzDropDownModule,
     NzMenuModule,
     HttpClientModule
-],
-schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [ {
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: JwtInterceptorService,
     multi: true
-}, provideNzI18n(fr_FR),
+  }, provideNzI18n(fr_FR),
     MenuService,
   ],
   bootstrap: [AppComponent],
 
+  exports: [
+      ]
 })
 export class AppModule { }

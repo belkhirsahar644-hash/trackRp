@@ -28,13 +28,17 @@ export class LoginComponent {
             }
           }).catch(err => {
             console.error('Erreur de navigation:', err);
+
+           /* localStorage.removeItem('accessToken');
+            this.router.navigate(['/login']);*/
+
           });
         },
-        error: (err) => {
+        /*error: (err) => {
           console.error('Erreur:', err);
           this.errorMessage = 'Échec de la connexion';
           alert('Erreur de connexion');
-        },
+        },*/
       });
     }
 

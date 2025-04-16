@@ -18,6 +18,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { RouterModule } from '@angular/router';
 import {NzPopconfirmModule} from 'ng-zorro-antd/popconfirm';
+import {MapsModule} from '../maps/maps.module';
 
 @NgModule({
   declarations: [
@@ -34,8 +35,7 @@ import {NzPopconfirmModule} from 'ng-zorro-antd/popconfirm';
     NzModalModule,
     BrowserAnimationsModule,
     NzDividerModule,NzModalModule, NzCardModule, NzGridModule,
-
-    FormsModule, NzButtonModule, NzDropDownModule, NzIconModule, NzInputModule, NzTableModule
+    FormsModule, MapsModule,NzButtonModule, NzDropDownModule, NzIconModule, NzInputModule, NzTableModule
 
 ],
   exports: [
