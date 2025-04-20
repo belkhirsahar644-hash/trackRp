@@ -29,8 +29,8 @@ export class LoginComponent {
           }).catch(err => {
             console.error('Erreur de navigation:', err);
 
-           /* localStorage.removeItem('accessToken');
-            this.router.navigate(['/login']);*/
+            localStorage.removeItem('accessToken');
+            this.router.navigate(['/login']);
 
           });
         },

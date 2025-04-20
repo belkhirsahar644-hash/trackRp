@@ -23,9 +23,9 @@ nz-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  justify-content: flex-end;
-  position: fixed;
-  right: 24px;
+  /*justify-content: flex-end;
+  position: fixed;*/
+  margin-left: auto;
 
   span {
     font-size: 16px;

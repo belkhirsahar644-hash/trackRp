@@ -10,11 +10,10 @@ import {MapService} from '../../services/map.service';
 })
 export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   map: Map | undefined;
-  marker: Marker | undefined;
-  positionInterval: any;
-
+  //Utilise le #map du HTML pour récupérer l'élément DOM contenant la carte.
   @ViewChild('map')
   private mapContainer!: ElementRef<HTMLElement>;
+  //Liste pour stocker tous les marqueurs créés.
   markers: Marker[] = [];
 
 
@@ -24,7 +23,8 @@ export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void { }
 
   ngAfterViewInit() {
-    const initialState = { lng: 10.1729, lat: 36.8702, zoom: 14 };
+    //35°49'42.0"N 9°40'52.5"E
+    const initialState = { lng: 9.40525, lat: 35.49420, zoom: 14 };
 
     this.map = new Map({
       container: this.mapContainer.nativeElement,
