@@ -23,8 +23,8 @@ export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void { }
 
   ngAfterViewInit() {
-    //35°49'42.0"N 9°40'52.5"E
-    const initialState = { lng: 9.40525, lat: 35.49420, zoom: 14 };
+
+    const initialState = { lng: 10.1729, lat: 36.8702, zoom: 14 };
 
     this.map = new Map({
       container: this.mapContainer.nativeElement,

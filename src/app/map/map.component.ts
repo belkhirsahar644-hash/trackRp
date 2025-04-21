@@ -150,7 +150,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
           'line-cap': 'round'
         },
         paint: {
-          'line-color': '#0074D9',
+          'line-color': 'green',
           'line-width': 4
         }
       });

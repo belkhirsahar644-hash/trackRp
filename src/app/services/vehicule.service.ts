@@ -7,6 +7,7 @@ export interface Device {
   model: string;
   uniqueId: string;
   name: string;
+
 }
 
 @Injectable({
