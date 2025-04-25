@@ -21,12 +21,22 @@ nzCancelText="Annuler">
         <input nz-input formControlName="name" placeholder="Marque" />
       </nz-form-control>
     </nz-form-item>
+
     <nz-form-item>
       <nz-form-label [nzSpan]="7" nzRequired>Modéle</nz-form-label>
       <nz-form-control [nzSpan]="12">
         <input nz-input formControlName="model" placeholder="Modéle" />
       </nz-form-control>
     </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" nzRequired>Nom du conducteur</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input nz-input formControlName="nameDriver" placeholder="Nom du conducteur" />
+      </nz-form-control>
+    </nz-form-item>
+
+
   </form>
 </ng-container>
 </nz-modal>

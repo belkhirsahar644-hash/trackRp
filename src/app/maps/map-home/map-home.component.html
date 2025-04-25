@@ -1,6 +1,166 @@
+
+<!--
 <div class="map-wrap">
+  <a href="https://www.maptiler.com" class="watermark">
+    <img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" />
+  </a>
+  <div class="map" #map></div>
+</div>
+
+<nz-modal
+  [(nzVisible)]="modalVisible"
+  nzTitle="Informations de l'appareil"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <ng-container *nzModalContent>
+    <p *ngIf="selectedDevice">Nom : {{ selectedDevice.name }}</p>
+    <p *ngIf="selectedDevice">Modèle : {{ selectedDevice.model }}</p>
+    <p *ngIf="selectedDevice">Conducteur : {{ selectedDevice.nameDriver }}</p>
+    <p *ngIf="selectedDevice">Identifiant unique : {{ selectedDevice.uniqueId }}</p>
+    <p *ngIf="selectedDevice">Status : {{ selectedDevice.status }}</p>
+
+    <p *ngIf="selectedDevice">ID : {{ selectedDevice.deviceId }}</p>
+    <p *ngIf="selectedDevice">Vitesse : {{ selectedDevice.speed }} km/h</p>
+    <p *ngIf="selectedDevice">Distance totale : {{ selectedDevice.distance | number:'1.0-2' }} m</p>
+    <p *ngIf="selectedDevice.battery !== undefined">Batterie : {{ selectedDevice.battery }}%</p>
+    <a (click)="startAddGeofence(selectedDevice)">➕ Ajouter une zone geofence</a>
+  </ng-container>
+</nz-modal>
+-->
+<!--<div class="map-wrap">
+  <a href="https://www.maptiler.com" class="watermark">
+    <img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" />
+  </a>
+  <div class="map" #map></div>
+</div>
+
+
+<nz-modal
+  [(nzVisible)]="modalVisible"
+  nzTitle="Informations de l'appareil"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <ng-container *nzModalContent>
+    <p *ngIf="selectedDevice">Nom : {{ selectedDevice.name }}</p>
+    <p *ngIf="selectedDevice">Modèle : {{ selectedDevice.model }}</p>
+    <p *ngIf="selectedDevice">Conducteur : {{ selectedDevice.nameDriver }}</p>
+    <p *ngIf="selectedDevice">Identifiant unique : {{ selectedDevice.uniqueId }}</p>
+    <p *ngIf="selectedDevice">Status : {{ selectedDevice.status }}</p>
+    <p *ngIf="selectedDevice">ID : {{ selectedDevice.deviceId }}</p>
+    <p *ngIf="selectedDevice">Vitesse : {{ selectedDevice.speed }} km/h</p>
+    <p *ngIf="selectedDevice">Distance totale : {{ selectedDevice.distance | number:'1.0-2' }} m</p>
+    <p *ngIf="selectedDevice.battery !== undefined">Batterie : {{ selectedDevice.battery }}%</p>
+
+
+    <a (click)="openZoneGeofence()"> Zone geofence</a>
+  </ng-container>
+</nz-modal>
+
+<nz-drawer
+  [nzClosable]="false"
+  [nzWidth]="320"
+  [nzVisible]="visible"
+  nzTitle="Zone geofence"
+  (nzOnClose)="close()"
+>
+  <div nz-row> <a>hello</a>
+
+  </div>
+
+  <div nz-row>
+    <div nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-label>Name</nz-form-label>
+        <nz-form-control>
+          <input nz-input placeholder="please enter cookbook name" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <p> {{selectedDevice?.name}}</p>
+  <button nz-button nzType="primary" (click)="startAddGeofence(selectedGeofenceDevice)">
+    Ajouter une zone
+  </button>
+</nz-drawer>
+-->
+
+
+
+<!--code de modal avec geofence-->
+<div class="map-wrap">
+  <a href="https://www.maptiler.com" class="watermark">
+    <img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" />
+  </a>
+  <div class="map" #map></div>
+</div>
+
+<nz-modal
+  [(nzVisible)]="modalVisible"
+  nzTitle="Informations de l'appareil"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <ng-container *nzModalContent>
+    <p *ngIf="selectedDevice">Nom : {{ selectedDevice.name }}</p>
+    <p *ngIf="selectedDevice">Modèle : {{ selectedDevice.model }}</p>
+    <p *ngIf="selectedDevice">Conducteur : {{ selectedDevice.nameDriver }}</p>
+    <p *ngIf="selectedDevice">Identifiant unique : {{ selectedDevice.uniqueId }}</p>
+    <p *ngIf="selectedDevice">Status : {{ selectedDevice.status }}</p>
+
+    <p *ngIf="selectedDevice">ID : {{ selectedDevice.deviceId }}</p>
+    <p *ngIf="selectedDevice">Vitesse : {{ selectedDevice.speed }} km/h</p>
+    <p *ngIf="selectedDevice">Distance totale : {{ selectedDevice.distance | number:'1.0-2' }} m</p>
+    <p *ngIf="selectedDevice.battery !== undefined">Batterie : {{ selectedDevice.battery }}%</p>
+
+  </ng-container>
+
+</nz-modal>
+<!--
+
+<div class="map-wrap">
+  <a href="https://www.maptiler.com" class="watermark">
+    <img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" />
+  </a>
+  <div class="map" #map></div>
+</div>
+
+<nz-modal
+  [(nzVisible)]="modalVisible"
+  nzTitle="Informations de l'appareil"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <ng-container *nzModalContent>
+    <p *ngIf="selectedDevice">Nom : {{ selectedDevice.name }}</p>
+    <p *ngIf="selectedDevice">Identifiant unique : {{ selectedDevice.uniqueId }}</p>
+    <p *ngIf="selectedDevice">ID : {{ selectedDevice.deviceId }}</p>
+    <p *ngIf="selectedDevice">Vitesse : {{ selectedDevice.speed }} km/h</p>
+    <p *ngIf="selectedDevice">Distance totale : {{ selectedDevice.distance | number:'1.0-2' }} m</p>
+    <p *ngIf="selectedDevice.battery !== undefined">Batterie : {{ selectedDevice.battery }}%</p>
+  </ng-container>
+</nz-modal>
+-->
+
+<!--<div class="map-wrap">
   <a href="https://www.maptiler.com" class="watermark"><img
     src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo"/></a>
   <div class="map" #map></div>
 </div>
 
+<nz-modal
+  [(nzVisible)]="modalVisible"
+  nzTitle="Informations de l'appareil"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <ng-container *nzModalContent>
+    <p *ngIf="selectedDevice">ID : {{ selectedDevice.deviceId }}</p>
+    <p *ngIf="selectedDevice">Vitesse : {{ selectedDevice.speed }} km/h</p>
+    <p *ngIf="selectedDevice">Distance totale : {{ selectedDevice.distance | number:'1.0-2' }} m</p>
+    <p *ngIf="selectedDevice.battery !== undefined">Batterie : {{ selectedDevice.battery }}%</p>
+  </ng-container>
+</nz-modal>
+-->

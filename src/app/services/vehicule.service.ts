@@ -7,6 +7,10 @@ export interface Device {
   model: string;
   uniqueId: string;
   name: string;
+  attributes: {
+    nameDriver: string;
+
+  };
 
 }
 
@@ -18,6 +22,9 @@ export class VehiculeService {
   constructor(private http: HttpClient) { }
   getVehicule(){
     return this.http.get<Device[]>(`${environment.apiURL}devices`,)
+  }
+  getDevice(id: number) {
+    return this.http.get<Device[]>(`${environment.apiURL}devices/${id}`, )
   }
   deleteVehicule(device: Device){
     return this.http.delete(environment.apiURL + "devices/" + device.id, );

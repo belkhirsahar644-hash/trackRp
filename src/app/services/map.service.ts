@@ -13,8 +13,6 @@ export class MapService {
   getRouteReport(deviceId: number, from: string, to: string) {
     return this.http.get<any[]>(`${environment.apiURL}reports/route?deviceId=${deviceId}&from=${from}&to=${to}`);
   }
-  getPositions(){
-    return this.http.get<any[]>(`${environment.apiURL}positions`);
-  }
+
 }
 

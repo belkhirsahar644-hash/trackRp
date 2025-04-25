@@ -21,7 +21,7 @@ const routes: Routes = [
          { path: 'superviseur', component: SuperviseurComponent},
          { path: 'map/:deviceId', component: MapComponent},
 
-  ]
+           ]
 },
   ];
 

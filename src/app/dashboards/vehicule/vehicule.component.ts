@@ -14,7 +14,8 @@ export class VehiculeComponent {
   selectedDevice: Device = {
     model: '',
     name: '',
-    uniqueId: ''
+    uniqueId: '',
+    attributes:{nameDriver:''},
   }
   device: Device[] = [];
   showForm: boolean = false;
@@ -78,7 +79,10 @@ export class VehiculeComponent {
     this.selectedDevice = {
       model: '',
       name: '',
-      uniqueId: ''
+      uniqueId: '',
+      attributes:{nameDriver:''},
+
+
     };
     this.showForm = !this.showForm;
   }

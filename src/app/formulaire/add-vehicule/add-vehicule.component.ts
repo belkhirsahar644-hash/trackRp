@@ -10,8 +10,8 @@ import { Subject } from 'rxjs';
   templateUrl: './add-vehicule.component.html',
   styleUrl: './add-vehicule.component.scss'
 })
-export class AddVehiculeComponent {
-  @Input() device: Device = {model: '', name: '',uniqueId: ''};
+export class AddVehiculeComponent implements OnInit {
+  @Input() device: Device = {model: '', name: '',uniqueId: '', attributes:{nameDriver:''},};
   @Output() cancelEvent = new EventEmitter<void>();
   @Output() addEvent = new EventEmitter<any>();
   @Input() isVisibleV = true;
@@ -25,6 +25,7 @@ export class AddVehiculeComponent {
       uniqueId: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
       model: new FormControl('', [Validators.required]),
+      nameDriver: new FormControl('', [Validators.required]),
     })
   }
   ngOnInit(): void {
@@ -32,6 +33,8 @@ export class AddVehiculeComponent {
       name: this.device?.name || '',
       uniqueId: this.device?.uniqueId || '',
       model: this.device?.model || '',
+      nameDriver: this.device?.attributes?.nameDriver || '',  // Initialisez ici si 'device' a les données
+
     });
   }
   ngOnDestroy(): void {
@@ -58,7 +61,10 @@ export class AddVehiculeComponent {
       name: formData.name,
       uniqueId: formData.uniqueId,
       model: formData.model,
-      };
+      attributes: {
+        nameDriver: formData.nameDriver
+      }
+    };
 
       console.log('Device data to send:', driverData);
     this.addvehicule.addveh(driverData).subscribe({

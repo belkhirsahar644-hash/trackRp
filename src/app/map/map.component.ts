@@ -36,9 +36,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     const deviceIdParam = this.route.snapshot.paramMap.get('deviceId');
     if (deviceIdParam) {
       this.deviceId = parseInt(deviceIdParam, 10);
-      console.log("✅ ID trouvé :", this.deviceId);
+      console.log(" ID trouvé :", this.deviceId);
     } else {
-      console.log("❌ Aucun ID trouvé dans l'URL.");
+      console.log(" Aucun ID trouvé dans l'URL.");
       this.deviceId = null;
     }
 

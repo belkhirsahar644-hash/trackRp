@@ -19,7 +19,7 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { UserOutline, VideoCameraOutline, UploadOutline } from '@ant-design/icons-angular/icons';
-import { JwtInterceptorService } from './services/jwt-interceptor.service';
+//import { JwtInterceptorService } from './services/jwt-interceptor.service';
 import {registerLocaleData} from '@angular/common';
 import fr from '@angular/common/locales/fr';
 const icons = [UserOutline, VideoCameraOutline, UploadOutline];
@@ -34,7 +34,7 @@ import { MenuService } from 'ng-zorro-antd/menu';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzInputNumberLegacyModule } from 'ng-zorro-antd/input-number-legacy';
-
+import { SessionInterceptor } from './services/session-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -64,9 +64,10 @@ import { NzInputNumberLegacyModule } from 'ng-zorro-antd/input-number-legacy';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [{
     provide: HTTP_INTERCEPTORS,
-    useClass: JwtInterceptorService,
-    multi: true
-  }, provideNzI18n(fr_FR),
+    useClass: SessionInterceptor,
+    multi: true // Ajoute cet intercepteur à la chaîne des intercepteurs HTTP
+  },
+    provideNzI18n(fr_FR),
     MenuService,
   ],
   bootstrap: [AppComponent],
