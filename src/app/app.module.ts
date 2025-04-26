@@ -35,6 +35,8 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzInputNumberLegacyModule } from 'ng-zorro-antd/input-number-legacy';
 import { SessionInterceptor } from './services/session-interceptor.service';
+import { MapsModule } from './maps/maps.module';
+
 
 @NgModule({
   declarations: [
@@ -48,7 +50,7 @@ import { SessionInterceptor } from './services/session-interceptor.service';
     HttpClientModule,
     BrowserModule,
     AppRoutingModule, NzDatePickerModule, NzGridModule, NzInputNumberLegacyModule,
-    FormsModule,
+    FormsModule,MapsModule,
     RouterModule, NzSelectModule, NzSpaceModule, NzIconModule,
     DashboardsModule,
     FormulaireModule,

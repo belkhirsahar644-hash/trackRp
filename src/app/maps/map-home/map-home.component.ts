@@ -1,3 +1,160 @@
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  OnDestroy
+} from '@angular/core';
+import { Map as MapLibreMap, Marker, NavigationControl } from 'maplibre-gl';
+import { Subscription } from 'rxjs';
+import { MapHomeService } from '../../services/map-home.service';
+
+@Component({
+  selector: 'app-map-home',
+  standalone: false,
+  templateUrl: './map-home.component.html',
+  styleUrl: './map-home.component.scss'
+})
+export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
+  map: MapLibreMap | undefined;
+  private deviceMarkers: Map<number, Marker> = new Map<number, Marker>();
+  private positionsSubscription: Subscription | undefined;
+
+  @ViewChild('map')
+  private mapContainer!: ElementRef<HTMLElement>;
+
+  modalVisible = false;
+  selectedDevice: any = null;
+
+  constructor(private mapHomeService: MapHomeService) {}
+
+  ngOnInit(): void {}
+
+  ngAfterViewInit() {
+    const initialState = { lng: 10.1729, lat: 36.8702, zoom: 5 };
+
+    this.map = new MapLibreMap({
+      container: this.mapContainer.nativeElement,
+      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=sFhBT3kZc5gtzUAEukg8`,
+      center: [initialState.lng, initialState.lat],
+      zoom: initialState.zoom
+    });
+
+    this.map.addControl(new NavigationControl({}), 'top-right');
+    this.map.on('load', () => {
+      this.mapHomeService.connectWebSocket();
+
+      this.positionsSubscription = this.mapHomeService.fullData$.subscribe(
+        (positions: any[]) => {
+          positions.forEach((position: any) => {
+            const deviceId = position.deviceId;
+
+            const oldMarker = this.deviceMarkers.get(deviceId);
+            if (oldMarker) {
+              oldMarker.remove();
+            }
+
+            const carIcon = document.createElement('img');
+
+            if (position.status === 'offline') {
+              carIcon.src = 'https://cdn-icons-png.flaticon.com/512/4042/4042715.png';
+            } else {
+              carIcon.src = 'https://cdn-icons-png.flaticon.com/512/2813/2813010.png';
+            }
+
+            carIcon.style.width = '50px';
+            carIcon.style.height = '50px';
+            carIcon.style.cursor = 'pointer';
+
+            const deviceData = {
+              deviceId: deviceId,
+              name: position.deviceName,
+              uniqueId: position.uniqueId,
+              model: position.model,
+              nameDriver: position.nameDriver,
+              latitude: position.latitude,
+              longitude: position.longitude,
+              speed: position.speed,
+              distance: position.attributes?.totalDistance,
+              battery: position.attributes?.batteryLevel,
+              status: position.status,
+            };
+
+            carIcon.addEventListener('click', () => {
+              this.showModal(deviceData);
+            });
+
+            const marker = new Marker({ element: carIcon })
+              .setLngLat([position.longitude, position.latitude])
+              .addTo(this.map!);
+
+            this.deviceMarkers.set(deviceId, marker);
+          });
+        }
+      );
+    });
+  }
+
+  showModal(device?: any): void {
+    this.selectedDevice = device ?? null;
+    this.modalVisible = true;
+  }
+
+  handleOk(): void {
+    this.modalVisible = false;
+  }
+
+  handleCancel(): void {
+    this.modalVisible = false;
+  }
+
+  visibleGeofence = false;
+  size= 'default';
+
+
+  showDefault(): void {
+    this.size = 'default';
+    this.modalVisible = false;
+    this.visibleGeofence = true;
+    if (this.selectedDevice) {
+      this.loadGeofences(this.selectedDevice.deviceId); // Appeler la méthode propre
+    }
+  }
+  geofences: any[] = [];
+
+  loadGeofences(deviceId: number): void {
+    this.mapHomeService.getGeofencesByDeviceId(deviceId).subscribe(
+      (data) => {
+        this.geofences = data;
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des geofences', error);
+      }
+    );
+  }
+
+  openMap: { [name: string]: boolean } = {
+    sub1: true,
+    sub2: false,
+    sub3: false
+  };
+
+  close(): void {
+    this.visibleGeofence = false;
+  }
+
+
+  ngOnDestroy() {
+    this.map?.remove();
+    this.deviceMarkers.forEach(marker => marker.remove());
+    this.deviceMarkers.clear();
+    if (this.positionsSubscription) {
+      this.positionsSubscription.unsubscribe();
+    }
+    this.mapHomeService.disconnectWebSocket();
+  }
+}
 
 
 /*
@@ -495,125 +652,7 @@ export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 }
 */
-//code modal sans geofence
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  AfterViewInit,
-  OnDestroy
-} from '@angular/core';
-import { Map as MapLibreMap, Marker, NavigationControl } from 'maplibre-gl';
-import { Subscription } from 'rxjs';
-import { MapHomeService } from '../../services/map-home.service';
-import {VehiculeService} from '../../services/vehicule.service';
 
-@Component({
-  selector: 'app-map-home',
-  standalone: false,
-  templateUrl: './map-home.component.html',
-  styleUrl: './map-home.component.scss'
-})
-export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
-  map: MapLibreMap | undefined;
-  private deviceMarkers: Map<number, Marker> = new Map<number, Marker>();
-  private positionsSubscription: Subscription | undefined;
-
-  @ViewChild('map')
-  private mapContainer!: ElementRef<HTMLElement>;
-
-  modalVisible = false;
-  selectedDevice: any = null;
-
-  constructor(private mapHomeService: MapHomeService, private vehiculeService : VehiculeService) {}
-
-  ngOnInit(): void {}
-
-  ngAfterViewInit() {
-    const initialState = { lng: 10.1729, lat: 36.8702, zoom: 5 };
-
-    this.map = new MapLibreMap({
-      container: this.mapContainer.nativeElement,
-      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=sFhBT3kZc5gtzUAEukg8`,
-      center: [initialState.lng, initialState.lat],
-      zoom: initialState.zoom
-    });
-
-    this.map.addControl(new NavigationControl({}), 'top-right');
-    this.map.on('load', () => {
-      this.mapHomeService.connectWebSocket();
-
-      this.positionsSubscription = this.mapHomeService.fullData$.subscribe(
-        (positions: any[]) => {
-          positions.forEach((position: any) => {
-            const deviceId = position.deviceId;
-
-            const oldMarker = this.deviceMarkers.get(deviceId);
-            if (oldMarker) {
-              oldMarker.remove();
-            }
-
-            const carIcon = document.createElement('img');
-            carIcon.src = 'https://cdn-icons-png.flaticon.com/512/5412/5412275.png';
-            carIcon.style.width = '50px';
-            carIcon.style.height = '50px';
-            carIcon.style.cursor = 'pointer';
-
-            const deviceData = {
-              deviceId: deviceId,
-              name: position.deviceName,
-              uniqueId: position.uniqueId,
-              model: position.model,
-              nameDriver: position.attributes?.nameDriver,
-              latitude: position.latitude,
-              longitude: position.longitude,
-              speed: position.speed,
-              distance: position.attributes?.totalDistance,
-              battery: position.attributes?.batteryLevel,
-              status: position.status,
-            };
-
-            carIcon.addEventListener('click', () => {
-              this.showModal(deviceData);
-            });
-
-            const marker = new Marker({ element: carIcon })
-              .setLngLat([position.longitude, position.latitude])
-              .addTo(this.map!);
-
-            this.deviceMarkers.set(deviceId, marker);
-          });
-        }
-      );
-    });
-  }
-
-
-
-  showModal(device?: any): void {
-    this.selectedDevice = device ?? null;
-    this.modalVisible = true;
-  }
-
-  handleOk(): void {
-    this.modalVisible = false;
-  }
-
-  handleCancel(): void {
-    this.modalVisible = false;
-  }
-
-  ngOnDestroy() {
-    this.map?.remove();
-    this.deviceMarkers.forEach(marker => marker.remove());
-    this.deviceMarkers.clear();
-    if (this.positionsSubscription) {
-      this.positionsSubscription.unsubscribe();
-    }
-    this.mapHomeService.disconnectWebSocket();
-  }
-}
  //code du gitlab
 /*
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';

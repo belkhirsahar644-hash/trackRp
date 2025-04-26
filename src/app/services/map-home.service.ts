@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,9 @@ export class MapHomeService {
 
   constructor(private http: HttpClient) {}
 
+  getGeofencesByDeviceId(deviceId: number): Observable<any[]> {
+    return this.http.get<any[]>(`/api/geofences?deviceId=${deviceId}`);
+  }
   private fetchDeviceById(deviceId: number): Promise<any> {
     const params = new HttpParams().set('id', deviceId.toString());
     return this.http.get<any[]>(`${this.baseUrl}/devices`, { params }).toPromise();
@@ -55,8 +59,8 @@ export class MapHomeService {
               deviceName: device?.name || 'Inconnu',
               uniqueId: device?.uniqueId || 'Inconnu',
               model: device?.model || 'Inconnu',
-              nameDriver: device?.attributes?.nameDriver || 'Inconnu',
-              status: device?.status || 'Offline',
+              nameDriver: device?.attributes?.nameDriver ?? 'Inconnu',
+              status: device?.status ?? 'Offline',
             };
           })
         );
@@ -66,11 +70,11 @@ export class MapHomeService {
     };
 
     this.socket.onerror = (error) => {
-      console.error("WebSocket Error: ", error);
+      console.error('WebSocket Error:', error);
     };
 
     this.socket.onclose = (event) => {
-      console.log("WebSocket closed", event);
+      console.log('WebSocket closed', event);
     };
   }
 
@@ -80,6 +84,7 @@ export class MapHomeService {
     }
   }
 }
+
 
 /*
 //websoket

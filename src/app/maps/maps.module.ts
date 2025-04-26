@@ -9,6 +9,9 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import {  CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
 
@@ -20,8 +23,10 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
     exports: [
         MapHomeComponent, InfoComponent,
     ],
-    imports: [
+    imports: [NzMenuModule,NzDropDownModule,
         CommonModule, NzButtonModule, NzModalModule, NzDrawerModule, NzFormModule, NzInputModule, NzListModule, NzTagModule
-    ]
+    ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]  // Ajouter cette ligne
+
 })
 export class MapsModule { }
