@@ -145,6 +145,18 @@ export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
+  showAddZoneOptions = false;
+
+  toggleAddZoneOptions() {
+    this.showAddZoneOptions = !this.showAddZoneOptions;
+  }
+
+  createZone(type: string) {
+    console.log('Créer une zone de type :', type);
+    // Ici tu peux ouvrir un autre formulaire, ou afficher des champs supplémentaires
+  }
+
+
   ngOnDestroy() {
     this.map?.remove();
     this.deviceMarkers.forEach(marker => marker.remove());

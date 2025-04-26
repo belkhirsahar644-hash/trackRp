@@ -30,28 +30,42 @@
 
 </nz-modal>
 <nz-drawer
-
   [nzVisible]="visibleGeofence"
   nzPlacement="right"
   nzTitle="Zone Geofence"
-  [nzExtra]="extra"
   (nzOnClose)="close()"
 >
   <ng-container *nzDrawerContent>
-    <div *ngIf="geofences.length > 0; else noGeofences">
+
+    <!-- Bouton pour afficher les options -->
+    <button nz-button nzType="dashed" (click)="toggleAddZoneOptions()">
+      Ajouter une zone géographique
+    </button>
+
+
+    <div *ngIf="showAddZoneOptions" style="margin-top: 16px;">
+      <ul nz-menu nzMode="inline" style="border: none;">
+        <li nz-menu-item (click)="createZone('Identifiée')">Zone Identifiée</li>
+        <li nz-menu-item (click)="createZone('autorisee')">Zone Autorisée</li>
+      </ul>
+    </div>
+
+    <!-- Ensuite ta liste de geofences par exemple -->
+    <div *ngIf="geofences.length > 0; else noGeofences" style="margin-top: 24px;">
       <ul>
         <li *ngFor="let geofence of geofences">
           <strong>{{ geofence.name }}</strong> - {{ geofence.description }}
         </li>
       </ul>
     </div>
+
     <ng-template #noGeofences>
       <p>Aucune zone geofence trouvée pour ce véhicule.</p>
     </ng-template>
 
   </ng-container>
-
 </nz-drawer>
+
 
 <ng-template #extra>
   <button nz-button nzType="default" (click)="close()">Ajouter</button>
