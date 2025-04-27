@@ -1,79 +1,4 @@
-<!--code de modal avec geofence-->
-<div class="map-wrap">
-  <a href="https://www.maptiler.com" class="watermark">
-    <img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" />
-  </a>
-  <div class="map" #map></div>
-</div>
-
-<nz-modal
-  [(nzVisible)]="modalVisible"
-  nzTitle="Informations de l'appareil"
-  (nzOnCancel)="handleCancel()"
-  (nzOnOk)="handleOk()"
->
-  <ng-container *nzModalContent>
-    <p *ngIf="selectedDevice">Nom : {{ selectedDevice.name }}</p>
-    <p *ngIf="selectedDevice">Modèle : {{ selectedDevice.model }}</p>
-    <p *ngIf="selectedDevice">Conducteur : {{ selectedDevice.nameDriver }}</p>
-    <p *ngIf="selectedDevice">Identifiant unique : {{ selectedDevice.uniqueId }}</p>
-    <p *ngIf="selectedDevice">Status : {{ selectedDevice.status }}</p>
-
-    <p *ngIf="selectedDevice">ID : {{ selectedDevice.deviceId }}</p>
-    <p *ngIf="selectedDevice">Vitesse : {{ selectedDevice.speed }} km/h</p>
-    <p *ngIf="selectedDevice">Distance totale : {{ selectedDevice.distance | number:'1.0-2' }} m</p>
-    <p *ngIf="selectedDevice.battery !== undefined">Batterie : {{ selectedDevice.battery }}%</p>
-
-    <a  (click)="showDefault()"> Zone geofence</a>
-
-  </ng-container>
-
-</nz-modal>
-<nz-drawer
-  [nzVisible]="visibleGeofence"
-  nzPlacement="right"
-  nzTitle="Zone Geofence"
-  (nzOnClose)="close()"
->
-  <ng-container *nzDrawerContent>
-
-    <!-- Bouton pour afficher les options -->
-    <button nz-button nzType="dashed" (click)="toggleAddZoneOptions()">
-      Ajouter une zone géographique
-    </button>
-
-
-    <div *ngIf="showAddZoneOptions" style="margin-top: 16px;">
-      <ul nz-menu nzMode="inline" style="border: none;">
-        <li nz-menu-item (click)="createZone('Identifiée')">Zone Identifiée</li>
-        <li nz-menu-item (click)="createZone('autorisee')">Zone Autorisée</li>
-      </ul>
-    </div>
-
-    <!-- Ensuite ta liste de geofences par exemple -->
-    <div *ngIf="geofences.length > 0; else noGeofences" style="margin-top: 24px;">
-      <ul>
-        <li *ngFor="let geofence of geofences">
-          <strong>{{ geofence.name }}</strong> - {{ geofence.description }}
-        </li>
-      </ul>
-    </div>
-
-    <ng-template #noGeofences>
-      <p>Aucune zone geofence trouvée pour ce véhicule.</p>
-    </ng-template>
-
-  </ng-container>
-</nz-drawer>
-
-
-<ng-template #extra>
-  <button nz-button nzType="default" (click)="close()">Ajouter</button>
-  &nbsp;
-  <button nz-button nzType="primary" (click)="close()">OK</button>
-</ng-template>
-<!--
-<div class="map-wrap">
+<!--<div class="map-wrap">
   <a href="https://www.maptiler.com" class="watermark">
     <img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" />
   </a>
@@ -99,72 +24,44 @@
     <p *ngIf="selectedDevice.battery !== undefined">Batterie : {{ selectedDevice.battery }}%</p>
     <a (click)="startAddGeofence(selectedDevice)">➕ Ajouter une zone geofence</a>
   </ng-container>
-</nz-modal>
--->
-<!--<div class="map-wrap">
-  <a href="https://www.maptiler.com" class="watermark">
-    <img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" />
-  </a>
-  <div class="map" #map></div>
-</div>
-
-
-<nz-modal
-  [(nzVisible)]="modalVisible"
-  nzTitle="Informations de l'appareil"
-  (nzOnCancel)="handleCancel()"
-  (nzOnOk)="handleOk()"
->
-  <ng-container *nzModalContent>
-    <p *ngIf="selectedDevice">Nom : {{ selectedDevice.name }}</p>
-    <p *ngIf="selectedDevice">Modèle : {{ selectedDevice.model }}</p>
-    <p *ngIf="selectedDevice">Conducteur : {{ selectedDevice.nameDriver }}</p>
-    <p *ngIf="selectedDevice">Identifiant unique : {{ selectedDevice.uniqueId }}</p>
-    <p *ngIf="selectedDevice">Status : {{ selectedDevice.status }}</p>
-    <p *ngIf="selectedDevice">ID : {{ selectedDevice.deviceId }}</p>
-    <p *ngIf="selectedDevice">Vitesse : {{ selectedDevice.speed }} km/h</p>
-    <p *ngIf="selectedDevice">Distance totale : {{ selectedDevice.distance | number:'1.0-2' }} m</p>
-    <p *ngIf="selectedDevice.battery !== undefined">Batterie : {{ selectedDevice.battery }}%</p>
-
-
-    <a (click)="openZoneGeofence()"> Zone geofence</a>
-  </ng-container>
-</nz-modal>
-
-<nz-drawer
-  [nzClosable]="false"
-  [nzWidth]="320"
-  [nzVisible]="visible"
-  nzTitle="Zone geofence"
-  (nzOnClose)="close()"
->
-  <div nz-row> <a>hello</a>
-
-  </div>
-
-  <div nz-row>
-    <div nz-col nzSpan="24">
-      <nz-form-item>
-        <nz-form-label>Name</nz-form-label>
-        <nz-form-control>
-          <input nz-input placeholder="please enter cookbook name" />
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-  </div>
-
-  <p> {{selectedDevice?.name}}</p>
-  <button nz-button nzType="primary" (click)="startAddGeofence(selectedGeofenceDevice)">
-    Ajouter une zone
-  </button>
-</nz-drawer>
--->
-
-
-
+</nz-modal>-->
+<!--code de modal avec geofence-->
 
 <!--
+      <button nz-button nzType="dashed" (click)="toggleAddZoneOptions()">
+      Ajouter une zone géographique
+    </button>
+  <div *ngIf="showAddZoneOptions" style="margin-top: 1px;">
+      <ul nz-menu nzMode="inline" style="border: none;">
+        <li nz-menu-item (click)="createZone('Identifiée')">Zone Identifiée</li>
+        <li nz-menu-item (click)="createZone('autorisee')">Zone Autorisée</li>
+      </ul>
+    </div> -->
+<!-- Formulaire d'ajout
+   <nz-form-item>
+     <nz-form-label [nzSpan]="6" nzRequired>Nom de la zone</nz-form-label>
+     <nz-form-control [nzSpan]="14">
+       <input nz-input [(ngModel)]="geofenceName" name="geofenceName" placeholder="Entrez le nom de la zone" />
+     </nz-form-control>
+   </nz-form-item>
 
+   <nz-form-item>
+     <nz-form-label [nzSpan]="6" nzRequired>Type de la zone</nz-form-label>
+     <nz-form-control [nzSpan]="14">
+       <nz-select [(ngModel)]="geofenceType" name="geofenceType" nzPlaceHolder="Sélectionnez un type">
+         <nz-option nzValue="identifiee" nzLabel="Zone Identifiée"></nz-option>
+         <nz-option nzValue="autorisee" nzLabel="Zone Autorisée"></nz-option>
+       </nz-select>
+     </nz-form-control>
+   </nz-form-item>
+
+   <div style="text-align: right; margin-top: 16px;">
+     <button nz-button nzType="primary" (click)="confirmAddGeofence()">Ajouter</button>
+   </div>
+    <a (click)="startAddGeofence(selectedDevice)">➕ Ajouter une zone geofence</a>
+
+-->
+<!-- version final du coden-->
 <div class="map-wrap">
   <a href="https://www.maptiler.com" class="watermark">
     <img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" />
@@ -176,36 +73,83 @@
   [(nzVisible)]="modalVisible"
   nzTitle="Informations de l'appareil"
   (nzOnCancel)="handleCancel()"
-  (nzOnOk)="handleOk()"
 >
   <ng-container *nzModalContent>
     <p *ngIf="selectedDevice">Nom : {{ selectedDevice.name }}</p>
+    <p *ngIf="selectedDevice">Modèle : {{ selectedDevice.model }}</p>
+    <p *ngIf="selectedDevice">Conducteur : {{ selectedDevice.nameDriver }}</p>
     <p *ngIf="selectedDevice">Identifiant unique : {{ selectedDevice.uniqueId }}</p>
+    <p *ngIf="selectedDevice">Status : {{ selectedDevice.status }}</p>
+
     <p *ngIf="selectedDevice">ID : {{ selectedDevice.deviceId }}</p>
     <p *ngIf="selectedDevice">Vitesse : {{ selectedDevice.speed }} km/h</p>
     <p *ngIf="selectedDevice">Distance totale : {{ selectedDevice.distance | number:'1.0-2' }} m</p>
     <p *ngIf="selectedDevice.battery !== undefined">Batterie : {{ selectedDevice.battery }}%</p>
+
+    <a  (click)="showGeofence()"> Zone geofence</a>
+
   </ng-container>
+
 </nz-modal>
--->
-
-<!--<div class="map-wrap">
-  <a href="https://www.maptiler.com" class="watermark"><img
-    src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo"/></a>
-  <div class="map" #map></div>
-</div>
-
-<nz-modal
-  [(nzVisible)]="modalVisible"
-  nzTitle="Informations de l'appareil"
-  (nzOnCancel)="handleCancel()"
-  (nzOnOk)="handleOk()"
+<nz-drawer
+  [nzVisible]="visibleGeofence"
+  nzPlacement="right"
+  nzTitle="Zone Geofence"
+  (nzOnClose)="close()"
 >
-  <ng-container *nzModalContent>
-    <p *ngIf="selectedDevice">ID : {{ selectedDevice.deviceId }}</p>
-    <p *ngIf="selectedDevice">Vitesse : {{ selectedDevice.speed }} km/h</p>
-    <p *ngIf="selectedDevice">Distance totale : {{ selectedDevice.distance | number:'1.0-2' }} m</p>
-    <p *ngIf="selectedDevice.battery !== undefined">Batterie : {{ selectedDevice.battery }}%</p>
+  <ng-container *nzDrawerContent>
+
+
+       <a (click)="ShowForm()">➕ Ajouter une zone geofence</a>
+    <div *ngIf="FormVisible">
+      <form nz-form [formGroup]="validateForm" (ngSubmit)="AjoutertForm()">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" nzRequired nzFor="nom">Nom</nz-form-label>
+          <nz-form-control [nzSpan]="12"  nzErrorTip="Ajouter Nom du zone">
+            <input id="nom" type="text" nz-input formControlName="nom"  />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" nzFor="type" nzRequired>Type</nz-form-label>
+          <nz-form-control [nzSpan]="12" nzErrorTip="Ajouter le type du zone">
+            <nz-select id="type" formControlName="type" nzPlaceHolder="Type de zone">
+              <nz-option nzValue="Zone identifié" nzLabel="Zone identifié"></nz-option>
+              <nz-option nzValue="Zone autorisé" nzLabel="Zone autorisé"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control [nzSpan]="12" [nzOffset]="5">
+            <button nz-button nzType="primary" >Ajouter</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+
+    </div>
+
+
+    <div *ngIf="geofences.length > 0; else noGeofences" style="margin-top: 24px;">
+      <ul>
+        <li *ngFor="let geofence of geofences">
+          <strong>{{ geofence.name }}</strong> - {{ geofence.description }}
+        </li>
+      </ul>
+    </div>
+
+    <ng-template #noGeofences>
+      <p>Aucune zone geofence trouvée pour ce véhicule.</p>
+    </ng-template>
+
   </ng-container>
-</nz-modal>
--->
+</nz-drawer>
+
+
+<ng-template #extra>
+  <button nz-button nzType="default" (click)="close()">Ajouter</button>
+  &nbsp;
+  <button nz-button nzType="primary" (click)="close()">OK</button>
+</ng-template>
+
+

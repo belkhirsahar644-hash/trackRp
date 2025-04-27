@@ -8,6 +8,7 @@ import { VehiculeComponent } from './dashboards/vehicule/vehicule.component';
 import { SuperviseurComponent } from './dashboards/superviseur/superviseur.component';
 import { MapComponent } from './map/map.component';
 import {LayoutComponent} from './layout/layout.component';
+import {InfoComponent} from './maps/info/info.component';
 
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
          { path: 'vehicule', component: VehiculeComponent},
          { path: 'superviseur', component: SuperviseurComponent},
          { path: 'map/:deviceId', component: MapComponent},
+         { path: 'info', component: InfoComponent}
 
            ]
 },

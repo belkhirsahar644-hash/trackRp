@@ -12,7 +12,9 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import {  CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 
 @NgModule({
@@ -23,7 +25,8 @@ import {  CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     exports: [
         MapHomeComponent, InfoComponent,
     ],
-    imports: [NzMenuModule,NzDropDownModule,
+    imports: [ReactiveFormsModule,NzSelectModule,
+      NzMenuModule,NzDropDownModule,FormsModule,
         CommonModule, NzButtonModule, NzModalModule, NzDrawerModule, NzFormModule, NzInputModule, NzListModule, NzTagModule
     ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]  // Ajouter cette ligne
