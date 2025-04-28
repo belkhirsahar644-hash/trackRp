@@ -1,0 +1,40 @@
+<nz-modal [(nzVisible)]="isVisibleF"
+          nzTitle="{{notif.id ? 'Modifier' : 'Ajouter'}} un véhicule"
+          (nzOnCancel)="handleCancel()"
+          (nzOnOk)="handleOk()"
+          [nzOkDisabled]="!validateForm.valid"
+          nzOkText="{{notif.id ? 'Modifier' : 'Ajouter'}}"
+          nzCancelText="Annuler">
+
+  <ng-container *nzModalContent>
+    <!--formulaire-->
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzRequired nzFor="description">Description</nz-form-label>
+        <nz-form-control [nzSpan]="12"  nzErrorTip="Ajouter une description">
+          <input id="description" type="text" nz-input formControlName="description"  />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzFor="type" nzRequired>Type</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Ajouter le type ">
+          <nz-select id="type" formControlName="type" nzPlaceHolder="Type du notification">
+            <nz-option nzValue="deviceOnline" nzLabel="deviceOnline"></nz-option>
+            <nz-option nzValue="deviceUnknown" nzLabel="deviceUnknown"></nz-option>
+            <nz-option nzValue="deviceOffline" nzLabel="deviceOffline"></nz-option>
+            <nz-option nzValue="deviceInactive" nzLabel="deviceInactive"></nz-option>
+            <nz-option nzValue="deviceMoving" nzLabel="deviceMoving"></nz-option>
+            <nz-option nzValue="deviceStopped" nzLabel="deviceStopped"></nz-option>
+            <nz-option nzValue="geofenceEnter" nzLabel="geofenceEnter"></nz-option>
+            <nz-option nzValue="geofenceExit" nzLabel="geofenceExit"></nz-option>
+
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+
+
+  </ng-container>
+</nz-modal>
+

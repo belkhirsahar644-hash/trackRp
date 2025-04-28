@@ -1,7 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {Device, VehiculeService} from '../../services/vehicule.service';
-import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-vehicule',
@@ -9,7 +8,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
   templateUrl: './vehicule.component.html',
   styleUrl: './vehicule.component.scss'
 })
-export class VehiculeComponent {
+export class VehiculeComponent implements OnInit, OnDestroy{
 
   selectedDevice: Device = {
     model: '',
@@ -19,7 +18,6 @@ export class VehiculeComponent {
   }
   device: Device[] = [];
   showForm: boolean = false;
-  showdeleteModalV: boolean = false;
   searchValue = '';
   visible = false;
   private unsubscribe$ = new Subject<void>();
@@ -27,14 +25,8 @@ export class VehiculeComponent {
 
   constructor(
     private vehiculeService: VehiculeService,
-    private modal: NzModalService,
-  ) {
-  }
+  ) {}
 
-  openDeleteModalV(device: Device): void {
-    this.selectedDevice = device;
-    this.showdeleteModalV = true;
-  }
 
   ngOnInit(): void {
     this.loadVehicule();
@@ -87,11 +79,7 @@ export class VehiculeComponent {
     this.showForm = !this.showForm;
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next(); // Déclenche l'arrêt des abonnements
-    this.unsubscribe$.complete(); // Libère la mémoire
 
-  }
 
 
   deleteVehicle(data: Device) {
@@ -102,5 +90,11 @@ export class VehiculeComponent {
         }
       }
     )
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(); // Déclenche l'arrêt des abonnements
+    this.unsubscribe$.complete(); // Libère la mémoire
+
   }
 }

@@ -37,7 +37,6 @@ import { NzInputNumberLegacyModule } from 'ng-zorro-antd/input-number-legacy';
 import { SessionInterceptor } from './services/session-interceptor.service';
 import { MapsModule } from './maps/maps.module';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,7 +49,7 @@ import { MapsModule } from './maps/maps.module';
     HttpClientModule,
     BrowserModule,
     AppRoutingModule, NzDatePickerModule, NzGridModule, NzInputNumberLegacyModule,
-    FormsModule,MapsModule,
+    FormsModule,MapsModule,NzIconModule,
     RouterModule, NzSelectModule, NzSpaceModule, NzIconModule,
     DashboardsModule,
     FormulaireModule,

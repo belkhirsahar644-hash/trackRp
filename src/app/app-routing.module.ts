@@ -9,6 +9,7 @@ import { SuperviseurComponent } from './dashboards/superviseur/superviseur.compo
 import { MapComponent } from './map/map.component';
 import {LayoutComponent} from './layout/layout.component';
 import {InfoComponent} from './maps/info/info.component';
+import {NotificationComponent} from './dashboards/notification/notification.component';
 
 
 const routes: Routes = [
@@ -21,7 +22,8 @@ const routes: Routes = [
          { path: 'vehicule', component: VehiculeComponent},
          { path: 'superviseur', component: SuperviseurComponent},
          { path: 'map/:deviceId', component: MapComponent},
-         { path: 'info', component: InfoComponent}
+         { path: 'notif', component: NotificationComponent},
+         { path: 'info', component: InfoComponent},
 
            ]
 },

@@ -19,6 +19,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { RouterModule } from '@angular/router';
 import {NzPopconfirmModule} from 'ng-zorro-antd/popconfirm';
 import {MapsModule} from '../maps/maps.module';
+import { NotificationComponent } from './notification/notification.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {MapsModule} from '../maps/maps.module';
     ConducteursComponent,
     VehiculeComponent,
     SuperviseurComponent,
+    NotificationComponent,
   ],
   imports: [
     CommonModule,RouterModule,

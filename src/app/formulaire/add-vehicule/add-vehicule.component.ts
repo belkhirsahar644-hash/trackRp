@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
   templateUrl: './add-vehicule.component.html',
   styleUrl: './add-vehicule.component.scss'
 })
-export class AddVehiculeComponent implements OnInit {
+export class AddVehiculeComponent implements OnInit, OnDestroy {
   @Input() device: Device = {model: '', name: '',uniqueId: '', attributes:{nameDriver:''},};
   @Output() cancelEvent = new EventEmitter<void>();
   @Output() addEvent = new EventEmitter<any>();

@@ -15,27 +15,31 @@ import { takeUntil } from 'rxjs/operators';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { AddNotificationComponent } from './add-notification/add-notification.component';
+import {NzOptionComponent, NzSelectComponent} from "ng-zorro-antd/select";
 
 @NgModule({
   declarations: [
     AddconducteurComponent,
     AddVehiculeComponent,
     AddSuperviseurComponent,
+    AddNotificationComponent,
 
   ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    NzButtonModule,
-    NzModalModule,
-    ReactiveFormsModule, NzFormModule, NzInputModule
-  ],
-  exports: [
-    AddconducteurComponent,
-    AddVehiculeComponent,
-    AddSuperviseurComponent
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        FormsModule,
+        NzButtonModule,
+        NzModalModule,
+        ReactiveFormsModule, NzFormModule, NzInputModule, NzOptionComponent, NzSelectComponent
+    ],
+    exports: [
+        AddconducteurComponent,
+        AddVehiculeComponent,
+        AddSuperviseurComponent,
+        AddNotificationComponent
+    ],
 
 
 })
