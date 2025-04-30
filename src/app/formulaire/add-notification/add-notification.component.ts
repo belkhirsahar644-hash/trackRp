@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit, Input, Output, EventEmitter, model, inject} from '@angular/core';
 import {NotificationService} from '../../services/notification.service';
 import {Notification} from '../../services/notification.service';
-import {FormGroup, FormControl, NonNullableFormBuilder, Validators, FormBuilder} from '@angular/forms';
+import { Validators, FormBuilder} from '@angular/forms';
 import { Subject } from 'rxjs';
 
-type Type = 'deviceOnline' | 'deviceUnknown' |'deviceOffline' | 'deviceInactive' |'deviceMoving' | 'deviceStopped' |'geofenceEnter' | 'geofenceExit';
+type Type = 'deviceOnline' | 'deviceUnknown' |'deviceOffline' | 'deviceInactive' |'deviceMoving' | 'deviceStopped' |'geofenceEnter' | 'geofenceExit'   |'commandResult' | 'queuedCommandSent'  |'deviceOverspeed' | 'deviceFuelDrop'  |'deviceFuelIncrease' | 'alarm'  |'ignitionOn' | 'ignitionOff';
 
 @Component({
   selector: 'app-add-notification',

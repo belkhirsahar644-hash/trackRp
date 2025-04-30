@@ -9,6 +9,9 @@ export interface Device {
   name: string;
   attributes: {
     nameDriver: string;
+    speedLimit: string;
+    fuelDropThreshold: string;
+    fuelIncreaseThreshold: string;
 
   };
 

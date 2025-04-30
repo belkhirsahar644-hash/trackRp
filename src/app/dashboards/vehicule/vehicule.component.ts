@@ -14,7 +14,12 @@ export class VehiculeComponent implements OnInit, OnDestroy{
     model: '',
     name: '',
     uniqueId: '',
-    attributes:{nameDriver:''},
+    attributes:{
+      nameDriver:'',
+      speedLimit:'',
+      fuelDropThreshold:'',
+      fuelIncreaseThreshold:'',
+    },
   }
   device: Device[] = [];
   showForm: boolean = false;
@@ -72,8 +77,12 @@ export class VehiculeComponent implements OnInit, OnDestroy{
       model: '',
       name: '',
       uniqueId: '',
-      attributes:{nameDriver:''},
-
+      attributes:{
+        nameDriver:'',
+        speedLimit:'',
+        fuelDropThreshold:'',
+        fuelIncreaseThreshold:'',
+      },
 
     };
     this.showForm = !this.showForm;

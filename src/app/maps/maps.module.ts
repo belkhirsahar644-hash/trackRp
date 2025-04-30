@@ -15,6 +15,7 @@ import {  CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { FormulaireModule } from "../formulaire/formulaire.module";
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     exports: [
         MapHomeComponent, InfoComponent,
     ],
-    imports: [ReactiveFormsModule,NzSelectModule,
+    imports: [ReactiveFormsModule,NzSelectModule,FormulaireModule,
       NzMenuModule,NzDropDownModule,FormsModule,
         CommonModule, NzButtonModule, NzModalModule, NzDrawerModule, NzFormModule, NzInputModule, NzListModule, NzTagModule
     ],

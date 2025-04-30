@@ -11,7 +11,17 @@ import { Subject } from 'rxjs';
   styleUrl: './add-vehicule.component.scss'
 })
 export class AddVehiculeComponent implements OnInit, OnDestroy {
-  @Input() device: Device = {model: '', name: '',uniqueId: '', attributes:{nameDriver:''},};
+  @Input() device: Device = {
+    model: '',
+    name: '',
+    uniqueId: '',
+    attributes:{
+      nameDriver:'',
+      speedLimit:'',
+      fuelDropThreshold:'',
+      fuelIncreaseThreshold:'',
+    },
+  };
   @Output() cancelEvent = new EventEmitter<void>();
   @Output() addEvent = new EventEmitter<any>();
   @Input() isVisibleV = true;
@@ -25,7 +35,11 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
       uniqueId: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
       model: new FormControl('', [Validators.required]),
-      nameDriver: new FormControl('', [Validators.required]),
+      nameDriver: new FormControl(''),
+      speedLimit: new FormControl(''),
+      fuelDropThreshold: new FormControl(''),
+      fuelIncreaseThreshold: new FormControl(''),
+
     })
   }
   ngOnInit(): void {
@@ -33,7 +47,10 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
       name: this.device?.name || '',
       uniqueId: this.device?.uniqueId || '',
       model: this.device?.model || '',
-      nameDriver: this.device?.attributes?.nameDriver || '',  // Initialisez ici si 'device' a les données
+      nameDriver: this.device?.attributes?.nameDriver || '',
+      speedLimit: this.device?.attributes?.speedLimit || '',
+      fuelDropThreshold: this.device?.attributes?.fuelDropThreshold || '',
+      fuelIncreaseThreshold: this.device?.attributes?.fuelIncreaseThreshold || '',
 
     });
   }
@@ -62,7 +79,11 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
       uniqueId: formData.uniqueId,
       model: formData.model,
       attributes: {
-        nameDriver: formData.nameDriver
+        nameDriver: formData.nameDriver,
+        speedLimit: formData.speedLimit,
+        fuelDropThreshold:  formData.fuelDropThreshold,
+        fuelIncreaseThreshold:  formData.fuelIncreaseThreshold,
+
       }
     };
 

@@ -1,27 +1,25 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submit()" *ngIf="visible">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="5" nzRequired nzFor="nom">Nom</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzErrorTip="Ajouter Nom du zone">
+      <input id="nom" type="text" nz-input formControlName="nom" />
+    </nz-form-control>
+  </nz-form-item>
 
-  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-    <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired nzFor="nom">Nom</nz-form-label>
-      <nz-form-control [nzSpan]="12"  nzErrorTip="Ajouter Nom du zone">
-        <input id="nom" type="text" nz-input formControlName="nom"  />
-      </nz-form-control>
-    </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="5" nzFor="type" nzRequired>Type</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzErrorTip="Ajouter le type du zone">
+      <nz-select id="type" formControlName="type" nzPlaceHolder="Type de zone">
+        <nz-option nzValue="Zone identifié" nzLabel="Zone identifié"></nz-option>
+        <nz-option nzValue="Zone autorisé" nzLabel="Zone autorisé"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzFor="type" nzRequired>Type</nz-form-label>
-      <nz-form-control [nzSpan]="12" nzErrorTip="Ajouter le type du zone">
-        <nz-select id="type" formControlName="type" nzPlaceHolder="Type de zone">
-          <nz-option nzValue="Zone identifié" nzLabel="Zone identifié"></nz-option>
-          <nz-option nzValue="Zone autorisé" nzLabel="Zone autorisé"></nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item>
-      <nz-form-control [nzSpan]="12" [nzOffset]="5">
-        <button nz-button nzType="primary" >Ajouter</button>
-      </nz-form-control>
-    </nz-form-item>
-  </form>
-
-
+  <nz-form-item>
+    <nz-form-control [nzSpan]="12" [nzOffset]="5">
+      <button nz-button nzType="primary">Ajouter</button>
+      &nbsp;
+    </nz-form-control>
+  </nz-form-item>
+</form>

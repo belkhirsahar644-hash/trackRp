@@ -2,7 +2,7 @@
 nzTitle="{{device.id ? 'Modifier' : 'Ajouter'}} un véhicule"
 (nzOnCancel)="handleCancel()"
 (nzOnOk)="handleOk()"
-          [nzOkDisabled]="!VehiculForm.valid"
+          [nzOkDisabled]="VehiculForm.invalid"
 nzOkText="{{device.id ? 'Modifier' : 'Ajouter'}}"
 nzCancelText="Annuler">
 
@@ -10,9 +10,9 @@ nzCancelText="Annuler">
   <!--formulaire-->
   <form nz-form  [formGroup]="VehiculForm" >
     <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>Matricule</nz-form-label>
-      <nz-form-control [nzSpan]="12" nzValidatingTip="Validating...">
-        <input nz-input formControlName="uniqueId" placeholder="Matricule" />
+      <nz-form-label [nzSpan]="7"  nzRequired >Identifiant</nz-form-label>
+      <nz-form-control [nzSpan]="12" [nzErrorTip]="'Identifiant requis'"   nzValidatingTip="Validating...">
+        <input nz-input formControlName="uniqueId" placeholder="Identifiant" />
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -30,9 +30,30 @@ nzCancelText="Annuler">
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>Nom du conducteur</nz-form-label>
+      <nz-form-label [nzSpan]="7" >Nom du conducteur</nz-form-label>
       <nz-form-control [nzSpan]="12">
         <input nz-input formControlName="nameDriver" placeholder="Nom du conducteur" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" >Limite de vitesse </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input nz-input formControlName="speedLimit" placeholder="Limite de vitesse" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" >Seuil perte de carburant </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input nz-input formControlName="fuelDropThreshold" placeholder="Seuil perte de carburant" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" >Seuil ajout de carburant </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input nz-input formControlName="fuelIncreaseThreshold" placeholder="Seuil ajout de carburant" />
       </nz-form-control>
     </nz-form-item>
 
