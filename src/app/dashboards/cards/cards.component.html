@@ -3,18 +3,32 @@
   <div *ngIf="!isLoading">
   <div nz-row [nzGutter]="8">
     <div nz-col [nzSpan]="8">
-      <nz-card nzTitle="Superviseurs">
+      <nz-card nzTitle="Superviseurs" class="dashboard-card center-content" >
         <p>Total : {{ supervisorCount }}</p>
       </nz-card>
     </div>
+
     <div nz-col [nzSpan]="8">
-      <nz-card nzTitle="Conducteurs">
+      <nz-card nzTitle="Conducteurs" class="dashboard-card">
         <p>Total : {{ driverCount }}</p>
       </nz-card>
     </div>
+
     <div nz-col [nzSpan]="8">
-      <nz-card nzTitle="Véhicules">
+      <nz-card nzTitle="Appareil" class="dashboard-card">
         <p>Total : {{ vehicleCount }}</p>
+
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu nzSelectable>
+            <li nz-menu-item *ngFor="let name of installedDeviceNames">{{ name }}</li>
+
+          </ul>
+        </nz-dropdown-menu>
+        <p> Appareil Connecté :
+          <a nz-dropdown [nzDropdownMenu]="menu">
+            {{ AppareilInstaller }}
+            <nz-icon nzType="down" />
+          </a></p>
       </nz-card>
     </div>
   </div>

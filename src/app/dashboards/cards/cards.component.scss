@@ -1,41 +1,15 @@
-/*.cards-container {
+.dashboard-card {
+  min-height: 200px;
   display: flex;
-  gap: 15px;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.card {
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  width: 250px;
+.dashboard-card .ant-card-body {
+  min-height: 150px; /* ou 200px selon ton besoin */
+  display: flex;
+  justify-content: center; /* centrer horizontalement */
+  align-items: center;     /* centrer verticalement */
+  flex-direction: column;  /* empile les éléments en colonne */
   text-align: center;
 }
-.v { background-color: blue; color: white; }
-.s { background-color: orange; color: white; }
-.c { background-color: green; color: white; }
-*/
-/* cards.component.scss */
-.cards-container {
-  display: flex;
-  flex-wrap: wrap;
-  transition: margin-left 0.3s ease;
-  margin-left: 0px;
-}
 
-.cards-container.sidebar-open {
-  margin-left: 50px;  /* Largeur du sidebar lorsqu'il est ouvert */
-}
-
-.card {
-  width: 250px;
-  margin: 10px;
-  padding: 20px;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-}
-.v { background-color: blue; color: white; }
-.c { background-color: orange; color: white; }
-.s { background-color: green; color: white; }
-/* Optionnel : Ajuster la taille des cartes lorsque la sidebar est fermée */
-.cards-container.sidebar-open .card {
-  width: 250px; /* Plus large si le sidebar est fermé */
-}

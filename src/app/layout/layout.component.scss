@@ -16,8 +16,7 @@ nz-header {
   display: flex;
   align-items: center;
   gap: 20px;
-  position: fixed; /* Fixe la section à droite */
-  right: 24px; /* Ajustez la distance de la droite */
+  margin-left: auto;
 }
 
 .periode {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
+import { Observable } from 'rxjs';
 
 export interface Device {
   "id"?: number;
@@ -30,5 +31,9 @@ export class VehiculeService {
   deleteVehicule(device: Device){
     return this.http.delete(environment.apiURL + "devices/" + device.id, );
   }
+  getDeviceById(id: number): Observable<Device> {
+    return this.http.get<Device>(`/api/devices/${id}`);
+  }
+
 
 }
