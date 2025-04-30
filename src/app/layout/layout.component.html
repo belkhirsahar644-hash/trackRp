@@ -21,7 +21,7 @@
         <a routerLink="/vehicule"> 🚗 Gestion des Véhicules </a>
       </li>
       <li nz-menu-item>
-        <nz-icon nzType="user" />
+        <nz-icon nzType="user"/>
         <a routerLink="/notif"> 🚗 Gestion des Notifications</a>
       </li>
 
@@ -31,6 +31,7 @@
 
     <nz-header>
       <div class="header-container">
+
         <div class="periode" *ngIf="isMapRoute()">
           <label for="period">Période :</label>
           <nz-select
@@ -67,20 +68,59 @@
           ></nz-date-picker>
 
         </div>
+        <div class="right-section">
+          <button
+            class="btn btn-light position-relative notifiction-list"
+            nz-dropdown
+            [nzDropdownMenu]="notificationMenu"
+            nzTrigger="click"
+          >
+            <nz-icon nzType="bell" />
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              *ngIf="notifications.length > 0"
+            >
+        {{ notifications.length }}
+      </span>
+          </button>
 
+          <nz-dropdown-menu #notificationMenu="nzDropdownMenu">
+            <ul nz-menu class="dropdown-menu dropdown-menu-end show p-0 mt-2" style="min-width: 250px">
+              <li *ngIf="notifications.length === 0" class="dropdown-item text-center text-muted">
+                No notifications
+              </li>
+              <li
+                *ngFor="let notification of notifications"
+                class="dropdown-item"
+              >
+                {{ notification.title }}
+              </li>
+            </ul>
+          </nz-dropdown-menu>
 
+          <div class="user-info" style="cursor:pointer;" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+            <nz-avatar nzIcon="user" (click)="handleUserIconClick()"></nz-avatar>
+            <span>{{ userName }}</span>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu>
+                <li (click)="logout()" nz-menu-item>Se déconnecter</li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
 
-        <div class="user-info">
-          <nz-avatar nzIcon="user" (click)="handleUserIconClick()"></nz-avatar>
-          <span>{{ userName }}</span>
-          <button *ngIf="showLogout" nz-button nzType="default" (click)="logout()">Se déconnecter</button>
         </div>
+
+
+
+
+
+
       </div>
     </nz-header>
 
     <nz-content>
       <div class="inner-content">
-       <router-outlet></router-outlet>
+        <router-outlet></router-outlet>
       </div>
 
     </nz-content>

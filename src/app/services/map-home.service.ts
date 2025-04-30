@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 
@@ -13,6 +13,7 @@ export class MapHomeService {
   private devicesMap: Map<number, any> = new Map(); //une mémoire locale pour stocker les devices par ID
   private fullDataSubject: Subject<any[]> = new Subject<any[]>(); //Un Subject pour envoyer des positions enrichies aux composants qui écoutent
   fullData$ = this.fullDataSubject.asObservable(); //Un Observable public  pour recevoir les données dans le composant.
+  socketEvents: BehaviorSubject<any> = new BehaviorSubject(null);
 
 
   constructor(private http: HttpClient) {}
@@ -34,7 +35,9 @@ export class MapHomeService {
     this.socket.onmessage = async (event) => {
       //transformation du message reçu (JSON) en objet JavaScript
       const data = JSON.parse(event.data);
-
+      if (data.events) {
+        this.socketEvents.next(data.events);
+      }
       //le message contient un tableau devices
       if (data.devices) {
         //parcourt chaque device et on le stocke dans devicesMap

@@ -774,11 +774,16 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
   ) {}
 
   ngAfterViewInit() {
-    const initialState = { lng: 10.1729, lat: 36.8702, zoom: 5 };
+    const initialState = { lng: 10.1729, lat: 36.8702, zoom: 17 };
 
     this.map = new MapLibreMap({
       container: this.mapContainer.nativeElement,
-      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=sFhBT3kZc5gtzUAEukg8`,
+      //style: `https://api.maptiler.com/maps/satellite/?key=sFhBT3kZc5gtzUAEukg8`,
+      //style: `https://api.maptiler.com/maps/satellite/style.json?key=sFhBT3kZc5gtzUAEukg8`,
+
+      //style: `https://api.maptiler.com/maps/topo-v2/style.json?key=sFhBT3kZc5gtzUAEukg8`,
+
+      style: `https://tiles.stadiamaps.com/styles/osm_bright.json`,
       center: [initialState.lng, initialState.lat],
       zoom: initialState.zoom
     });
@@ -847,6 +852,8 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
             }
 
             const carIcon = document.createElement('img');
+
+
 
             if (position.attributes.status) {
               carIcon.src = 'https://cdn-icons-png.flaticon.com/512/4042/4042715.png';

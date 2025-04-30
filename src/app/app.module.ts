@@ -36,6 +36,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzInputNumberLegacyModule } from 'ng-zorro-antd/input-number-legacy';
 import { SessionInterceptor } from './services/session-interceptor.service';
 import { MapsModule } from './maps/maps.module';
+import {NzNotificationModule} from 'ng-zorro-antd/notification';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,7 @@ import { MapsModule } from './maps/maps.module';
     NzIconModule.forRoot(icons), NzAvatarModule,
     NzDropDownModule,
     NzMenuModule,
-    HttpClientModule
+    NzNotificationModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [{

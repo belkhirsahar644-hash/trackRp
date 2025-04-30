@@ -1,28 +1,39 @@
-import {Component, OnInit} from '@angular/core';
-import {LayoutService} from '../services/layout.service';
-import {Session} from '../services/layout.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {LayoutService, Session} from '../services/layout.service';
 import {Router} from '@angular/router';
 import dayjs from 'dayjs';
-
+import {MapHomeService} from '../services/map-home.service';
+import {Subscription} from 'rxjs';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import { Howl } from 'howler';
 @Component({
   selector: 'app-layout',
   standalone: false,
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent implements OnInit, OnDestroy {
   isSiderOpen: boolean = false;
   menuVisible: boolean = false;
   userName: string = '';
   showLogout: boolean = false;
   isUserIconClicked: boolean = false;
   selectedPeriod: string = 'today';
-
+  private positionsSubscription: Subscription | undefined;
   startDate: Date | null = null;
   endDate: Date | null = null;
-
-  constructor(private layoutService: LayoutService, private router: Router) {
+  private sound: Howl;
+  constructor(
+    private layoutService: LayoutService, private router: Router,
+    private mapHomeService: MapHomeService,
+    private notification: NzNotificationService
+  ) {
+    this.sound = new Howl({
+      src: ['assets/mixkit-correct-answer-tone-2870.wav'],
+      volume: 1.0
+    });
   }
+
 
   ngOnInit() {
     this.layoutService.getSession().subscribe(
@@ -34,7 +45,26 @@ export class LayoutComponent implements OnInit {
         console.log(error)
         this.router.navigate(['/login'])
       }
-    )
+    );
+    this.mapHomeService.connectWebSocket();
+    this.positionsSubscription = this.mapHomeService.socketEvents.subscribe(
+      (notifications: any[]) => {
+        console.log("ldata", notifications);
+        if (notifications && notifications.length) {
+          notifications.forEach(notification => {
+            this.notifications.push({
+              title : notification.attributes.message
+            });
+            this.notification.create(
+              'warning',
+              notification.eventTime,
+              notification.attributes.message
+            );
+            this.sound.play();
+          })
+        }
+
+      });
   }
   // Méthode à appeler quand l'utilisateur change la periode
   onPeriodChange(period: string): void {
@@ -48,6 +78,9 @@ export class LayoutComponent implements OnInit {
   }
 
   // Méthode à appeler quand l'utilisateur change la date
+  notifications: any[]= [
+
+  ];
   onCustomDateSelected(): void {
     if (this.startDate && this.endDate) {
       const start = dayjs(this.startDate).startOf('day').toISOString(); // 00:00:00
@@ -77,6 +110,10 @@ export class LayoutComponent implements OnInit {
 
   isMapRoute(): boolean {
     return this.router.url.includes('/map');
+  }
+
+  ngOnDestroy(): void {
+    this.mapHomeService.disconnectWebSocket();
   }
 
 
