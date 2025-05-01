@@ -3,9 +3,9 @@ import { CardsService } from '../../services/cards.service';
 import { Superviseur } from '../../services/superviseur.service';
 import { Driver } from '../../services/conducteurs.service';
 import { MapHomeService } from '../../services/map-home.service';
-import {Device, VehiculeService} from '../../services/vehicule.service';
-import { forkJoin, of } from 'rxjs';
-import { map, switchMap, catchError } from 'rxjs/operators';
+import { Device, VehiculeService } from '../../services/vehicule.service';
+import { forkJoin, of, Subscription } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cards',
@@ -17,106 +17,124 @@ export class CardsComponent implements OnInit {
   vehicleCount = 0;
   supervisorCount = 0;
   driverCount = 0;
-  isLoading = true;  // Variable pour l'état de chargement
+  isLoading = true;
 
-  installedDeviceNames: string[] = [];
+  resetMapView = false;
 
   AppareilInstaller = 0;
-  constructor(private cardsService:CardsService,
-              private mapHomeService: MapHomeService,
-              private vehiculeService: VehiculeService) {}
+  installedDeviceNames: { id: number, name: string }[] = [];
+  selectedDeviceId: number | null = null;
+
+  private positionSub: Subscription | undefined;
+
+  constructor(
+    private cardsService: CardsService,
+    private mapHomeService: MapHomeService,
+    private vehiculeService: VehiculeService
+  ) {}
+
+
   ngOnInit() {
-    console.log(" CardsComponent chargé !");
+    console.log('CardsComponent chargé !');
     this.fetchData();
 
-    /*this.mapHomeService.fullData$.subscribe((positions) => {
-      if (positions ) {
-                this.AppareilInstaller = positions.length;
-      }
-    });
-    this.mapHomeService.connectWebSocket(); // Lance la connexion WebSocket
-*/
-    this.mapHomeService.fullData$.pipe(
-      switchMap((positions) => {
-        if (!positions || positions.length === 0) {
-          this.AppareilInstaller = 0;
-          return of([]);
-        }
+    // Lancement WebSocket
+    this.mapHomeService.connectWebSocket();
 
-        this.AppareilInstaller = positions.length;
+    // Abonnement WebSocket
+    this.positionSub = this.mapHomeService.fullData$.subscribe((positions) => {
+      if (!positions || positions.length === 0) return;
 
-        const uniqueDeviceIds = Array.from(new Set(positions.map(p => p.deviceId)));
+      const newDeviceIds = Array.from(new Set(positions.map(p => p.deviceId)));
 
-        // Appels parallèles pour récupérer les noms
-        const deviceRequests = uniqueDeviceIds.map(id =>
+      // Ne pas compter les devices déjà connus
+      const knownDeviceIds = this.installedDeviceNames.map(d => d.id);
+      const unknownDeviceIds = newDeviceIds.filter(id => !knownDeviceIds.includes(id));
+
+      // Mettre à jour le compteur
+      const allDeviceIds = new Set([...knownDeviceIds, ...newDeviceIds]);
+      this.AppareilInstaller = allDeviceIds.size;
+
+      if (unknownDeviceIds.length > 0) {
+        const deviceRequests = unknownDeviceIds.map(id =>
           this.vehiculeService.getDeviceById(id).pipe(
             catchError(error => {
               console.error(`Erreur lors de la récupération du device ${id}`, error);
-              return of(null); // Pour ne pas bloquer forkJoin
+              return of(null);
             })
           )
         );
 
-        return forkJoin(deviceRequests);
-      }),
-      map(devices => devices.filter(device => device !== null))
-    ).subscribe((devices: Device[]) => {
-      this.installedDeviceNames = devices.map(d => d.name);
-    });
+        forkJoin(deviceRequests).subscribe((devices: (Device | null)[]) => {
+          const validDevices = devices.filter((d): d is Device & { id: number } => d !== null && typeof d.id === 'number');
 
+          const newDevices = validDevices.map(d => ({
+            id: d.id,
+            name: d.name
+          }));
+
+// Ne pas ajouter les devices déjà présents
+          const existingIds = new Set(this.installedDeviceNames.map(d => d.id));
+          const uniqueNewDevices = newDevices.filter(d => !existingIds.has(d.id));
+
+// Mise à jour finale
+          this.installedDeviceNames = [...this.installedDeviceNames, ...uniqueNewDevices];
+        });
+      }
+    });
+  }
+  installerClicked = false;
+
+  onClickInstaller() {
+    this.selectedDeviceId = null;
+    this.resetMapView = true;  // ceci va déclencher le reset dans MapHomeComponent
+  }
+
+
+
+  onDeviceSelected(deviceId: number) {
+    this.selectedDeviceId = deviceId;
   }
 
   fetchData() {
-    // Récupération du nombre de véhicules
     this.cardsService.getVehicule()
-      .pipe(
-        catchError(error => {
-          console.error(' Erreur API devices:', error);
-          return of([]); // Retourne un tableau vide en cas d'erreur
-        })
-      )
+      .pipe(catchError(error => {
+        console.error('Erreur API devices:', error);
+        return of([]);
+      }))
       .subscribe((devices: Device[]) => {
-        console.log(' Véhicules récupérés:', devices);
         this.vehicleCount = devices.length;
-        this.checkLoadingStatus();  // Vérifie si toutes les données sont chargées
-
+        this.checkLoadingStatus();
       });
 
-    // Récupération du nombre d'utilisateurs
     this.cardsService.getSuperviseur()
-      .pipe(
-        catchError(error => {
-          console.error(' Erreur API users:', error);
-          return of([]); // Retourne un tableau vide en cas d'erreur
-        })
-      )
+      .pipe(catchError(error => {
+        console.error('Erreur API users:', error);
+        return of([]);
+      }))
       .subscribe((superviseur: Superviseur[]) => {
-        console.log(' Utilisateurs récupérés:', superviseur);
         this.supervisorCount = superviseur.length;
-        this.checkLoadingStatus();  // Vérifie si toutes les données sont chargées
-
-        //this.supervisorCount = superviseur.filter(user => user.administrator).length;
+        this.checkLoadingStatus();
       });
 
-    // Récupération du nombre de conducteurs
     this.cardsService.getDriver()
-      .pipe(
-        catchError(error => {
-          console.error(' Erreur API drivers:', error);
-          return of([]); // Retourne un tableau vide en cas d'erreur
-        })
-      )
+      .pipe(catchError(error => {
+        console.error('Erreur API drivers:', error);
+        return of([]);
+      }))
       .subscribe((drivers: Driver[]) => {
-        console.log(' Conducteurs récupérés:', drivers);
         this.driverCount = drivers.length;
-        this.checkLoadingStatus();  // Vérifie si toutes les données sont chargées
-
+        this.checkLoadingStatus();
       });
-
   }
+
   checkLoadingStatus() {
     if (this.vehicleCount && this.supervisorCount && this.driverCount) {
-      this.isLoading = false; // Désactive l'indicateur de chargement
+      this.isLoading = false;
     }
+  }
+
+  ngOnDestroy() {
+    this.positionSub?.unsubscribe();
   }
 }

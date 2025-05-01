@@ -4,7 +4,10 @@ import {
   ElementRef,
   AfterViewInit,
   OnDestroy,
-  inject
+  inject,
+  Input,Output, EventEmitter,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import * as turf from '@turf/turf';
 import { Map as MapLibreMap, Marker, NavigationControl } from 'maplibre-gl';
@@ -19,14 +22,20 @@ type Type = 'Zone identifié' | 'Zone autorisé';
   selector: 'app-map-home',
   standalone: false,
   templateUrl: './map-home.component.html',
-  styleUrl: './map-home.component.scss'
+  styleUrls: ['./map-home.component.scss']
 })
 export class MapHomeComponent implements AfterViewInit, OnDestroy {
   map: MapLibreMap | undefined; // Pour stocker l'objet carte
   private deviceMarkers: Map<number, Marker> = new Map<number, Marker>();
   private positionsSubscription: Subscription | undefined;
+  private currentDeviceMarker: Marker | null = null; // Pour stocker le marqueur du device suivi
 
   @ViewChild('map') private mapContainer!: ElementRef<HTMLElement>;
+
+  @Input() selectedDeviceId: number | null = null;
+
+  @Input() resetMapView: boolean = false;
+  @Output() mapResetDone = new EventEmitter<void>();
 
   modalVisible = false;
   selectedDevice: any = null;
@@ -37,19 +46,54 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private mapHomeService: MapHomeService,
-    private http: HttpClient,
+    private http: HttpClient
   ) {}
+
+  /*ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedDeviceId'] && this.selectedDeviceId !== null) {
+      this.centerMapOnDevice(this.selectedDeviceId);
+    }
+  }*/
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['resetMapView'] && this.resetMapView === true) {
+      this.resetToInitialView();
+      this.mapResetDone.emit(); // Notifie le parent qu’on a fini
+    }
+
+    if (changes['selectedDeviceId'] && this.selectedDeviceId !== null) {
+      this.centerMapOnDevice(this.selectedDeviceId);
+    }
+  }
+  resetToInitialView(): void {
+    const initialState = { lng: 10.1729, lat: 36.8702, zoom: 5 };
+    this.map?.flyTo({
+      center: [initialState.lng, initialState.lat],
+      zoom: initialState.zoom,
+      speed: 1.2
+    });
+  }
+
+
+
+  centerMapOnDevice(deviceId: number) {
+    const marker = this.deviceMarkers.get(deviceId);
+    if (marker) {
+      const lngLat = marker.getLngLat();
+      this.map?.flyTo({
+        center: [lngLat.lng, lngLat.lat],
+        zoom: 15,
+        speed: 1.2
+      });
+    } else {
+      console.warn(`Device ${deviceId} non trouvé sur la carte.`);
+    }
+  }
 
   ngAfterViewInit() {
     const initialState = { lng: 10.1729, lat: 36.8702, zoom: 5 };
 
     this.map = new MapLibreMap({
       container: this.mapContainer.nativeElement,
-      //style: `https://api.maptiler.com/maps/satellite/?key=sFhBT3kZc5gtzUAEukg8`,
-      //style: `https://api.maptiler.com/maps/satellite/style.json?key=sFhBT3kZc5gtzUAEukg8`,
-
-      //style: `https://api.maptiler.com/maps/topo-v2/style.json?key=sFhBT3kZc5gtzUAEukg8`,
-
       style: `https://tiles.stadiamaps.com/styles/osm_bright.json`,
       center: [initialState.lng, initialState.lat],
       zoom: initialState.zoom
@@ -72,7 +116,6 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
 
         const shapeId = `shape-${Date.now()}`;
         this.tempShapeId = shapeId;
-
 
         // Zone identifié - Cercle autour du centre
         const circle = turf.circle(center, radiusInMeters, {
@@ -101,7 +144,6 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
 
         // Envoi de la géofence à l'API
         this.createGeofence(area, 'Zone identifiée autour du dépôt');
-
       }
     });
 
@@ -119,15 +161,9 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
             }
 
             const carIcon = document.createElement('img');
-
-
-
-            if (position.attributes.status) {
-              carIcon.src = 'https://cdn-icons-png.flaticon.com/512/4042/4042715.png';
-            } else {
-
-              carIcon.src = 'https://cdn-icons-png.flaticon.com/512/2813/2813010.png';
-            }
+            carIcon.src = position.attributes.status
+              ? 'https://cdn-icons-png.flaticon.com/512/4042/4042715.png'
+              : 'https://cdn-icons-png.flaticon.com/512/2813/2813010.png';
             carIcon.style.width = '50px';
             carIcon.style.height = '50px';
             carIcon.style.cursor = 'pointer';
@@ -154,10 +190,31 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
               .setLngLat([position.longitude, position.latitude])
               .addTo(this.map!);
 
+            // Mise à jour du marqueur suivi
+            if (this.selectedDeviceId === deviceId) {
+              this.updateCurrentDeviceMarker(marker, position);
+            }
+
             this.deviceMarkers.set(deviceId, marker);
           });
         }
       );
+    });
+  }
+
+  updateCurrentDeviceMarker(marker: Marker, position: any) {
+    // Si un marqueur de l'appareil est déjà présent, on le met à jour
+    if (this.currentDeviceMarker) {
+      this.currentDeviceMarker.setLngLat([position.longitude, position.latitude]);
+    } else {
+      this.currentDeviceMarker = marker;
+    }
+
+    // Centrer la carte sur le nouveau marqueur
+    this.map?.flyTo({
+      center: [position.longitude, position.latitude],
+      zoom: 15,
+      speed: 1.2
     });
   }
 
@@ -230,6 +287,8 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
     );
   }
 
+
+
   startAddGeofence(device: any): void {
     this.modalVisible = false;
     this.addingGeofence = true;
@@ -242,6 +301,7 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
   }
 
   FormVisible = false;
+
   ShowForm() {
     this.FormVisible = !this.FormVisible;
   }
@@ -252,7 +312,6 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
     nom: this.fb.control<string | null>(null, Validators.required),
     type: this.fb.control<Type | null>(null, Validators.required),
     radius: this.fb.control<number | null>(null, [Validators.required, Validators.min(1)]),  // Rayon en mètres
-
   });
 
   AjoutertForm(): void {

@@ -14,7 +14,7 @@ export class MapHomeService {
   private fullDataSubject: Subject<any[]> = new Subject<any[]>(); //Un Subject pour envoyer des positions enrichies aux composants qui écoutent
   fullData$ = this.fullDataSubject.asObservable(); //Un Observable public  pour recevoir les données dans le composant.
   socketEvents: BehaviorSubject<any> = new BehaviorSubject(null);
-
+ // private latestPositions: Map<number, any> = new Map();
 
   constructor(private http: HttpClient) {}
 
@@ -81,6 +81,7 @@ export class MapHomeService {
           })
         );
 
+
         //On envoie toutes les positions enrichies à ceux qui écoutent
         this.fullDataSubject.next(enrichedPositions);
       }
@@ -109,6 +110,7 @@ export class MapHomeService {
     };
     return this.http.post<any>('/api/permissions', payload);
   }
+
 
   //fermeture manuellement
   disconnectWebSocket() {
