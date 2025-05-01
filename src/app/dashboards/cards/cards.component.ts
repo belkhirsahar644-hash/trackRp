@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CardsService } from '../../services/cards.service';
-import { Superviseur } from '../../services/superviseur.service';
-import { Driver } from '../../services/conducteurs.service';
 import { MapHomeService } from '../../services/map-home.service';
 import { Device, VehiculeService } from '../../services/vehicule.service';
 import { forkJoin, of, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Superviseur, SuperviseurService } from '../../services/superviseur.service';
+import { ConducteursService, Driver } from '../../services/conducteurs.service';
 
 @Component({
   selector: 'app-cards',
@@ -27,9 +26,10 @@ export class CardsComponent implements OnInit, OnDestroy {
   private positionSub: Subscription | undefined;
 
   constructor(
-    private cardsService: CardsService,
     private mapHomeService: MapHomeService,
-    private vehiculeService: VehiculeService
+    private vehiculeService: VehiculeService,
+    private superviseurService:SuperviseurService,
+    private conducteursService:ConducteursService
   ) {}
 
 
@@ -107,7 +107,7 @@ export class CardsComponent implements OnInit, OnDestroy {
         this.deviceCount = devices.length;
       });
 
-    this.cardsService.getSuperviseur()
+    this.superviseurService.getSuperviseur()
       .pipe(catchError(error => {
         console.error('Erreur API users:', error);
         return of([]);
@@ -117,7 +117,7 @@ export class CardsComponent implements OnInit, OnDestroy {
 
       });
 
-    this.cardsService.getDriver()
+    this.conducteursService.getDriver()
       .pipe(catchError(error => {
         console.error('Erreur API drivers:', error);
         return of([]);
