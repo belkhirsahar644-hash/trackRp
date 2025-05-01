@@ -47,7 +47,7 @@ export class VehiculeComponent implements OnInit, OnDestroy{
   }
 
   loadVehicule() {
-    this.vehiculeService.getVehicule().subscribe(
+    this.vehiculeService.getDevices().subscribe(
       {
         next: (value) => {
           this.device = value;

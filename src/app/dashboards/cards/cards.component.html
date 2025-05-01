@@ -1,6 +1,4 @@
 <div style="background: #ECECEC; padding:30px;">
-  <div *ngIf="isLoading">Chargement...</div>
-  <div *ngIf="!isLoading">
   <div nz-row [nzGutter]="8">
     <div nz-col [nzSpan]="8">
       <nz-card nzTitle="Superviseurs" class="dashboard-card center-content" >
@@ -16,12 +14,12 @@
 
     <div nz-col [nzSpan]="8">
       <nz-card nzTitle="Appareil" class="dashboard-card">
-        <p>Total : {{ vehicleCount }}</p>
+        <p>Total : {{ deviceCount }}</p>
 
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu nzSelectable>
 
-            <li nz-menu-item *ngFor="let device of installedDeviceNames" (click)="onDeviceSelected(device.id)">
+            <li nz-menu-item *ngFor="let device of installedDevice" (click)="onDeviceSelected(device.id)">
               {{ device.id }}, {{ device.name }}
             </li>
 
@@ -36,11 +34,11 @@
     </div>
   </div>
   </div>
-</div>
+
 <div>
   <app-map-home [selectedDeviceId]="selectedDeviceId"
-                [resetMapView]="resetMapView"
-                (mapResetDone)="resetMapView = false">
+                [resetMapView]="reinitialiserMap"
+                (mapResetDone)="reinitialiserMap = false">
   </app-map-home>
 
 </div>

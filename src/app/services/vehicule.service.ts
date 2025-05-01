@@ -24,7 +24,7 @@ export interface Device {
 export class VehiculeService {
 
   constructor(private http: HttpClient) { }
-  getVehicule(){
+  getDevices(){
     return this.http.get<Device[]>(`${environment.apiURL}devices`,)
   }
 

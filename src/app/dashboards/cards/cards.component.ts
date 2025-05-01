@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CardsService } from '../../services/cards.service';
 import { Superviseur } from '../../services/superviseur.service';
 import { Driver } from '../../services/conducteurs.service';
@@ -13,16 +13,15 @@ import { catchError } from 'rxjs/operators';
   templateUrl: './cards.component.html',
   styleUrls: ['./cards.component.scss']
 })
-export class CardsComponent implements OnInit {
-  vehicleCount = 0;
+export class CardsComponent implements OnInit, OnDestroy {
+  deviceCount = 0;
   supervisorCount = 0;
   driverCount = 0;
-  isLoading = true;
-
-  resetMapView = false;
-
   AppareilInstaller = 0;
-  installedDeviceNames: { id: number, name: string }[] = [];
+  reinitialiserMap = false;
+
+
+  installedDevice: { id: number, name: string }[] = [];
   selectedDeviceId: number | null = null;
 
   private positionSub: Subscription | undefined;
@@ -43,16 +42,18 @@ export class CardsComponent implements OnInit {
 
     // Abonnement WebSocket
     this.positionSub = this.mapHomeService.fullData$.subscribe((positions) => {
+      //Si la donnée est vide ou absente, on quitte sans rien faire
       if (!positions || positions.length === 0) return;
 
-      const newDeviceIds = Array.from(new Set(positions.map(p => p.deviceId)));
+      //Set pour retirer les doublons
+      const PositionDeviceIds = Array.from(new Set(positions.map(position => position.deviceId)));
 
       // Ne pas compter les devices déjà connus
-      const knownDeviceIds = this.installedDeviceNames.map(d => d.id);
-      const unknownDeviceIds = newDeviceIds.filter(id => !knownDeviceIds.includes(id));
+      const knownDeviceIds = this.installedDevice.map(device => device.id); //pour chaque device on prend son id
+      const unknownDeviceIds = PositionDeviceIds.filter(id => !knownDeviceIds.includes(id));
 
       // Mettre à jour le compteur
-      const allDeviceIds = new Set([...knownDeviceIds, ...newDeviceIds]);
+      const allDeviceIds = new Set([...knownDeviceIds, ...PositionDeviceIds]); //fusionner les 2 tableaux
       this.AppareilInstaller = allDeviceIds.size;
 
       if (unknownDeviceIds.length > 0) {
@@ -65,6 +66,7 @@ export class CardsComponent implements OnInit {
           )
         );
 
+        //forkJoin: attendre que toutes les requêtes soient terminées
         forkJoin(deviceRequests).subscribe((devices: (Device | null)[]) => {
           const validDevices = devices.filter((d): d is Device & { id: number } => d !== null && typeof d.id === 'number');
 
@@ -74,20 +76,19 @@ export class CardsComponent implements OnInit {
           }));
 
 // Ne pas ajouter les devices déjà présents
-          const existingIds = new Set(this.installedDeviceNames.map(d => d.id));
+          const existingIds = new Set(this.installedDevice.map(d => d.id));
           const uniqueNewDevices = newDevices.filter(d => !existingIds.has(d.id));
 
-// Mise à jour finale
-          this.installedDeviceNames = [...this.installedDeviceNames, ...uniqueNewDevices];
+// ajoute les nouveaux appareils à la liste existante
+          this.installedDevice = [...this.installedDevice, ...uniqueNewDevices];
         });
       }
     });
   }
-  installerClicked = false;
 
   onClickInstaller() {
     this.selectedDeviceId = null;
-    this.resetMapView = true;  // ceci va déclencher le reset dans MapHomeComponent
+    this.reinitialiserMap = true;  // ceci va réinitialiserMap
   }
 
 
@@ -97,14 +98,13 @@ export class CardsComponent implements OnInit {
   }
 
   fetchData() {
-    this.cardsService.getVehicule()
+    this.vehiculeService.getDevices()
       .pipe(catchError(error => {
         console.error('Erreur API devices:', error);
         return of([]);
       }))
       .subscribe((devices: Device[]) => {
-        this.vehicleCount = devices.length;
-        this.checkLoadingStatus();
+        this.deviceCount = devices.length;
       });
 
     this.cardsService.getSuperviseur()
@@ -114,7 +114,7 @@ export class CardsComponent implements OnInit {
       }))
       .subscribe((superviseur: Superviseur[]) => {
         this.supervisorCount = superviseur.length;
-        this.checkLoadingStatus();
+
       });
 
     this.cardsService.getDriver()
@@ -124,14 +124,7 @@ export class CardsComponent implements OnInit {
       }))
       .subscribe((drivers: Driver[]) => {
         this.driverCount = drivers.length;
-        this.checkLoadingStatus();
       });
-  }
-
-  checkLoadingStatus() {
-    if (this.vehicleCount && this.supervisorCount && this.driverCount) {
-      this.isLoading = false;
-    }
   }
 
   ngOnDestroy() {
