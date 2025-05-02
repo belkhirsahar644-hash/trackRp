@@ -1,7 +1,5 @@
-import { Component  } from '@angular/core';
+import { Component, OnInit  } from '@angular/core';
 import { ConducteursService, Driver } from '../../services/conducteurs.service';
-import { Subject } from 'rxjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-conducteurs',
@@ -9,7 +7,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   standalone: false,
   styleUrls: ['./conducteurs.component.scss']
 })
-export class ConducteursComponent  {
+export class ConducteursComponent implements OnInit{
 
   selectedDriver: Driver =  {
     name: '',
@@ -20,28 +18,18 @@ export class ConducteursComponent  {
   }
   driver: Driver[] = [];
   showForm: boolean = false;
-  showdeleteModal: boolean = false;
   searchValue = '';
   visible = false;
-  private unsubscribe$ = new Subject<void>();
   listOfDisplayData = [...this.driver];
 
-  constructor(private conducteursService: ConducteursService, private modal: NzModalService, ) {}
+  constructor(private conducteursService: ConducteursService ) {}
 
-  trackById(index: number, item: any): number {
-    return item.id;
-  }
-
-  openDeleteModal(driver: Driver): void {
-    this.selectedDriver = driver;
-    this.showdeleteModal = true;
-  }
 
   ngOnInit(): void {
     this.loadDriver();
 
   }
-  editConducteur(driver: Driver){
+  updateDriver(driver: Driver){
     this.selectedDriver= {...driver};
     console.log("Conducteur sélectionné:", this.selectedDriver);
     this.showForm = true;
@@ -92,8 +80,5 @@ export class ConducteursComponent  {
     }
   this.showForm = !this.showForm;
 }
-  ngOnDestroy(): void {
-    this.unsubscribe$.next(); // Déclenche l'arrêt des abonnements
-    this.unsubscribe$.complete(); // Libère la mémoire
-  }
+
 }

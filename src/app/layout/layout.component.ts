@@ -13,8 +13,6 @@ import { Howl } from 'howler';
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent implements OnInit, OnDestroy {
-  isSiderOpen: boolean = false;
-  menuVisible: boolean = false;
   userName: string = '';
   showLogout: boolean = false;
   isUserIconClicked: boolean = false;
@@ -42,14 +40,14 @@ export class LayoutComponent implements OnInit, OnDestroy {
       },
       (error) => {
 
-        console.log(error)
-        this.router.navigate(['/login'])
+        console.log(error);
+        this.router.navigate(['/login']);
       }
     );
     this.mapHomeService.connectWebSocket();
     this.positionsSubscription = this.mapHomeService.socketEvents.subscribe(
       (notifications: any[]) => {
-        console.log("ldata", notifications);
+        console.log("data", notifications);
         if (notifications && notifications.length) {
           notifications.forEach(notification => {
             this.notifications.push({
@@ -69,7 +67,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   // Méthode à appeler quand l'utilisateur change la periode
   onPeriodChange(period: string): void {
     this.selectedPeriod = period;
-    //ne rien envoyé au layoutservise si period = custom
+    //ne rien envoyer au layoutservise si period = custom
     if (period !== 'custom') {
       this.startDate = null;
       this.endDate = null;
@@ -91,25 +89,18 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
 
-  handleSidebarToggle(isOpen: boolean) {
-    this.isSiderOpen = isOpen;
-  }
-  toggleLogout() {
-    this.showLogout = !this.showLogout;
-  }
-
   logout() {
-
-      this.router.navigate(['/login']);
-
+    this.router.navigate(['/login']);
   }
+
   handleUserIconClick() {
     this.isUserIconClicked = !this.isUserIconClicked;
     this.showLogout = this.isUserIconClicked;
   }
 
   isMapRoute(): boolean {
-    return this.router.url.includes('/map');
+    return this.router.url.includes('/map')  || this.router.url.includes('/notifications');
+
   }
 
   ngOnDestroy(): void {

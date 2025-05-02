@@ -30,6 +30,13 @@ nzCancelText="Annuler">
     </nz-form-item>
 
     <nz-form-item>
+      <nz-form-label [nzSpan]="7" nzRequired>Matricule du voiture</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input nz-input formControlName="carNumber" placeholder="Matricule du voiture" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
       <nz-form-label [nzSpan]="7" >Nom du conducteur</nz-form-label>
       <nz-form-control [nzSpan]="12">
         <input nz-input formControlName="nameDriver" placeholder="Nom du conducteur" />

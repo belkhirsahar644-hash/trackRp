@@ -1,5 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
+import {Component, OnInit} from '@angular/core';
 import {Device, VehiculeService} from '../../services/vehicule.service';
 
 @Component({
@@ -8,7 +7,7 @@ import {Device, VehiculeService} from '../../services/vehicule.service';
   templateUrl: './vehicule.component.html',
   styleUrl: './vehicule.component.scss'
 })
-export class VehiculeComponent implements OnInit, OnDestroy{
+export class VehiculeComponent implements OnInit{
 
   selectedDevice: Device = {
     model: '',
@@ -16,6 +15,7 @@ export class VehiculeComponent implements OnInit, OnDestroy{
     uniqueId: '',
     attributes:{
       nameDriver:'',
+      carNumber:'' ,
       speedLimit:'',
       fuelDropThreshold:'',
       fuelIncreaseThreshold:'',
@@ -25,7 +25,6 @@ export class VehiculeComponent implements OnInit, OnDestroy{
   showForm: boolean = false;
   searchValue = '';
   visible = false;
-  private unsubscribe$ = new Subject<void>();
   listOfDisplayData = [...this.device];
 
   constructor(
@@ -79,6 +78,7 @@ export class VehiculeComponent implements OnInit, OnDestroy{
       uniqueId: '',
       attributes:{
         nameDriver:'',
+        carNumber:'' ,
         speedLimit:'',
         fuelDropThreshold:'',
         fuelIncreaseThreshold:'',
@@ -89,21 +89,15 @@ export class VehiculeComponent implements OnInit, OnDestroy{
   }
 
 
-
-
   deleteVehicle(data: Device) {
     this.vehiculeService.deleteVehicule(data).subscribe(
       {
-        next: (value) => {
+        next: () => {
           this.loadVehicule()
         }
       }
     )
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next(); // Déclenche l'arrêt des abonnements
-    this.unsubscribe$.complete(); // Libère la mémoire
 
-  }
 }

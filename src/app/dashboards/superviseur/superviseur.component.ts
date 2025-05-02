@@ -1,7 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Superviseur, SuperviseurService } from '../../services/superviseur.service';
-import { Subject } from 'rxjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
 
 
 @Component({
@@ -10,7 +8,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   templateUrl: './superviseur.component.html',
   styleUrl: './superviseur.component.scss'
 })
-export class SuperviseurComponent {
+export class SuperviseurComponent implements OnInit{
   selectedSup: Superviseur  = {
     name: '',
     email: '',
@@ -19,21 +17,15 @@ export class SuperviseurComponent {
     supervisor: true
   }
   superviseurs: Superviseur[] = [];
-  isVisible=false;
-  private unsubscribe$ = new Subject<void>();
   showForm: boolean = false;
   searchValue = '';
   visible = false;
   listOfData = [...this.superviseurs];
-  showdeleteModalS:  boolean = false;
+  constructor(
+    private superviseurService: SuperviseurService,
+  ){}
 
-  constructor(private superviseurService: SuperviseurService, private modal: NzModalService){}
 
-  openDeleteModalS(superviseurs: Superviseur){
-    this.selectedSup = superviseurs;
-    this.showdeleteModalS = true;
-
-  }
   ngOnInit(): void {
     this.loadSuperviseur();
   }
@@ -80,15 +72,12 @@ toggleForm(): void {
   }
   this.showForm = !this.showForm;
 }
-  ngOnDestroy(): void {
-    this.unsubscribe$.next(); // Déclenche l'arrêt des abonnements
-    this.unsubscribe$.complete(); // Libère la mémoire
 
-  }
-  deleteSuperviseur(data:Superviseur){
+
+deleteSuperviseur(data:Superviseur){
     this.superviseurService.deleteSup(data).subscribe(
       {
-        next: (value) => {
+        next: () => {
           this.loadSuperviseur()
         }
       }

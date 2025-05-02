@@ -17,6 +17,7 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
     uniqueId: '',
     attributes:{
       nameDriver:'',
+      carNumber:'' ,
       speedLimit:'',
       fuelDropThreshold:'',
       fuelIncreaseThreshold:'',
@@ -35,6 +36,7 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
       uniqueId: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
       model: new FormControl('', [Validators.required]),
+      carNumber: new FormControl('', [Validators.required]),
       nameDriver: new FormControl(''),
       speedLimit: new FormControl(''),
       fuelDropThreshold: new FormControl(''),
@@ -48,6 +50,7 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
       uniqueId: this.device?.uniqueId || '',
       model: this.device?.model || '',
       nameDriver: this.device?.attributes?.nameDriver || '',
+      carNumber: this.device?.attributes?.carNumber || '',
       speedLimit: this.device?.attributes?.speedLimit || '',
       fuelDropThreshold: this.device?.attributes?.fuelDropThreshold || '',
       fuelIncreaseThreshold: this.device?.attributes?.fuelIncreaseThreshold || '',
@@ -80,6 +83,7 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
       model: formData.model,
       attributes: {
         nameDriver: formData.nameDriver,
+        carNumber:formData.carNumber,
         speedLimit: formData.speedLimit,
         fuelDropThreshold:  formData.fuelDropThreshold,
         fuelIncreaseThreshold:  formData.fuelIncreaseThreshold,
@@ -89,7 +93,7 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
 
       console.log('Device data to send:', driverData);
     this.addvehicule.addveh(driverData).subscribe({
-      next: (response) => {
+      next: () => {
         this.addEvent.emit();
         this.message = 'Véhicule ajouté avec succès !';
 

@@ -2,6 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 
+export interface Notifications {
+  "id"?: number;
+  type: string;
+  eventTime: string;
+}
+
 export interface Notification {
   "id"?: number;
   description: string;
@@ -29,6 +35,12 @@ export class NotificationService {
     } else {
       return this.http.post(environment.apiURL + "notifications/" ,notif, )
     }
+  }
+
+
+
+  getHistoriqueNotif(deviceId: number, from: string, to: string) {
+    return this.http.get<any[]>(`${environment.apiURL}reports/events?deviceId=${deviceId}&from=${from}&to=${to}`);
   }
 
 }

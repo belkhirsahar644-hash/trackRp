@@ -10,6 +10,7 @@ import { MapComponent } from './map/map.component';
 import {LayoutComponent} from './layout/layout.component';
 import {InfoComponent} from './maps/info/info.component';
 import {NotificationComponent} from './dashboards/notification/notification.component';
+import {HistoriqueNotificationComponent} from './dashboards/historique-notification/historique-notification.component';
 
 
 const routes: Routes = [
@@ -24,6 +25,7 @@ const routes: Routes = [
          { path: 'map/:deviceId', component: MapComponent},
          { path: 'notif', component: NotificationComponent},
          { path: 'info', component: InfoComponent},
+         { path: 'notifications/:deviceId', component: HistoriqueNotificationComponent},
 
            ]
 },

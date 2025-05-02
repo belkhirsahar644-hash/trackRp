@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 import { BehaviorSubject } from 'rxjs';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 export interface Session {
   id?: number;
@@ -12,6 +15,53 @@ export interface Session {
   providedIn: 'root'
 })
 export class LayoutService {
+  // Déterminer les dates en fonction de la période sélectionnée
+   getPeriodDates(period: string): { from: string, to: string } {
+    const now = dayjs().utc();
+    let from = now.startOf('day');
+    let to = now.endOf('day');
+
+    switch (period) {
+      case 'yesterday':
+        const yesterday = now.subtract(1, 'day');
+        from = yesterday.startOf('day');
+        to = yesterday.endOf('day');
+        break;
+      case 'this_week':
+        from = now.startOf('week');
+        to = now.endOf('week');
+        break;
+      case 'last_week':
+        const lastWeek = now.subtract(1, 'week');
+        from = lastWeek.startOf('week');
+        to = lastWeek.endOf('week');
+        break;
+      case 'this_month':
+        from = now.startOf('month');
+        to = now.endOf('month');
+        break;
+      case 'last_month':
+        const lastMonth = now.subtract(1, 'month');
+        from = lastMonth.startOf('month');
+        to = lastMonth.endOf('month');
+        break;
+      case 'custom':
+        const custom = this.getCustomPeriod();
+        if (custom) {
+          from = dayjs(custom.from);
+          to = dayjs(custom.to);
+        }
+        break;
+    }
+
+    console.log(`[Période: ${period}]`, `From: ${from.toISOString()}`, `To: ${to.toISOString()}`);
+
+    return {
+      from: from.toISOString(),
+      to: to.toISOString()
+    };
+  }
+
 
   // Période sélectionnée (today, this_week, etc.)
   private periodSubject = new BehaviorSubject<string>('today');
@@ -46,31 +96,3 @@ export class LayoutService {
   }
 }
 
-/*import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment.development';
-import { BehaviorSubject } from 'rxjs'
-export interface Session {
-  "id"?: number;
-  name: string;
-
-}
-@Injectable({
-  providedIn: 'root'
-})
-export class LayoutService {
-  private periodSubject = new BehaviorSubject<string>('today');//garde la période actuelle
-  period$ = this.periodSubject.asObservable();//permet à d'autres composants de réagir automatiquement aux changements de période.
-
-
-  setPeriod(period: string) {
-    this.periodSubject.next(period);
-  }
-
-
-  constructor(private http: HttpClient) { }
-  getSession(){
-    return this.http.get<Session>(`${environment.apiURL}session`,)
-  }
-}
-*/

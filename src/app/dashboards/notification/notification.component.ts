@@ -1,7 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Notification} from '../../services/notification.service';
-import {NotificationService} from '../../services/notification.service';
-import {Subject} from 'rxjs';
+import {Component, OnInit} from '@angular/core';
+import {Notification ,NotificationService} from '../../services/notification.service';
 
 @Component({
   selector: 'app-notification',
@@ -9,11 +7,12 @@ import {Subject} from 'rxjs';
   templateUrl: './notification.component.html',
   styleUrl: './notification.component.scss'
 })
-export class NotificationComponent implements OnInit, OnDestroy {
+export class NotificationComponent implements OnInit {
 
   selectedNotification: Notification ={
     description: '',
     type: '',
+
   }
 
   notif: Notification[]=[];
@@ -21,7 +20,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
   searchType = '';
   showForm: boolean = false;
   visibleSearch = false;
-  private unsubscribe$ = new Subject<void>();
 
 
   constructor(
@@ -59,25 +57,23 @@ export class NotificationComponent implements OnInit, OnDestroy {
   toggleForm(): void {
     this.selectedNotification = {
       description: '',
-      type: '',    };
+      type: '',
+
+    };
     this.showForm = !this.showForm;
   }
 
   deleteNotification(data: Notification) {
     this.notificationService.deleteNotif(data).subscribe(
       {
-        next:(value)=> {
+        next:()=> {
           this.loadNotif()
         }
       }
     )
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next(); // Déclenche l'arrêt des abonnements
-    this.unsubscribe$.complete(); // Libère la mémoire
 
-  }
 
 
 }

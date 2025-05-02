@@ -20,6 +20,7 @@ import { RouterModule } from '@angular/router';
 import {NzPopconfirmModule} from 'ng-zorro-antd/popconfirm';
 import {MapsModule} from '../maps/maps.module';
 import { NotificationComponent } from './notification/notification.component';
+import { HistoriqueNotificationComponent } from './historique-notification/historique-notification.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { NotificationComponent } from './notification/notification.component';
     VehiculeComponent,
     SuperviseurComponent,
     NotificationComponent,
+    HistoriqueNotificationComponent,
   ],
   imports: [
     CommonModule,RouterModule,

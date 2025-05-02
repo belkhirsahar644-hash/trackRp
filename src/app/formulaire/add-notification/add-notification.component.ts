@@ -14,7 +14,7 @@ type Type = 'deviceOnline' | 'deviceUnknown' |'deviceOffline' | 'deviceInactive'
 })
 export class AddNotificationComponent implements OnInit, OnDestroy{
   @Input() notif: Notification ={
-    description: '',
+    description : '',
     type: '',
   };
   @Output() cancelEvent = new EventEmitter<void>();
