@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { FormulaireModule } from "../formulaire/formulaire.module";
-
+import {ModalModule} from '../modal/modal.module';
 
 @NgModule({
     declarations: [
@@ -26,11 +26,24 @@ import { FormulaireModule } from "../formulaire/formulaire.module";
     exports: [
         MapHomeComponent, InfoComponent,
     ],
-    imports: [ReactiveFormsModule,NzSelectModule,FormulaireModule,
-      NzMenuModule,NzDropDownModule,FormsModule,
-        CommonModule, NzButtonModule, NzModalModule, NzDrawerModule, NzFormModule, NzInputModule, NzListModule, NzTagModule
+    imports: [
+      ModalModule,
+      FormulaireModule,
+      NzMenuModule,
+      NzDropDownModule,
+      FormsModule,
+      CommonModule,
+      NzButtonModule,
+      NzModalModule,
+      NzDrawerModule,
+      NzFormModule,
+      NzInputModule,
+      NzListModule,
+      NzTagModule,
+      ReactiveFormsModule,
+      NzSelectModule,
     ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]  // Ajouter cette ligne
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
 })
 export class MapsModule { }

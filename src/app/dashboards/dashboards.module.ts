@@ -7,7 +7,7 @@ import { VehiculeComponent } from './vehicule/vehicule.component';
 import { SuperviseurComponent } from './superviseur/superviseur.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -21,6 +21,12 @@ import {NzPopconfirmModule} from 'ng-zorro-antd/popconfirm';
 import {MapsModule} from '../maps/maps.module';
 import { NotificationComponent } from './notification/notification.component';
 import { HistoriqueNotificationComponent } from './historique-notification/historique-notification.component';
+import {NzDrawerModule} from 'ng-zorro-antd/drawer';
+import {NzFormModule} from 'ng-zorro-antd/form';
+import {NzMenuModule} from 'ng-zorro-antd/menu';
+import {NzListModule} from 'ng-zorro-antd/list';
+import {NzTagModule} from 'ng-zorro-antd/tag';
+import {NzSelectModule} from 'ng-zorro-antd/select';
 
 @NgModule({
   declarations: [
@@ -30,6 +36,8 @@ import { HistoriqueNotificationComponent } from './historique-notification/histo
     SuperviseurComponent,
     NotificationComponent,
     HistoriqueNotificationComponent,
+
+
   ],
   imports: [
     CommonModule,RouterModule,
@@ -38,13 +46,29 @@ import { HistoriqueNotificationComponent } from './historique-notification/histo
     NzButtonModule,
     NzModalModule,
     BrowserAnimationsModule,
-    NzDividerModule,NzModalModule, NzCardModule, NzGridModule,
-    FormsModule, MapsModule,NzButtonModule, NzDropDownModule, NzIconModule, NzInputModule, NzTableModule
+    NzDrawerModule,
+    NzFormModule,
+    NzDividerModule,
+     NzCardModule,
+    NzGridModule,
+    FormsModule,
+    MapsModule,
+    NzDropDownModule,
+    NzIconModule,
+    NzInputModule,
+    NzTableModule,
+    NzMenuModule,
+    CommonModule,
+    NzListModule,
+    NzTagModule,
+    ReactiveFormsModule,
+    NzSelectModule,
 
 ],
   exports: [
     CardsComponent,
-    ConducteursComponent
+    ConducteursComponent,
+
 
   ]
 })

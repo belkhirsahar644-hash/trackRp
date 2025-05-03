@@ -4,19 +4,16 @@ import {
   ElementRef,
   AfterViewInit,
   OnDestroy,
-  inject,
-  Input,Output, EventEmitter,
+  Input,
+  Output,
   OnChanges,
+  EventEmitter,
   SimpleChanges
 } from '@angular/core';
-import * as turf from '@turf/turf';
 import { Map as MapLibreMap, Marker, NavigationControl } from 'maplibre-gl';
 import { Subscription } from 'rxjs';
 import { MapHomeService } from '../../services/map-home.service';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
-
-type Type = 'Zone identifié' | 'Zone autorisé';
 
 @Component({
   selector: 'app-map-home',
@@ -24,7 +21,9 @@ type Type = 'Zone identifié' | 'Zone autorisé';
   templateUrl: './map-home.component.html',
   styleUrls: ['./map-home.component.scss']
 })
-export class MapHomeComponent implements AfterViewInit, OnDestroy {
+
+export class MapHomeComponent implements AfterViewInit,OnChanges, OnDestroy {
+
   map: MapLibreMap | undefined; // Pour stocker l'objet carte
   private deviceMarkers: Map<number, Marker> = new Map<number, Marker>();
   private positionsSubscription: Subscription | undefined;
@@ -33,27 +32,16 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
   @ViewChild('map') private mapContainer!: ElementRef<HTMLElement>;
 
   @Input() selectedDeviceId: number | null = null;
-
   @Input() resetMapView: boolean = false;
   @Output() mapResetDone = new EventEmitter<void>();
 
   modalVisible = false;
-  selectedDevice: any = null;
-  addingGeofence = false;
-  selectedGeofenceDevice: any = null;
-
-  tempShapeId: string | null = null; // Pour stocker l'id du cercle ou polygone temporaire
+  selectedPosition: any = null;
 
   constructor(
     private mapHomeService: MapHomeService,
-    private http: HttpClient
   ) {}
 
-  /*ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedDeviceId'] && this.selectedDeviceId !== null) {
-      this.centerMapOnDevice(this.selectedDeviceId);
-    }
-  }*/
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['resetMapView'] && this.resetMapView === true) {
       this.resetToInitialView();
@@ -64,6 +52,7 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
       this.centerMapOnDevice(this.selectedDeviceId);
     }
   }
+
   resetToInitialView(): void {
     const initialState = { lng: 10.1729, lat: 36.8702, zoom: 5 };
     this.map?.flyTo({
@@ -72,7 +61,6 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
       speed: 1.2
     });
   }
-
 
 
   centerMapOnDevice(deviceId: number) {
@@ -102,50 +90,6 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
     // Navigation control
     this.map.addControl(new NavigationControl({}), 'top-right');
 
-    // Gestion clic sur la carte pour dessiner une geofence
-    this.map.on('click', (e) => {
-      if (this.addingGeofence) {
-        const center = [e.lngLat.lng, e.lngLat.lat];
-        const radiusInMeters = this.validateForm.value.radius || 800;
-
-        // Supprimer le cercle ou le polygone précédent s'il existe
-        if (this.tempShapeId && this.map!.getSource(this.tempShapeId)) {
-          this.map!.removeLayer(this.tempShapeId);
-          this.map!.removeSource(this.tempShapeId);
-        }
-
-        const shapeId = `shape-${Date.now()}`;
-        this.tempShapeId = shapeId;
-
-        // Zone identifié - Cercle autour du centre
-        const circle = turf.circle(center, radiusInMeters, {
-          steps: 64,  // Plus de steps, cercle plus lisse
-          units: 'meters'
-        });
-
-        // Ajouter la source du cercle
-        this.map!.addSource(shapeId, {
-          type: 'geojson',
-          data: circle
-        });
-
-        // Ajouter la couche cercle
-        this.map!.addLayer({
-          id: shapeId,
-          type: 'fill',
-          source: shapeId,
-          paint: {
-            'fill-color': '#3b9ddd',
-            'fill-opacity': 0.4
-          }
-        });
-
-        const area = `CIRCLE(${center[0]} ${center[1]}, ${radiusInMeters})`;
-
-        // Envoi de la géofence à l'API
-        this.createGeofence(area, 'Zone identifiée autour du dépôt');
-      }
-    });
 
     this.map.on('load', () => {
       this.mapHomeService.connectWebSocket();
@@ -168,22 +112,10 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
             carIcon.style.height = '50px';
             carIcon.style.cursor = 'pointer';
 
-            const deviceData = {
-              deviceId: deviceId,
-              name: position.deviceName,
-              uniqueId: position.uniqueId,
-              model: position.model,
-              nameDriver: position.nameDriver,
-              latitude: position.latitude,
-              longitude: position.longitude,
-              speed: position.speed,
-              distance: position.attributes?.totalDistance,
-              battery: position.attributes?.batteryLevel,
-              status: position.status
-            };
+
 
             carIcon.addEventListener('click', () => {
-              this.showModal(deviceData);
+              this.showModal(position);
             });
 
             const marker = new Marker({ element: carIcon })
@@ -218,8 +150,8 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  showModal(device?: any): void {
-    this.selectedDevice = device ?? null;
+  showModal(position?: any): void {
+    this.selectedPosition = position ?? null;
     this.modalVisible = true;
   }
 
@@ -227,145 +159,8 @@ export class MapHomeComponent implements AfterViewInit, OnDestroy {
     this.modalVisible = false;
   }
 
-  visibleGeofence = false;
-
-  showGeofence(): void {
-    this.modalVisible = false;
-    this.visibleGeofence = true;
-    if (this.selectedDevice) {
-      this.loadGeofences(this.selectedDevice.deviceId);
-    }
-  }
-
-  geofences: any[] = [];
-
-  loadGeofences(deviceId: number): void {
-    this.mapHomeService.getGeofencesByDeviceId(deviceId).subscribe(
-      (data) => {
-        this.geofences = data;
-
-        // Ajouter chaque géofence sur la carte
-        this.geofences.forEach((geofence: any) => {
-          const { area, name } = geofence;
-
-          // Extraire les coordonnées du centre et le rayon
-          const match = /CIRCLE\((-?\d+\.\d+) (-?\d+\.\d+), (\d+)\)/.exec(area);
-          if (match) {
-            const lng = parseFloat(match[1]);
-            const lat = parseFloat(match[2]);
-            const radiusInMeters = parseInt(match[3], 10);
-
-            // Créer le cercle en utilisant turf
-            const circle = turf.circle([lng, lat], radiusInMeters, {
-              steps: 64,  // Plus de steps, cercle plus lisse
-              units: 'meters'
-            });
-
-            // Ajouter la source du cercle à la carte
-            const shapeId = `geofence-${geofence.id}`;
-            this.map!.addSource(shapeId, {
-              type: 'geojson',
-              data: circle
-            });
-
-            // Ajouter la couche pour afficher le cercle
-            this.map!.addLayer({
-              id: shapeId,
-              type: 'fill',
-              source: shapeId,
-              paint: {
-                'fill-color': 'green',
-                'fill-opacity': 0.4
-              }
-            });
-          }
-        });
-      },
-      (error) => {
-        console.error('Erreur lors du chargement des geofences', error);
-      }
-    );
-  }
 
 
-
-  startAddGeofence(device: any): void {
-    this.modalVisible = false;
-    this.addingGeofence = true;
-    this.selectedGeofenceDevice = device;
-    alert('Clique sur la carte pour choisir le centre de la zone géofence');
-  }
-
-  close(): void {
-    this.visibleGeofence = false;
-  }
-
-  FormVisible = false;
-
-  ShowForm() {
-    this.FormVisible = !this.FormVisible;
-  }
-
-  private fb = inject(FormBuilder);
-
-  validateForm = this.fb.group({
-    nom: this.fb.control<string | null>(null, Validators.required),
-    type: this.fb.control<Type | null>(null, Validators.required),
-    radius: this.fb.control<number | null>(null, [Validators.required, Validators.min(1)]),  // Rayon en mètres
-  });
-
-  AjoutertForm(): void {
-    if (this.validateForm.valid && this.selectedDevice) {
-      this.startAddGeofence(this.selectedDevice);
-      this.FormVisible = false;
-      this.visibleGeofence = false;
-    } else {
-      Object.values(this.validateForm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-    }
-  }
-
-  createGeofence(area: string, description: string): void {
-    const newGeofence = {
-      name: this.validateForm.value.nom,
-      area: area,
-      description: description,
-      calendarId: 0
-    };
-
-    this.http.post('http://localhost:8082/api/geofences', newGeofence).subscribe({
-      next: (response: any) => {
-        this.http.post('http://localhost:8082/api/permissions', {
-          deviceId: this.selectedGeofenceDevice.deviceId,
-          geofenceId: response.id
-        }).subscribe(() => {
-          alert('Zone ajoutée avec succès !');
-          this.resetTempShape();
-          this.addingGeofence = false;
-          this.selectedGeofenceDevice = null;
-        });
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Erreur lors de la création de la zone');
-        this.resetTempShape();
-        this.addingGeofence = false;
-        this.selectedGeofenceDevice = null;
-      }
-    });
-  }
-
-  resetTempShape(): void {
-    if (this.tempShapeId && this.map!.getSource(this.tempShapeId)) {
-      this.map!.removeLayer(this.tempShapeId);
-      this.map!.removeSource(this.tempShapeId);
-      this.tempShapeId = null;
-    }
-  }
 
   ngOnDestroy() {
     this.map?.remove();

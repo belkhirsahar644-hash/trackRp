@@ -7,12 +7,6 @@ import { AddVehiculeComponent } from './add-vehicule/add-vehicule.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { AddSuperviseurComponent } from './add-superviseur/add-superviseur.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
-import { Observable, Observer, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { AddNotificationComponent } from './add-notification/add-notification.component';
@@ -34,7 +28,11 @@ import { AddGeofenceComponent } from './add-geofence/add-geofence.component';
         FormsModule,
         NzButtonModule,
         NzModalModule,
-        ReactiveFormsModule, NzFormModule, NzInputModule, NzOptionComponent, NzSelectComponent
+        ReactiveFormsModule,
+      NzFormModule,
+      NzInputModule,
+      NzOptionComponent,
+      NzSelectComponent
     ],
     exports: [
         AddconducteurComponent,
