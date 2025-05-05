@@ -18,11 +18,3 @@
   </ng-container>
 </nz-modal>
 
-<app-geofence
-  *ngIf="geofenceDrawerVisible && device"
-  [visible]="geofenceDrawerVisible"
-  [device]="device"
-  [map]="map"
-  (closeDrawer)="geofenceDrawerVisible = false">
-
-</app-geofence>

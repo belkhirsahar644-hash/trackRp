@@ -7,7 +7,7 @@
   <ng-container *nzDrawerContent>
     <a (click)="ShowForm()">➕ Ajouter une zone geofence</a>
     <div *ngIf="FormVisible">
-      <form nz-form [formGroup]="validateForm" (ngSubmit)="AjoutertForm()">
+      <form nz-form [formGroup]="validateForm" (ngSubmit)="AjouterForm()">
         <nz-form-item>
           <nz-form-label [nzSpan]="5" nzRequired nzFor="nom">Nom</nz-form-label>
           <nz-form-control [nzSpan]="12"  nzErrorTip="Ajouter Nom du zone">

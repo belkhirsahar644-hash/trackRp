@@ -18,6 +18,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { FormulaireModule } from "../formulaire/formulaire.module";
 import {ModalModule} from '../modal/modal.module';
 import {DrawersModule} from '../drawers/drawers.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
     declarations: [
@@ -28,6 +30,11 @@ import {DrawersModule} from '../drawers/drawers.module';
         MapHomeComponent, InfoComponent,
     ],
   imports: [
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-center', // En haut de la page
+      timeOut: 3000
+    }),
     ModalModule,
     FormulaireModule,
     NzMenuModule,

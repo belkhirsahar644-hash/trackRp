@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
-import { Map, NavigationControl, Marker } from 'maplibre-gl';
+import {Map, NavigationControl, Marker, Map as MapLibreMap} from 'maplibre-gl';
 import { MapService } from '../services/map.service';
 import { LayoutService } from '../services/layout.service';
 import { Subscription } from 'rxjs';
@@ -55,9 +55,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     // Initialisation de la carte MapLibre
     const initialState = { lng: 10.1729, lat: 36.8702, zoom: 14 };
 
-    this.map = new Map({
-      container: this.mapContainer.nativeElement,
-      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=sFhBT3kZc5gtzUAEukg8`,
+    this.map = new MapLibreMap({
+      container: this.mapContainer.nativeElement as HTMLDivElement, // Le conteneur de la carte est l'élément DOM
+      style: `https://tiles.stadiamaps.com/styles/osm_bright.json`,
       center: [initialState.lng, initialState.lat],
       zoom: initialState.zoom
     });
