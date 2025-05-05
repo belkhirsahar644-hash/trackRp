@@ -13,6 +13,7 @@
 >
 
 </app-device-modal>
+
 <app-geofence
   *ngIf="geofenceDrawerVisible && selectedDevice"
   [visible]="geofenceDrawerVisible"
@@ -20,4 +21,3 @@
 
   (closeDrawer)="geofenceDrawerVisible = false">
 </app-geofence>
-<-- [map]="map" -->

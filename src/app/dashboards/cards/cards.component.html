@@ -19,7 +19,7 @@
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu nzSelectable>
 
-            <li nz-menu-item *ngFor="let device of installedDevice" (click)="onDeviceSelected(device.id)">
+            <li nz-menu-item *ngFor="let device of installedDevice" (click)="onDeviceSelected(device)">
               {{ device.id }}, {{ device.name }}
             </li>
 
@@ -36,8 +36,27 @@
   </div>
 
 <div>
-  <app-map-home [selectedDeviceId]="selectedDeviceId"
+  <div class="row">
+    <div class="col-3">
+      Appareil sélectionné :
+    </div>
+    <div class="col-3">
+      <nz-select [(ngModel)]="selectedDevice">
+        <nz-option nzValue="" nzLabel=""></nz-option>
+        <nz-option  *ngFor="let device of installedDevice" (click)="onDeviceSelected(device)"
+                    [nzValue]="device" [nzLabel]="device.name"></nz-option>
+      </nz-select>
+    </div>
+    <div class="col-3" *ngIf="selectedDevice">
+      <a (click)="markZone()">Marquer une zone geofence</a>
+    </div>
+    <div class="col-3" *ngIf="selectedDevice">
+      <a (click)="confirmZone()">confirmer</a>
+    </div>
+  </div>
+  <app-map-home [selectedDeviceId]="selectedDevice?.id"
                 [resetMapView]="reinitialiserMap"
+                (mapMarkerLocEvent)="updateMarkerLoc($event)"
                 (mapResetDone)="reinitialiserMap = false">
   </app-map-home>
 

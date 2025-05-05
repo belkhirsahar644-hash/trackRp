@@ -389,10 +389,12 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() selectedDeviceId: number | null = null;
   @Input() resetMapView: boolean = false;
   @Output() mapResetDone = new EventEmitter<void>();
+  @Output() mapMarkerLocEvent = new EventEmitter<any>();
 
   modalVisible = false;
   selectedPosition: any = null;
-
+  redMarker!: any;
+  markerLngLat: any;
   constructor(
     private mapHomeService: MapHomeService,
     private toastr: ToastrService
@@ -431,6 +433,7 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
         zoom: 15,
         speed: 1.2
       });
+    this.redMarker.setLngLat([lngLat.lng, lngLat.lat]);
     } else {
       console.warn(`Device ${deviceId} non trouvé sur la carte.`);
     }
@@ -451,19 +454,20 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
     // Navigation control
     this.map.addControl(new NavigationControl({}), 'top-right');
 
-      const redMarker = new Marker({ color: "#FF0000", draggable: true })
+      this.redMarker = new Marker({ color: "#FF0000", draggable: true })
         .setLngLat([10.1729, 36.8702])
         .addTo(this.map!);
 
 // Affiche la position lorsqu'on clique sur le marqueur rouge
-      redMarker.getElement().addEventListener('click', () => {
-        const lngLat = redMarker.getLngLat();
+      this.redMarker.getElement().addEventListener('click', () => {
+        const lngLat = this.redMarker.getLngLat();
         alert(`Longitude : ${lngLat.lng}\nLatitude : ${lngLat.lat}`);
       });
 
-      redMarker.on('dragend', () => {
-        const lngLat = redMarker.getLngLat();
-        console.log('Nouvelle position du marqueur :', lngLat.lng, lngLat.lat);
+      this.redMarker.on('dragend', () => {
+        this.markerLngLat = this.redMarker.getLngLat();
+        this.mapMarkerLocEvent.emit(this.markerLngLat);
+        console.log('Nouvelle position du marqueur :', this.markerLngLat, this.markerLngLat);
       });
 
 

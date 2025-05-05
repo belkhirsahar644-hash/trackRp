@@ -21,10 +21,10 @@ export class CardsComponent implements OnInit, OnDestroy {
 
 
   installedDevice: { id: number, name: string }[] = [];
-  selectedDeviceId: number | null = null;
+  selectedDevice: any | null = null;
 
   private positionSub: Subscription | undefined;
-
+  markerLngLat: any;
   constructor(
     private mapHomeService: MapHomeService,
     private vehiculeService: VehiculeService,
@@ -87,14 +87,14 @@ export class CardsComponent implements OnInit, OnDestroy {
   }
 
   onClickInstaller() {
-    this.selectedDeviceId = null;
+    this.selectedDevice = null;
     this.reinitialiserMap = true;  // ceci va réinitialiserMap
   }
 
 
 
-  onDeviceSelected(deviceId: number) {
-    this.selectedDeviceId = deviceId;
+  onDeviceSelected(device: any) {
+    this.selectedDevice = device;
   }
 
   fetchData() {
@@ -129,5 +129,17 @@ export class CardsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.positionSub?.unsubscribe();
+  }
+
+  markZone() {
+
+  }
+
+  confirmZone() {
+
+  }
+
+  updateMarkerLoc(event: any) {
+    this.markerLngLat = event;
   }
 }
