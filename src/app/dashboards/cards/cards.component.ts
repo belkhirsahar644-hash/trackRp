@@ -113,10 +113,11 @@ export class CardsComponent implements OnInit, OnDestroy {
   }
 
   confirmZone() {
-
+    this.geofenceDrawerVisible = true;
   }
 
   updateMarkerLoc(event: any) {
+    console.log("mrkl", event);
     this.markerLngLat = event;
   }
 

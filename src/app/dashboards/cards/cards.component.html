@@ -25,7 +25,7 @@
 
           </ul>
         </nz-dropdown-menu>
-        <p>  <a (click)="onClickInstaller()"> Appareil Installer :</a>
+        <p>  <a (click)="onClickInstaller()"> Appareils Installés :</a>
           <a nz-dropdown [nzDropdownMenu]="menu">
             {{ installedDevice.length }}
             <nz-icon nzType="down" />
@@ -78,8 +78,9 @@
   </app-device-modal>
 
   <app-geofence
-    *ngIf="geofenceDrawerVisible && mapEnrichedSelectedDevice?.position"
+    *ngIf="geofenceDrawerVisible"
     [visible]="geofenceDrawerVisible"
+    [markerLngLat]="markerLngLat"
     [device]="selectedDevice?.device || null"
     (closeDrawer)="geofenceDrawerVisible = false">
   </app-geofence>

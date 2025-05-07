@@ -429,6 +429,8 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
         speed: 1.2
       });
     this.redMarker.setLngLat([lngLat.lng, lngLat.lat]);
+      this.markerLngLat = this.redMarker.getLngLat();
+      this.mapMarkerLocEvent.emit(this.markerLngLat);
     } else {
       console.warn(`Device ${deviceId} non trouvé sur la carte.`);
     }

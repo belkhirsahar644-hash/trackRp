@@ -211,7 +211,7 @@ export class GeofenceComponent implements  OnChanges{
   @Input() device!: Device | null;
   @Input() map: any;
   @Output() closeDrawer = new EventEmitter<void>();
-
+  @Input() markerLngLat!: any;
   geofences: any[] = [];
   FormVisible = false;
   private fb = inject(FormBuilder);

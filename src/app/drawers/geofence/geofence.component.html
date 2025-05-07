@@ -5,6 +5,7 @@
   (nzOnClose)="close()"
 >
   <ng-container *nzDrawerContent>
+    {{markerLngLat|json}}
     <a (click)="ShowForm()">➕ Ajouter une zone geofence</a>
     <div *ngIf="FormVisible">
       <form nz-form [formGroup]="validateForm" (ngSubmit)="AjouterForm()">
