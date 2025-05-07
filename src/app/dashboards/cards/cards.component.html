@@ -20,14 +20,14 @@
           <ul nz-menu nzSelectable>
 
             <li nz-menu-item *ngFor="let device of installedDevice" (click)="onDeviceSelected(device)">
-              {{ device.id }}, {{ device.name }}
+              {{ device.device.id }}, {{ device.device.name }}
             </li>
 
           </ul>
         </nz-dropdown-menu>
         <p>  <a (click)="onClickInstaller()"> Appareil Installer :</a>
           <a nz-dropdown [nzDropdownMenu]="menu">
-            {{ AppareilInstaller }}
+            {{ installedDevice.length }}
             <nz-icon nzType="down" />
           </a></p>
       </nz-card>
@@ -44,7 +44,7 @@
       <nz-select [(ngModel)]="selectedDevice">
         <nz-option nzValue="" nzLabel=""></nz-option>
         <nz-option  *ngFor="let device of installedDevice" (click)="onDeviceSelected(device)"
-                    [nzValue]="device" [nzLabel]="device.name"></nz-option>
+                    [nzValue]="device" [nzLabel]="device.device.name"></nz-option>
       </nz-select>
     </div>
 
@@ -55,11 +55,11 @@
       <a (click)="confirmZone()">confirmer</a>
     </div>
   </div>
-
+{{selectedDevice | json}}
 
   <app-map-home
 
-    [selectedDeviceId]="selectedDevice?.id"
+    [selectedDeviceId]="selectedDevice?.device?.id || null"
     [resetMapView]="reinitialiserMap"
     (mapMarkerLocEvent)="updateMarkerLoc($event)"
     (mapResetDone)="reinitialiserMap = false"
@@ -80,8 +80,7 @@
   <app-geofence
     *ngIf="geofenceDrawerVisible && mapEnrichedSelectedDevice?.position"
     [visible]="geofenceDrawerVisible"
-    [device]="selectedDevice"
-    [position]="mapEnrichedSelectedDevice.position"
+    [device]="selectedDevice?.device || null"
     (closeDrawer)="geofenceDrawerVisible = false">
   </app-geofence>
 

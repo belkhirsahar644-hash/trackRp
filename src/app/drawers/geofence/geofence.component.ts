@@ -208,9 +208,8 @@ import {Position, Device} from '../../models/models.model';
 })
 export class GeofenceComponent implements  OnChanges{
   @Input() visible = false;
-  @Input() device!: Device;
+  @Input() device!: Device | null;
   @Input() map: any;
-  @Input() position!: Position;
   @Output() closeDrawer = new EventEmitter<void>();
 
   geofences: any[] = [];
@@ -234,8 +233,8 @@ export class GeofenceComponent implements  OnChanges{
   ngOnChanges() {
     console.log('OnChanges - visible:', this.visible, 'device:', this.device);
 
-    if (this.visible && this.position.deviceId) {
-      this.loadGeofences(this.position.deviceId);
+    if (this.visible && this.device?.id) {
+      this.loadGeofences(this.device.id);
     } else {
       console.log('Drawer non visible ou device null');
     }

@@ -375,10 +375,8 @@ import {EnrichedPosition} from '../../models/models.model';
 
 export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
 
-  selectedDevice: any = null;
-
   map: MapLibreMap | undefined; // Pour stocker l'objet carte MapLibre
-  private deviceMarkers: Map<number, Marker> = new Map<number, Marker>();
+  deviceMarkers: Map<number, Marker> = new Map<number, Marker>();
   private positionsSubscription: Subscription | undefined;
   private currentDeviceMarker: Marker | null = null; // Pour stocker le marqueur du device suivi
 
@@ -388,7 +386,6 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() resetMapView: boolean = false;
   @Output() mapResetDone = new EventEmitter<void>();
   @Output() mapMarkerLocEvent = new EventEmitter<any>();
-
   @Output() IconClicked: EventEmitter<EnrichedPosition> = new EventEmitter<EnrichedPosition>();
 
   redMarker!: any;
@@ -481,7 +478,7 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
             enreichedPositions.forEach((position) => {
               const deviceId = position.position.deviceId;
               console.log("positiongps", position);
-              const oldMarker = this.deviceMarkers.get(deviceId);
+              const oldMarker = this.deviceMarkers.get(deviceId); //nouvel position envoyé
               if (oldMarker) {
                 oldMarker.remove();
               }
@@ -508,6 +505,7 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
                 this.updateCurrentDeviceMarker(marker, position);
               }
 
+              console.log("deviceMarkers", this.deviceMarkers)
               this.deviceMarkers.set(deviceId, marker);
             });
           }
