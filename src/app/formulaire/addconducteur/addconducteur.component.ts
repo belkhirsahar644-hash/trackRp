@@ -11,7 +11,13 @@ import { Subject } from 'rxjs';
   styleUrls: ['./addconducteur.component.scss']
 })
 export class AddconducteurComponent implements OnInit, OnDestroy {
-  @Input() driver: Driver={ name: '', email: '', phone: '', password: '', driver: true}
+  @Input() driver: Driver={
+
+    name: '',
+
+    email: '', phone: '', password: '', driver: true,  attributes:{
+    carNumber: '',
+  },}
   @Output() cancelEvent = new EventEmitter<void>();
   @Output() addEvent = new EventEmitter<any>();
   @Input() isVisibleC = true;
@@ -26,6 +32,7 @@ export class AddconducteurComponent implements OnInit, OnDestroy {
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
+      carNumber: new FormControl('',)
     })
   }
   ngOnInit(): void {
@@ -33,7 +40,8 @@ export class AddconducteurComponent implements OnInit, OnDestroy {
       name: this.driver?.name || '',
       email: this.driver?.email || '',
       phone: this.driver?.phone || '',
-      password: this.driver?.password || ''
+      password: this.driver?.password || '',
+      carNumber: this.driver?.attributes.carNumber || '',
     });
   }
   ngOnDestroy(): void {
@@ -63,8 +71,12 @@ export class AddconducteurComponent implements OnInit, OnDestroy {
             email: formData.email,
             password: formData.password,
             phone: formData.phone,
-            driver: true as true
-          };
+            driver: true as true,
+            attributes: {
+              carNumber:formData.carNumber,
+
+            }
+         };
 
           console.log('Driver data to send:', driverData);
 

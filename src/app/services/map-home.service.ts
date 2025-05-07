@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+import {Device, EnrichedPosition, Position} from '../models/models.model';
 
 
 @Injectable({
@@ -11,8 +12,8 @@ import { environment } from '../../environments/environment.development';
 export class MapHomeService {
   private socket: WebSocket | undefined; // l'objet WebSocket qui va écouter les données en temps réel
   private devicesMap: Map<number, any> = new Map(); //une mémoire locale pour stocker les devices par ID
-  private fullDataSubject: Subject<any[]> = new Subject<any[]>(); //Un Subject pour envoyer des positions enrichies aux composants qui écoutent
-  fullData$ = this.fullDataSubject.asObservable(); //Un Observable public  pour recevoir les données dans le composant.
+  fullData$: BehaviorSubject<EnrichedPosition[] | null> = new BehaviorSubject<EnrichedPosition[] | null>(null); //Un Subject pour envoyer des positions enrichies aux composants qui écoutent
+  //fullData$ = this.fullDataSubject.asObservable(); //Un Observable public  pour recevoir les données dans le composant.
   socketEvents: BehaviorSubject<any> = new BehaviorSubject(null);
  // private latestPositions: Map<number, any> = new Map();
 
@@ -24,7 +25,7 @@ export class MapHomeService {
   // Si le device n'est pas encore connu (pas dans devicesMap), il va faire un GET /devices?id=xxx
   private fetchDeviceById(deviceId: number): Promise<any> {
     const params = new HttpParams().set('id', deviceId.toString());
-    return this.http.get<any[]>(`${environment.apiURL}devices`, { params }).toPromise();
+    return this.http.get<Device>(`${environment.apiURL}devices/${deviceId}`).toPromise();
   }
 
   connectWebSocket() {
@@ -49,7 +50,7 @@ export class MapHomeService {
       //Si le message contient aussi des positions
       if (data.positions) {
         //On enrichit toutes les positions en parallèle (avec Promise.all)
-        const enrichedPositions = await Promise.all(
+        const enrichedPositions: EnrichedPosition[] = await Promise.all(
           data.positions.map(async (position: any) => {
             const deviceId = position.deviceId;
             //On récupère l'appareil associé à cette position depuis devicesMap
@@ -60,7 +61,8 @@ export class MapHomeService {
               try {
                 const result = await this.fetchDeviceById(deviceId); //await  on attend la réponse avant de continuer
                 //Si result est défini, on prend result[0]
-                device = result?.[0];
+                console.log('resultSock', result);
+                device = result;
                 if (device) {
                   //l'ajoute dans devicesMap
                   this.devicesMap.set(device.id, device);
@@ -71,19 +73,15 @@ export class MapHomeService {
             }
 
             return {
-              ...position,
-              deviceName: device?.name || 'Inconnu',
-              uniqueId: device?.uniqueId || 'Inconnu',
-              model: device?.model || 'Inconnu',
-              nameDriver: device?.attributes?.nameDriver ?? 'Inconnu',
-              status: device?.status ?? 'offline',
+              position: position,
+              device: device,
             };
           })
         );
 
 
         //On envoie toutes les positions enrichies à ceux qui écoutent
-        this.fullDataSubject.next(enrichedPositions);
+        this.fullData$.next(enrichedPositions);
       }
     };
 

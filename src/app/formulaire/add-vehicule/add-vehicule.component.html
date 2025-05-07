@@ -15,22 +15,16 @@ nzCancelText="Annuler">
         <input nz-input formControlName="uniqueId" placeholder="Identifiant" />
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>Marque</nz-form-label>
-      <nz-form-control [nzSpan]="12">
-        <input nz-input formControlName="name" placeholder="Marque" />
-      </nz-form-control>
-    </nz-form-item>
 
     <nz-form-item>
       <nz-form-label [nzSpan]="7" nzRequired>Modéle</nz-form-label>
       <nz-form-control [nzSpan]="12">
-        <input nz-input formControlName="model" placeholder="Modéle" />
+        <input nz-input formControlName="name" placeholder="Modéle" />
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>Matricule du voiture</nz-form-label>
+      <nz-form-label [nzSpan]="7" >Matricule de voiture</nz-form-label>
       <nz-form-control [nzSpan]="12">
         <input nz-input formControlName="carNumber" placeholder="Matricule du voiture" />
       </nz-form-control>
@@ -44,23 +38,9 @@ nzCancelText="Annuler">
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="7" >Limite de vitesse </nz-form-label>
+      <nz-form-label [nzSpan]="7" >Limite de vitesse (km/h) </nz-form-label>
       <nz-form-control [nzSpan]="12">
         <input nz-input formControlName="speedLimit" placeholder="Limite de vitesse" />
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item>
-      <nz-form-label [nzSpan]="7" >Seuil perte de carburant </nz-form-label>
-      <nz-form-control [nzSpan]="12">
-        <input nz-input formControlName="fuelDropThreshold" placeholder="Seuil perte de carburant" />
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item>
-      <nz-form-label [nzSpan]="7" >Seuil ajout de carburant </nz-form-label>
-      <nz-form-control [nzSpan]="12">
-        <input nz-input formControlName="fuelIncreaseThreshold" placeholder="Seuil ajout de carburant" />
       </nz-form-control>
     </nz-form-item>
 

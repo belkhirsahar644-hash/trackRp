@@ -18,11 +18,11 @@ export class CardsComponent implements OnInit, OnDestroy {
   driverCount = 0;
   AppareilInstaller = 0;
   reinitialiserMap = false;
-
-
-  installedDevice: { id: number, name: string }[] = [];
+  modalVisible = false;
+  selectedPosition: any = null;
+  geofenceDrawerVisible = false;
+  installedDevice: any[] = [];
   selectedDevice: any | null = null;
-
   private positionSub: Subscription | undefined;
   markerLngLat: any;
   constructor(
@@ -46,7 +46,7 @@ export class CardsComponent implements OnInit, OnDestroy {
       if (!positions || positions.length === 0) return;
 
       //Set pour retirer les doublons
-      const PositionDeviceIds = Array.from(new Set(positions.map(position => position.deviceId)));
+      const PositionDeviceIds = Array.from(new Set(positions.map(position => position.position.deviceId)));
 
       // Ne pas compter les devices déjà connus
       const knownDeviceIds = this.installedDevice.map(device => device.id); //pour chaque device on prend son id
@@ -70,10 +70,7 @@ export class CardsComponent implements OnInit, OnDestroy {
         forkJoin(deviceRequests).subscribe((devices: (Device | null)[]) => {
           const validDevices = devices.filter((d): d is Device & { id: number } => d !== null && typeof d.id === 'number');
 
-          const newDevices = validDevices.map(d => ({
-            id: d.id,
-            name: d.name
-          }));
+          const newDevices = validDevices.map(d => (d));
 
 // Ne pas ajouter les devices déjà présents
           const existingIds = new Set(this.installedDevice.map(d => d.id));
@@ -85,16 +82,45 @@ export class CardsComponent implements OnInit, OnDestroy {
       }
     });
   }
+  onMarkerClicked(position: any) {
+    console.log('Marqueur cliqué !', position);
+    this.selectedDevice = this.installedDevice.find((device) => device.id === position.deviceId);
+    this.modalVisible = true;
+  }
+
+  showModal(position?: any): void {
+    this.selectedPosition = position ?? null;
+    this.selectedDevice = {
+      deviceId: position.deviceId,
+      name: position.deviceName,
+      uniqueId: position.uniqueId,
+      model: position.model,
+      nameDriver: position.nameDriver,
+    };
+    this.modalVisible = true;
+  }
+
+  handleOpenGeofence() {
+    this.modalVisible = false;
+    this.geofenceDrawerVisible = true;
+  }
+
+  handleCancel(): void {
+    this.modalVisible = false;
+  }
 
   onClickInstaller() {
     this.selectedDevice = null;
-    this.reinitialiserMap = true;  // ceci va réinitialiserMap
+    this.reinitialiserMap = true;
   }
 
 
 
   onDeviceSelected(device: any) {
-    this.selectedDevice = device;
+    this.selectedDevice = {
+      deviceId: device.id,
+      name: device.name
+    };
   }
 
   fetchData() {

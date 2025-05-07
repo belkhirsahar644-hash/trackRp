@@ -15,6 +15,7 @@
       </th>
       <th>Email</th>
       <th>Téléphone</th>
+      <th>Matricule du voiture</th>
       <th nzCellControl="action">Action</th>
     </tr>
   </thead>
@@ -24,6 +25,7 @@
         <td>{{ data.name }}</td>
         <td>{{ data.email }}</td>
         <td>{{ data.phone}}</td>
+        <td> {{data.attributes.carNumber}}</td>
         <td nzCellControl="action">
           <button nz-button nzType="dashed" (click)="updateDriver(data)">   Modifier </button>
           <nz-divider nzType="vertical"></nz-divider>

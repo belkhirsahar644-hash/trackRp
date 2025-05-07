@@ -28,6 +28,13 @@ nzCancelText="Annuler">
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
+        <nz-form-label [nzSpan]="7">Matricule de voiture</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="carNumber" placeholder="Matricule du voiture" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Password</nz-form-label>
         <nz-form-control [nzSpan]="12" nzDisableAutoTips nzErrorTip="Please input your password!">
           <input nz-input type="password" formControlName="password" placeholder="password"  autocomplete="new-password" />

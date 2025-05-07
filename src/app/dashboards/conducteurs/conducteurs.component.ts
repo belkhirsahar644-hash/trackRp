@@ -15,6 +15,10 @@ export class ConducteursComponent implements OnInit{
     phone: '',
     password: '',
     driver: true,
+    attributes:{
+      carNumber: '',
+    },
+
   }
   driver: Driver[] = [];
   showForm: boolean = false;
@@ -77,6 +81,9 @@ export class ConducteursComponent implements OnInit{
       phone: '',
       password: '',
       driver: true,
+      attributes:{
+        carNumber: '',
+      },
     }
   this.showForm = !this.showForm;
 }

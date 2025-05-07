@@ -12,13 +12,10 @@ export class DeviceModalComponent  implements OnChanges{
   @Input() device: any = null;
   @Output() close = new EventEmitter<void>();
   @Input() position: any;
-
   @Output() openGeofence = new EventEmitter<void>();
 
+  /*get deviceData() {
 
-
-
-  get deviceData() {
     return {
       deviceId: this.position.deviceId,
       name: this.position.deviceName,
@@ -32,7 +29,7 @@ export class DeviceModalComponent  implements OnChanges{
       battery: this.position.attributes?.batteryLevel,
       status: this.position.status
     };
-  }
+  }*/
 
   ngOnChanges() {
     if (this.position && (!this.device || this.device.deviceId !== this.position.deviceId)) {
@@ -52,7 +49,7 @@ export class DeviceModalComponent  implements OnChanges{
   openGeofenceDrawer(): void {
 
     this.Modalvisible = false;
-    this.openGeofence.emit();  // délégation au parent
+    this.openGeofence.emit();
 
   }
 

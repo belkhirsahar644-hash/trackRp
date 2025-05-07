@@ -10,15 +10,12 @@ import {Device, VehiculeService} from '../../services/vehicule.service';
 export class VehiculeComponent implements OnInit{
 
   selectedDevice: Device = {
-    model: '',
     name: '',
     uniqueId: '',
     attributes:{
       nameDriver:'',
       carNumber:'' ,
       speedLimit:'',
-      fuelDropThreshold:'',
-      fuelIncreaseThreshold:'',
     },
   }
   device: Device[] = [];
@@ -73,15 +70,12 @@ export class VehiculeComponent implements OnInit{
 
   toggleForm(): void {
     this.selectedDevice = {
-      model: '',
       name: '',
       uniqueId: '',
       attributes:{
         nameDriver:'',
         carNumber:'' ,
         speedLimit:'',
-        fuelDropThreshold:'',
-        fuelIncreaseThreshold:'',
       },
 
     };

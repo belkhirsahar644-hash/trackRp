@@ -54,10 +54,33 @@
       <a (click)="confirmZone()">confirmer</a>
     </div>
   </div>
-  <app-map-home [selectedDeviceId]="selectedDevice?.id"
-                [resetMapView]="reinitialiserMap"
-                (mapMarkerLocEvent)="updateMarkerLoc($event)"
-                (mapResetDone)="reinitialiserMap = false">
+
+  {{selectedDevice | json}}
+
+  <app-map-home
+
+    [selectedDeviceId]="selectedDevice?.id"
+    [resetMapView]="reinitialiserMap"
+    (mapMarkerLocEvent)="updateMarkerLoc($event)"
+    (mapResetDone)="reinitialiserMap = false"
+    (IconClicked)="onMarkerClicked($event)">
   </app-map-home>
+
+  <app-device-modal
+    [Modalvisible]="modalVisible"
+    [position]="selectedDevice"
+    (close)="handleCancel()"
+    (openGeofence)="handleOpenGeofence()"
+  >
+  </app-device-modal>
+
+  <app-geofence
+    *ngIf="geofenceDrawerVisible && selectedDevice"
+    [visible]="geofenceDrawerVisible"
+    [device]="selectedDevice"
+    [position]="selectedPosition"
+    (closeDrawer)="geofenceDrawerVisible = false">
+  </app-geofence>
+
 
 </div>

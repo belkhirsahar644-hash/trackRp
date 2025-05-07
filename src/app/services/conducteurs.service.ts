@@ -7,7 +7,10 @@ export interface Driver {
   email: string;
   phone: string;
   password: string;
-  driver: true
+  driver: true;
+  attributes:{
+    carNumber: string;
+  },
 }
 
 @Injectable({

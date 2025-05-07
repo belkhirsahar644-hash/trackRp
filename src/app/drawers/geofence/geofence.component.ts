@@ -196,8 +196,6 @@ export class GeofenceComponent implements OnChanges {
 */
 import {Component, EventEmitter, OnChanges ,inject, Input, Output} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {HttpClient} from '@angular/common/http';
-import * as turf from '@turf/turf';
 type Type = 'Zone identifié' | 'Zone autorisé';
 import {MapHomeService} from '../../services/map-home.service';
 
@@ -211,18 +209,15 @@ export class GeofenceComponent implements  OnChanges{
   @Input() visible = false;
   @Input() device: any;
   @Input() map: any;
+  @Input() position: any;
   @Output() closeDrawer = new EventEmitter<void>();
 
   geofences: any[] = [];
   FormVisible = false;
-  addingGeofence = false;
-  selectedGeofenceDevice: any = null;
-  tempShapeId: string | null = null;
-
   private fb = inject(FormBuilder);
 
 
-  constructor(private httpClient: HttpClient,
+  constructor(
               private mapHomeService: MapHomeService,) {
   }
   validateForm = this.fb.group({

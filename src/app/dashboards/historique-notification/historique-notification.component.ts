@@ -45,6 +45,17 @@ export class HistoriqueNotificationComponent implements OnInit{
       this.loadNotification();
     });
   }
+  typeLabelMap: { [key: string]: string } = {
+    deviceOnline: 'Statut en ligne',
+    deviceUnknown: 'Statut inconnu',
+    deviceOffline: 'Statut hors ligne',
+    deviceInactive: 'Appareil inactif',
+    deviceMoving: 'Déplacement de l\'appareil',
+    deviceStopped: 'Appareil arrêté',
+    deviceOverspeed: 'Limite de vitesse dépassée',
+    geofenceEnter: 'Entré du zone géofence',
+    geofenceExit: 'Sortie de du zone géofence'
+  };
   loadNotification(){
     const { from, to } = this.layoutService.getPeriodDates(this.selectedPeriod);
 
@@ -61,7 +72,6 @@ export class HistoriqueNotificationComponent implements OnInit{
        }
      )
    }
-
 
   }
 

@@ -4,7 +4,6 @@ import {Notification} from '../../services/notification.service';
 import { Validators, FormBuilder} from '@angular/forms';
 import { Subject } from 'rxjs';
 
-type Type = 'deviceOnline' | 'deviceUnknown' |'deviceOffline' | 'deviceInactive' |'deviceMoving' | 'deviceStopped' |'geofenceEnter' | 'geofenceExit'   |'commandResult' | 'queuedCommandSent'  |'deviceOverspeed' | 'deviceFuelDrop'  |'deviceFuelIncrease' | 'alarm'  |'ignitionOn' | 'ignitionOff';
 
 @Component({
   selector: 'app-add-notification',
@@ -30,7 +29,7 @@ export class AddNotificationComponent implements OnInit, OnDestroy{
   private fb = inject(FormBuilder);
 
   validateForm = this.fb.group({
-    description: this.fb.control<string | null>(null, Validators.required),
+    description: this.fb.control<string | null>(null),
     type: this.fb.control<string | null>(null, Validators.required)
   });
 
@@ -38,7 +37,7 @@ export class AddNotificationComponent implements OnInit, OnDestroy{
     if (this.notif) {
       this.validateForm.patchValue({
         description: this.notif.description,
-        type: this.notif.type || 'deviceUnknown',
+        type: this.notif.type || '',
       });
     }
   }

@@ -1,5 +1,5 @@
 <div class=" d-flex justify-content-between">
-  <h3>Liste des Véhicules</h3>
+  <h3>Liste des Appareils</h3>
   <button nz-button nzType="dashed" (click)="toggleForm()">Ajouter</button>
   <br/><br/>
 </div>
@@ -13,9 +13,11 @@
         <nz-icon nzType="search"/>
       </nz-filter-trigger>
     </th>
-    <th>Marque</th>
     <th>Modèle</th>
+    <th> Limite de vitesse (km/h)</th>
     <th>Matricule du voiture</th>
+    <th> Nom du conducteur</th>
+
     <th nzCellControl="action">Action</th>
   </tr>
   </thead>
@@ -24,8 +26,9 @@
       <tr>
         <td>{{ data.uniqueId }}</td>
         <td>{{ data.name }}</td>
-        <td>{{ data.model }}</td>
+        <td>{{ data.attributes.speedLimit }}</td>
         <td> {{data.attributes.carNumber}}</td>
+        <td> {{data.attributes.nameDriver}}</td>
         <td nzCellControl="action">
           <button nz-button nzType="dashed" (click)="editVehicle(data)"> Modifier</button>
           <nz-divider nzType="vertical"></nz-divider>

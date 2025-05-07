@@ -21,7 +21,7 @@
   <tbody>
     @for (data of nzTable.data; track data.id) {
       <tr>
-        <td>{{ data.type }}</td>
+        <td>{{ typeLabelMap[data.type] || data.type }}</td>
         <td>{{ data.eventTime }}</td>
 
         }

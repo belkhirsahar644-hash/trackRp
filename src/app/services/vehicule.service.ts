@@ -5,15 +5,12 @@ import { Observable } from 'rxjs';
 
 export interface Device {
   "id"?: number;
-  model: string;
-  uniqueId: string;
   name: string;
+  uniqueId: string;
   attributes: {
     nameDriver: string;
     carNumber:string ,
     speedLimit: string;
-    fuelDropThreshold: string;
-    fuelIncreaseThreshold: string;
 
   };
 

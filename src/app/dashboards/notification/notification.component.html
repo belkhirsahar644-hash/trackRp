@@ -20,11 +20,9 @@
   <tbody>
     @for (data of nzTable.data; track data.id) {
       <tr>
-        <td>{{ data.type }}</td>
+        <td>{{ typeLabelMap[data.type] || data.type }}</td>
         <td>{{ data.description }}</td>
         <td nzCellControl="action">
-          <button nz-button nzType="dashed" > Modifier</button>
-          <nz-divider nzType="vertical"></nz-divider>
           <button
             nz-button
             nz-popconfirm
@@ -51,7 +49,12 @@
 </nz-dropdown-menu>
 
 <div *ngIf="showForm">
-  <app-add-notification  [isVisibleF]="showForm" [notif]="selectedNotification" (addEvent)="loadNotif(); showForm=false "
-                         (cancelEvent)="showForm = false"></app-add-notification>
+
+  <app-add-notification
+    [isVisibleF]="showForm"
+    [notif]="selectedNotification"
+    (addEvent)="loadNotif(); showForm=false "
+    (cancelEvent)="showForm = false">
+  </app-add-notification>
 
 </div>

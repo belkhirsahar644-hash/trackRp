@@ -62,6 +62,18 @@ export class NotificationComponent implements OnInit {
     };
     this.showForm = !this.showForm;
   }
+  typeLabelMap: { [key: string]: string } = {
+    deviceOnline: 'Statut en ligne',
+    deviceUnknown: 'Statut inconnu',
+    deviceOffline: 'Statut hors ligne',
+    deviceInactive: 'Appareil inactif',
+    deviceMoving: 'Déplacement de l\'appareil',
+    deviceStopped: 'Appareil arrêté',
+    deviceOverspeed: 'Limite de vitesse dépassée',
+    geofenceEnter: 'Entré du zone géofence',
+    geofenceExit: 'Sortie de du zone géofence'
+  };
+
 
   deleteNotification(data: Notification) {
     this.notificationService.deleteNotif(data).subscribe(

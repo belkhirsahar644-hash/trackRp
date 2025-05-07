@@ -364,8 +364,6 @@ import { Component, ViewChild, ElementRef, AfterViewInit, OnDestroy, Input, Outp
 import { Map as MapLibreMap, Marker, NavigationControl } from 'maplibre-gl';
 import { Subscription } from 'rxjs';
 import { MapHomeService } from '../../services/map-home.service';
-import { HttpClient } from '@angular/common/http';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-map-home',
@@ -377,7 +375,6 @@ import { ToastrService } from 'ngx-toastr';
 export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   selectedDevice: any = null;
-  geofenceDrawerVisible = false;
 
   map: MapLibreMap | undefined; // Pour stocker l'objet carte MapLibre
   private deviceMarkers: Map<number, Marker> = new Map<number, Marker>();
@@ -391,18 +388,16 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Output() mapResetDone = new EventEmitter<void>();
   @Output() mapMarkerLocEvent = new EventEmitter<any>();
 
-  modalVisible = false;
-  selectedPosition: any = null;
+  @Output() IconClicked = new EventEmitter<any>();
+
   redMarker!: any;
   markerLngLat: any;
   constructor(
     private mapHomeService: MapHomeService,
-    private toastr: ToastrService
+
   ) {}
 
-  get isMapReady(): boolean {
-    return this.mapLoaded && !!this.map;
-  }
+
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['resetMapView'] && this.resetMapView === true) {
@@ -410,7 +405,9 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.mapResetDone.emit(); // Notifie le parent qu’on a fini
     }
 
-    if (changes['selectedDeviceId'] && this.selectedDeviceId !== null) {
+    if (changes['selectedDeviceId'] && this.selectedDeviceId !== null && this.selectedDeviceId !== undefined) {
+      console.log('DeviceId reçu dans MapHomeComponent:', this.selectedDeviceId);  // Vérification
+
       this.centerMapOnDevice(this.selectedDeviceId);
     }
   }
@@ -445,7 +442,7 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
     const initialState = { lng: 10.1729, lat: 36.8702, zoom: 5 };
     if (this.mapContainer.nativeElement instanceof HTMLElement) {
     this.map = new MapLibreMap({
-      container: this.mapContainer.nativeElement as HTMLDivElement, // Le conteneur de la carte est l'élément DOM
+      container: this.mapContainer.nativeElement as HTMLDivElement,
       style: `https://tiles.stadiamaps.com/styles/osm_bright.json`,
       center: [initialState.lng, initialState.lat],
       zoom: initialState.zoom
@@ -470,9 +467,6 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
         console.log('Nouvelle position du marqueur :', this.markerLngLat, this.markerLngLat);
       });
 
-
-
-
       this.map.on('load', () => {
       if (this.map) {
         this.mapLoaded = true;
@@ -480,38 +474,45 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.mapHomeService.connectWebSocket();
 
       this.positionsSubscription = this.mapHomeService.fullData$.subscribe(
-        (positions: any[]) => {
-          positions.forEach((position: any) => {
-            const deviceId = position.deviceId;
+        (enreichedPositions) => {
+          console.log("enrPositions", enreichedPositions);
+          if (enreichedPositions) {
+            enreichedPositions.forEach((position) => {
+              const deviceId = position.position.deviceId;
+              console.log("positiongps", position);
+              const oldMarker = this.deviceMarkers.get(deviceId);
+              if (oldMarker) {
+                oldMarker.remove();
+              }
 
-            const oldMarker = this.deviceMarkers.get(deviceId);
-            if (oldMarker) {
-              oldMarker.remove();
-            }
+              const carIcon = document.createElement('img');
+              carIcon.src = position.position.status
+                ? 'https://cdn-icons-png.flaticon.com/512/4042/4042715.png'
+                : 'https://cdn-icons-png.flaticon.com/512/2813/2813010.png';
+              carIcon.style.width = '50px';
+              carIcon.style.height = '50px';
+              carIcon.style.cursor = 'pointer';
 
-            const carIcon = document.createElement('img');
-            carIcon.src = position.attributes.status
-              ? 'https://cdn-icons-png.flaticon.com/512/4042/4042715.png'
-              : 'https://cdn-icons-png.flaticon.com/512/2813/2813010.png';
-            carIcon.style.width = '50px';
-            carIcon.style.height = '50px';
-            carIcon.style.cursor = 'pointer';
+              carIcon.addEventListener('click', () => {
+                this.IconClicked.emit(position)
+                //this.showModal(position);
+              });
 
-            carIcon.addEventListener('click', () => {
-              this.showModal(position);
+              const marker = new Marker({ element: carIcon })
+                .setLngLat([position.position.longitude, position.position.latitude])
+                .addTo(this.map!);
+
+              // Mise à jour du marqueur suivi
+              if (this.selectedDeviceId === deviceId) {
+                this.updateCurrentDeviceMarker(marker, position);
+              }
+
+              this.deviceMarkers.set(deviceId, marker);
             });
+          }
 
-            const marker = new Marker({ element: carIcon })
-              .setLngLat([position.longitude, position.latitude])
-              .addTo(this.map!);
 
-            // Mise à jour du marqueur suivi
-            if (this.selectedDeviceId === deviceId) {
-              this.updateCurrentDeviceMarker(marker, position);
-            }
 
-            this.deviceMarkers.set(deviceId, marker);
-          });
         }
       );
     });
@@ -533,26 +534,7 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
     });
   }
 
-  showModal(position?: any): void {
-    this.selectedPosition = position ?? null;
-    this.selectedDevice = {
-      deviceId: position.deviceId,
-      name: position.deviceName,
-      uniqueId: position.uniqueId,
-      model: position.model,
-      nameDriver: position.nameDriver,
-    };
-    this.modalVisible = true;
-  }
 
-  handleOpenGeofence() {
-    this.modalVisible = false;
-    this.geofenceDrawerVisible = true;
-  }
-
-  handleCancel(): void {
-    this.modalVisible = false;
-  }
 
   ngOnDestroy() {
     this.map?.remove();

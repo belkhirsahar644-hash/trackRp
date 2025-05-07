@@ -27,6 +27,8 @@ import {NzMenuModule} from 'ng-zorro-antd/menu';
 import {NzListModule} from 'ng-zorro-antd/list';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzSelectModule} from 'ng-zorro-antd/select';
+import {DrawersModule} from "../drawers/drawers.module";
+import {ModalModule} from "../modal/modal.module";
 
 @NgModule({
   declarations: [
@@ -39,32 +41,32 @@ import {NzSelectModule} from 'ng-zorro-antd/select';
 
 
   ],
-  imports: [
-    CommonModule,RouterModule,
-    NzPopconfirmModule,
-    FormulaireModule,
-    NzButtonModule,
-    NzModalModule,
-    BrowserAnimationsModule,
-    NzDrawerModule,
-    NzFormModule,
-    NzDividerModule,
-     NzCardModule,
-    NzGridModule,
-    FormsModule,
-    MapsModule,
-    NzDropDownModule,
-    NzIconModule,
-    NzInputModule,
-    NzTableModule,
-    NzMenuModule,
-    CommonModule,
-    NzListModule,
-    NzTagModule,
-    ReactiveFormsModule,
-    NzSelectModule,
+    imports: [
+        CommonModule, RouterModule,
+        NzPopconfirmModule,
+        FormulaireModule,
+        NzButtonModule,
+        NzModalModule,
+        BrowserAnimationsModule,
+        NzDrawerModule,
+        NzFormModule,
+        NzDividerModule,
+        NzCardModule,
+        NzGridModule,
+        FormsModule,
+        MapsModule,
+        NzDropDownModule,
+        NzIconModule,
+        NzInputModule,
+        NzTableModule,
+        NzMenuModule,
+        CommonModule,
+        NzListModule,
+        NzTagModule,
+        ReactiveFormsModule,
+        NzSelectModule, DrawersModule, ModalModule,
 
-],
+    ],
   exports: [
     CardsComponent,
     ConducteursComponent,
