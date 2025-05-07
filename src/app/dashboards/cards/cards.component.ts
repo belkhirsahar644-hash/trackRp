@@ -5,6 +5,7 @@ import { forkJoin, of, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Superviseur, SuperviseurService } from '../../services/superviseur.service';
 import { ConducteursService, Driver } from '../../services/conducteurs.service';
+import {EnrichedPosition} from '../../models/models.model';
 
 @Component({
   selector: 'app-cards',
@@ -23,8 +24,10 @@ export class CardsComponent implements OnInit, OnDestroy {
   geofenceDrawerVisible = false;
   installedDevice: any[] = [];
   selectedDevice: any | null = null;
+  mapEnrichedSelectedDevice!: EnrichedPosition;
   private positionSub: Subscription | undefined;
   markerLngLat: any;
+
   constructor(
     private mapHomeService: MapHomeService,
     private vehiculeService: VehiculeService,
@@ -82,23 +85,12 @@ export class CardsComponent implements OnInit, OnDestroy {
       }
     });
   }
-  onMarkerClicked(position: any) {
+  onMarkerClicked(position: EnrichedPosition) {
     console.log('Marqueur cliqué !', position);
-    this.selectedDevice = this.installedDevice.find((device) => device.id === position.deviceId);
+    this.mapEnrichedSelectedDevice = position;
     this.modalVisible = true;
   }
 
-  showModal(position?: any): void {
-    this.selectedPosition = position ?? null;
-    this.selectedDevice = {
-      deviceId: position.deviceId,
-      name: position.deviceName,
-      uniqueId: position.uniqueId,
-      model: position.model,
-      nameDriver: position.nameDriver,
-    };
-    this.modalVisible = true;
-  }
 
   handleOpenGeofence() {
     this.modalVisible = false;

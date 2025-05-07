@@ -4,19 +4,17 @@
   (nzOnCancel)="handleCancel()"
 >
   <ng-container *nzModalContent>
+
     <p >ID : {{ position.deviceId }}</p>
-    <p >Nom : {{ position.name }}</p>
-
-    <p >Conducteur : {{ position.nameDriver }}</p>
-
-    <p >Modèle : {{ position.model }}</p>
-    <p >Identifiant unique : {{ position.uniqueId }}</p>
-    <p >Status : {{ position.status }}</p>
-    <p >Batterie : {{ position.battery }}%</p>
-
-    <p *ngIf="device">Vitesse : {{ position.speed }} km/h</p>
-    <p *ngIf="position">Distance totale : {{ position.distance | number:'1.0-2' }} m</p>
-        <a (click)="openGeofenceDrawer()">Zone geofence</a>
+    <p >Identifiant unique : {{ device.uniqueId }}</p>
+    <p >Modèle : {{ device.name }}</p>
+    <p >Status : {{ device.status }}</p>
+    <p *ngIf="device.attributes.nameDriver" >Conducteur : {{ device.attributes.nameDriver }}</p>
+    <p *ngIf="device.attributes.carNumber"> Matricule de voiture : {{device.attributes.carNumber}}</p>
+    <p *ngIf="device.attributes.speedLimit"> Limite de vitesse : {{device.attributes.speedLimit}} km/h</p>
+    <p *ngIf="position.speed">Vitesse : {{ position.speed }} km/h</p>
+    <p *ngIf="position">Distance totale : {{ position.attributes.distance }} m</p>
+    <a  (click)="openGeofenceDrawer()">Zone geofence</a>
   </ng-container>
 </nz-modal>
 

@@ -55,7 +55,6 @@
     </div>
   </div>
 
-  {{selectedDevice | json}}
 
   <app-map-home
 
@@ -67,18 +66,21 @@
   </app-map-home>
 
   <app-device-modal
+    *ngIf="mapEnrichedSelectedDevice?.device && mapEnrichedSelectedDevice?.position"
+
     [Modalvisible]="modalVisible"
-    [position]="selectedDevice"
+    [device]="mapEnrichedSelectedDevice.device"
+    [position]="mapEnrichedSelectedDevice.position"
     (close)="handleCancel()"
     (openGeofence)="handleOpenGeofence()"
   >
   </app-device-modal>
 
   <app-geofence
-    *ngIf="geofenceDrawerVisible && selectedDevice"
+    *ngIf="geofenceDrawerVisible && mapEnrichedSelectedDevice?.position"
     [visible]="geofenceDrawerVisible"
     [device]="selectedDevice"
-    [position]="selectedPosition"
+    [position]="mapEnrichedSelectedDevice.position"
     (closeDrawer)="geofenceDrawerVisible = false">
   </app-geofence>
 

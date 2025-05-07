@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, Output,  OnChanges} from '@angular/core';
+import {Device, Position} from '../../models/models.model';
 
 @Component({
   selector: 'app-device-modal',
@@ -6,53 +7,25 @@ import {Component, EventEmitter, Input, Output,  OnChanges} from '@angular/core'
   templateUrl: './device-modal.component.html',
   styleUrl: './device-modal.component.scss'
 })
-export class DeviceModalComponent  implements OnChanges{
+export class DeviceModalComponent  {
   @Input() map: any;
   @Input() Modalvisible = false;
-  @Input() device: any = null;
+  @Input() device!: Device;
   @Output() close = new EventEmitter<void>();
-  @Input() position: any;
-  @Output() openGeofence = new EventEmitter<void>();
-
-  /*get deviceData() {
-
-    return {
-      deviceId: this.position.deviceId,
-      name: this.position.deviceName,
-      uniqueId: this.position.uniqueId,
-      model: this.position.model,
-      nameDriver: this.position.nameDriver,
-      latitude: this.position.latitude,
-      longitude: this.position.longitude,
-      speed: this.position.speed,
-      distance: this.position.attributes?.totalDistance,
-      battery: this.position.attributes?.batteryLevel,
-      status: this.position.status
-    };
-  }*/
-
-  ngOnChanges() {
-    if (this.position && (!this.device || this.device.deviceId !== this.position.deviceId)) {
-      this.device = {
-        deviceId: this.position.deviceId,
-      };
-    }
-  }
-
-
+  @Input() position!: Position;
+  @Output() openGeofence = new EventEmitter<number>();
 
   handleCancel() {
     this.close.emit();
   }
   geofenceDrawerVisible = false;
 
-  openGeofenceDrawer(): void {
+  openGeofenceDrawer() {
 
     this.Modalvisible = false;
-    this.openGeofence.emit();
+    this.openGeofence.emit(this.position.deviceId);
 
   }
-
 }
 /*
 

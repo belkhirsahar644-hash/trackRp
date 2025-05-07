@@ -364,6 +364,7 @@ import { Component, ViewChild, ElementRef, AfterViewInit, OnDestroy, Input, Outp
 import { Map as MapLibreMap, Marker, NavigationControl } from 'maplibre-gl';
 import { Subscription } from 'rxjs';
 import { MapHomeService } from '../../services/map-home.service';
+import {EnrichedPosition} from '../../models/models.model';
 
 @Component({
   selector: 'app-map-home',
@@ -388,7 +389,7 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Output() mapResetDone = new EventEmitter<void>();
   @Output() mapMarkerLocEvent = new EventEmitter<any>();
 
-  @Output() IconClicked = new EventEmitter<any>();
+  @Output() IconClicked: EventEmitter<EnrichedPosition> = new EventEmitter<EnrichedPosition>();
 
   redMarker!: any;
   markerLngLat: any;
@@ -495,7 +496,7 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
 
               carIcon.addEventListener('click', () => {
                 this.IconClicked.emit(position)
-                //this.showModal(position);
+
               });
 
               const marker = new Marker({ element: carIcon })

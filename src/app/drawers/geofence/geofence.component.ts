@@ -198,6 +198,7 @@ import {Component, EventEmitter, OnChanges ,inject, Input, Output} from '@angula
 import {FormBuilder, Validators} from '@angular/forms';
 type Type = 'Zone identifié' | 'Zone autorisé';
 import {MapHomeService} from '../../services/map-home.service';
+import {Position, Device} from '../../models/models.model';
 
 @Component({
   selector: 'app-geofence',
@@ -207,9 +208,9 @@ import {MapHomeService} from '../../services/map-home.service';
 })
 export class GeofenceComponent implements  OnChanges{
   @Input() visible = false;
-  @Input() device: any;
+  @Input() device!: Device;
   @Input() map: any;
-  @Input() position: any;
+  @Input() position!: Position;
   @Output() closeDrawer = new EventEmitter<void>();
 
   geofences: any[] = [];
@@ -233,8 +234,8 @@ export class GeofenceComponent implements  OnChanges{
   ngOnChanges() {
     console.log('OnChanges - visible:', this.visible, 'device:', this.device);
 
-    if (this.visible && this.device) {
-      this.loadGeofences(this.device.deviceId);
+    if (this.visible && this.position.deviceId) {
+      this.loadGeofences(this.position.deviceId);
     } else {
       console.log('Drawer non visible ou device null');
     }
