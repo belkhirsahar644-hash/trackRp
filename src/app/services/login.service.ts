@@ -1,31 +1,3 @@
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
-import {environment} from '../../environments/environment.development';
-
-@Injectable({
-  providedIn: 'root'
-})
-export class LoginService {
-
-  private apiUrl = 'http://localhost:8082/api/session';  // URL de votre serveur Traccar
-
-  constructor(private http: HttpClient) { }
-
-  // Connexion
-  login(email: string, password: string): Observable<any> {
-    // Créer l'objet HttpParams pour envoyer les données dans le format 'x-www-form-urlencoded'
-    const body = new HttpParams()
-      .set('email', email)
-      .set('password', password);
-
-    return this.http.post(environment.apiURL + "session" ,body.toString(), {
-      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
-      withCredentials: true // Inclure les cookies de session
-    });
-  }
-}
 /*
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
@@ -78,3 +50,36 @@ export class LoginService {
   }
 }
 */
+
+import { Injectable } from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Observable, tap} from 'rxjs';
+import {environment} from '../../environments/environment.development';
+import {AuthentificationsService} from './authentifications.service';
+import {User} from '../models/models.model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LoginService {
+
+   constructor(private http: HttpClient,
+               private authentificationsService: AuthentificationsService,) { }
+
+  // Connexion
+  login(email: string, password: string): Observable<any> {
+    // Créer l'objet HttpParams pour envoyer les données dans le format 'x-www-form-urlencoded'
+    const body = new HttpParams()
+      .set('email', email)
+      .set('password', password);
+
+    return this.http.post<User>(environment.apiURL + "session" ,body.toString(), {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
+      withCredentials: true // Inclure les cookies de session
+    }).pipe( //enchaîner des opérateurs
+      tap((user: User) => { //tap: permet de stocker l'utilisateur
+        this.authentificationsService.setUser(user); // stocker l'utilisateur connecté
+      })
+    );
+  }
+}

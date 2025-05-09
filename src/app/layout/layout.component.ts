@@ -6,6 +6,7 @@ import {MapHomeService} from '../services/map-home.service';
 import {Subscription} from 'rxjs';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import { Howl } from 'howler';
+import {AuthentificationsService} from '../services/authentifications.service';
 @Component({
   selector: 'app-layout',
   standalone: false,
@@ -24,7 +25,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
   constructor(
     private layoutService: LayoutService, private router: Router,
     private mapHomeService: MapHomeService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    public authentificationsService: AuthentificationsService
   ) {
     this.sound = new Howl({
       src: ['assets/mixkit-correct-answer-tone-2870.wav'],

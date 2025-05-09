@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import {LoginService} from '../services/login.service';
+import {AuthentificationsService} from '../services/authentifications.service';
+import { User } from '../models/models.model';  // Assurez-vous d'importer l'interface User
+
 @Component({
   selector: 'app-login',
   standalone: false,
@@ -8,7 +11,9 @@ import {LoginService} from '../services/login.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService,
+              private router: Router,
+              private authentificationsService: AuthentificationsService) {}
   email: string= '';
   password: string= '';
   errorMessage: string= '';
@@ -17,10 +22,9 @@ export class LoginComponent {
     onLogin() {
       console.log('Tentative de connexion avec:', this.email, this.password);
       this.loginService.login(this.email, this.password).subscribe({
-        next: (value) => {
-          console.log('Réponse serveur:', value);
-          alert('Connexion réussie');
-          console.log('Redirection en cours...');
+        next: (user: User) => {
+          console.log('Réponse serveur:', user);
+          this.authentificationsService.setUser(user);
           this.router.navigate(['/home']).then(success => {
             console.log('Navigation réussie ?', success);
             if (!success) {
@@ -34,15 +38,12 @@ export class LoginComponent {
 
           });
         },
-        /*error: (err) => {
+        error: (err) => {
           console.error('Erreur:', err);
-          this.errorMessage = 'Échec de la connexion';
+          this.errorMessage = 'Vérifier votre mot de passe ou Email';
           alert('Erreur de connexion');
-        },*/
+        },
       });
     }
-
-
-
 }
 

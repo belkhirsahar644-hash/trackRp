@@ -8,7 +8,7 @@
         <a routerLink="/home"> Accueil</a>
 
       </li>
-      <li nz-menu-item>
+      <li nz-menu-item *ngIf="authentificationsService.getUser()?.administrator">
         <nz-icon nzType="user"/>
         <a routerLink="/superviseur"> Gestion des superviseurs</a>
       </li>

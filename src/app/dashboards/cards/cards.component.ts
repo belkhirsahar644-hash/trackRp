@@ -12,6 +12,7 @@ import { Superviseur, SuperviseurService } from '../../services/superviseur.serv
 import { ConducteursService, Driver } from '../../services/conducteurs.service';
 import {EnrichedPosition} from '../../models/models.model';
 import {GeofenceComponent} from '../../drawers/geofence/geofence.component';
+import {AuthentificationsService} from '../../services/authentifications.service';
 
 @Component({
   selector: 'app-cards',
@@ -40,7 +41,8 @@ export class CardsComponent implements OnInit, OnDestroy {
     private mapHomeService: MapHomeService,
     private vehiculeService: VehiculeService,
     private superviseurService:SuperviseurService,
-    private conducteursService:ConducteursService
+    private conducteursService:ConducteursService,
+    public authentificationsService: AuthentificationsService
   ) {}
 
 

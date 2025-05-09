@@ -77,3 +77,37 @@ export class EnrichedPosition {
   device!: Device;
 }
 
+export interface User {
+  id: number
+  attributes: UserAttributes
+  name: string
+  login: any
+  email: string
+  phone: string
+  readonly: boolean
+
+  administrator: boolean
+  supervisor: boolean
+  driver: boolean
+  map: any
+  latitude: number
+  longitude: number
+  zoom: number
+  coordinateFormat: any
+  disabled: boolean
+  expirationTime: any
+  deviceLimit: number
+  userLimit: number
+  deviceReadonly: boolean
+  limitCommands: boolean
+  disableReports: boolean
+  fixedEmail: boolean
+  poiLayer: any
+  totpKey: any
+  temporary: boolean
+  password: any
+}
+
+export interface UserAttributes {
+  carNumber: string
+}
