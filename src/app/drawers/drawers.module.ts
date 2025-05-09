@@ -10,6 +10,9 @@ import {NzOptionComponent, NzSelectComponent} from "ng-zorro-antd/select";
 import {NzWaveDirective} from "ng-zorro-antd/core/wave";
 import {ReactiveFormsModule} from "@angular/forms";
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 
 
@@ -18,6 +21,9 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
     GeofenceComponent
   ],
     imports: [
+      NzButtonModule,
+      NzPopconfirmModule,
+      NzIconModule,
       NzDrawerModule,
         CommonModule,
         NzButtonComponent,

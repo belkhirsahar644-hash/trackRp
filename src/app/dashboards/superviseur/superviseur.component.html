@@ -50,6 +50,13 @@
   </div>
 </nz-dropdown-menu>
 <div *ngIf="showForm">
-  <app-add-superviseur [isVisibleS]="showForm" [superviseur]="selectedSup" (addEvent)="loadSuperviseur() ; showForm=false" (cancelEvent)="showForm =false"></app-add-superviseur>
+  <app-add-superviseur
+    [isVisibleS]="showForm"
+    [superviseur]="selectedSup"
+    (addEvent)="loadSuperviseur() ; showForm=false"
+    (cancelEvent)="showForm =false"
+  >
+
+  </app-add-superviseur>
 
 </div>

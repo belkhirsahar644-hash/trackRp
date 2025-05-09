@@ -5,9 +5,9 @@
   (nzOnClose)="close()"
 >
   <ng-container *nzDrawerContent>
+    <div *ngIf="formDirectVisible">
     {{markerLngLat|json}}
-    <a (click)="ShowForm()">➕ Ajouter une zone geofence</a>
-    <div *ngIf="FormVisible">
+       <div *ngIf="FormVisible">
       <form nz-form [formGroup]="validateForm" (ngSubmit)="AjouterForm()">
         <nz-form-item>
           <nz-form-label [nzSpan]="5" nzRequired nzFor="nom">Nom</nz-form-label>
@@ -41,14 +41,31 @@
       </form>
     </div>
 
-
+    </div>
     <div *ngIf="geofences.length > 0; else noGeofences" style="margin-top: 24px;">
-      <ul>
-        <li *ngFor="let geofence of geofences; trackBy: trackByGeofenceId">
-          <strong>{{ geofence.name }}</strong> - {{ geofence.description }}
+      <ul style="list-style: none; padding: 0;">
+        <li *ngFor="let geofence of geofences; trackBy: trackByGeofenceId"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+    <span>
+      <strong>{{ geofence.name }}</strong> - {{ geofence.description }}
+    </span>
+
+          <button
+            nz-button
+            nzType="text"
+            nz-popconfirm
+            nzPopconfirmTitle="Voulez-vous vraiment supprimer cette zone ?"
+            nzPopconfirmPlacement="left"
+            (nzOnConfirm)="deleteGeofence(geofence.id)">
+            <nz-icon nzType="delete" nzTheme="outline" style="color: red;"></nz-icon>
+          </button>
+
+
         </li>
       </ul>
+
     </div>
+
 
 
     <ng-template #noGeofences>
@@ -57,4 +74,6 @@
 
   </ng-container>
 </nz-drawer>
+
+
 

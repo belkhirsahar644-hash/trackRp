@@ -102,11 +102,10 @@ export class MapHomeService {
 
   // Méthode pour associer un device à une géofence
   linkDeviceToGeofence(deviceId: number, geofenceId: number): Observable<any> {
-    const payload = {
+    return this.http.post<any>('/api/permissions', {
       deviceId: deviceId,
       geofenceId: geofenceId,
-    };
-    return this.http.post<any>('/api/permissions', payload);
+    });
   }
 
 

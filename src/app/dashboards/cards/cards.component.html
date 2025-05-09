@@ -38,7 +38,7 @@
 <div>
   <div class="row">
     <div class="col-3">
-      Appareil sélectionné :
+      Appareil sélectionné
     </div>
     <div class="col-3">
       <nz-select [(ngModel)]="selectedDevice">
@@ -55,16 +55,32 @@
       <a (click)="confirmZone()">confirmer</a>
     </div>
   </div>
-{{selectedDevice | json}}
 
   <app-map-home
 
+    [showMarker]="MarkerVisible"
+    (mapReady)="map = $event"
     [selectedDeviceId]="selectedDevice?.device?.id || null"
     [resetMapView]="reinitialiserMap"
     (mapMarkerLocEvent)="updateMarkerLoc($event)"
     (mapResetDone)="reinitialiserMap = false"
     (IconClicked)="onMarkerClicked($event)">
   </app-map-home>
+
+  <app-geofence
+
+    #geoComp
+    *ngIf="geofenceDrawerVisible && map"
+    [map]="map"
+    [visible]="geofenceDrawerVisible"
+    [markerLngLat]="markerLngLat"
+    [device]="selectedDevice?.device || null"
+    [formDirectVisible]="geofenceFormDirectVisible"
+    (closeDrawer)="geofenceDrawerVisible = false"
+    (addGeofence)="geofenceDrawerVisible=false"
+  >
+  </app-geofence>
+
 
   <app-device-modal
     *ngIf="mapEnrichedSelectedDevice?.device && mapEnrichedSelectedDevice?.position"
@@ -77,13 +93,6 @@
   >
   </app-device-modal>
 
-  <app-geofence
-    *ngIf="geofenceDrawerVisible"
-    [visible]="geofenceDrawerVisible"
-    [markerLngLat]="markerLngLat"
-    [device]="selectedDevice?.device || null"
-    (closeDrawer)="geofenceDrawerVisible = false">
-  </app-geofence>
 
 
 </div>

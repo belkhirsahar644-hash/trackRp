@@ -18,7 +18,6 @@ export class DeviceModalComponent  {
   handleCancel() {
     this.close.emit();
   }
-  geofenceDrawerVisible = false;
 
   openGeofenceDrawer() {
 

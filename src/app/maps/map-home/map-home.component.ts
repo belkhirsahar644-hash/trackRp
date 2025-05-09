@@ -382,11 +382,14 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @ViewChild('map', { static: true }) mapContainer!: ElementRef<HTMLElement>;
 
+  @Input() showMarker: boolean= false;
   @Input() selectedDeviceId: number | null = null;
   @Input() resetMapView: boolean = false;
   @Output() mapResetDone = new EventEmitter<void>();
   @Output() mapMarkerLocEvent = new EventEmitter<any>();
   @Output() IconClicked: EventEmitter<EnrichedPosition> = new EventEmitter<EnrichedPosition>();
+
+  @Output() mapReady = new EventEmitter<any>();
 
   redMarker!: any;
   markerLngLat: any;
@@ -408,6 +411,17 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
 
       this.centerMapOnDevice(this.selectedDeviceId);
     }
+
+    if (changes['showMarker'] && this.showMarker && this.selectedDeviceId !== null) {
+      console.log('Activation du marqueur draggable pour l’appareil:', this.selectedDeviceId);
+      this.centerMapOnDevice(this.selectedDeviceId, true); // true = placer le marqueur rouge
+    } else if (!this.showMarker) {
+      if (this.redMarker) {
+        this.redMarker.remove();
+        this.redMarker = null;
+      }
+    }
+
   }
 
   resetToInitialView(): void {
@@ -419,7 +433,7 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
     });
   }
 
-  centerMapOnDevice(deviceId: number) {
+  centerMapOnDevice(deviceId: number, placeDraggableMarker = false) {
     const marker = this.deviceMarkers.get(deviceId);
     if (marker) {
       const lngLat = marker.getLngLat();
@@ -428,9 +442,25 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
         zoom: 15,
         speed: 1.2
       });
-    this.redMarker.setLngLat([lngLat.lng, lngLat.lat]);
-      this.markerLngLat = this.redMarker.getLngLat();
-      this.mapMarkerLocEvent.emit(this.markerLngLat);
+
+      if (placeDraggableMarker){
+        // Supprimer l'ancien marqueur rouge s'il existe
+        if (this.redMarker) this.redMarker.remove();
+        this.redMarker = new Marker({ color: "#FF0000", draggable: true })
+          .setLngLat([lngLat.lng, lngLat.lat])
+          .addTo(this.map!);
+
+        this.redMarker.on('dragend', () => {
+          this.markerLngLat = this.redMarker.getLngLat();
+          this.mapMarkerLocEvent.emit(this.markerLngLat);
+          console.log('Nouvelle position du marqueur :', this.markerLngLat, this.markerLngLat);
+        });
+        this.markerLngLat = this.redMarker.getLngLat();
+        this.mapMarkerLocEvent.emit(this.markerLngLat);
+      }
+
+
+
     } else {
       console.warn(`Device ${deviceId} non trouvé sur la carte.`);
     }
@@ -451,24 +481,10 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
     // Navigation control
     this.map.addControl(new NavigationControl({}), 'top-right');
 
-      this.redMarker = new Marker({ color: "#FF0000", draggable: true })
-        .setLngLat([10.1729, 36.8702])
-        .addTo(this.map!);
-
-// Affiche la position lorsqu'on clique sur le marqueur rouge
-      this.redMarker.getElement().addEventListener('click', () => {
-        const lngLat = this.redMarker.getLngLat();
-        alert(`Longitude : ${lngLat.lng}\nLatitude : ${lngLat.lat}`);
-      });
-
-      this.redMarker.on('dragend', () => {
-        this.markerLngLat = this.redMarker.getLngLat();
-        this.mapMarkerLocEvent.emit(this.markerLngLat);
-        console.log('Nouvelle position du marqueur :', this.markerLngLat, this.markerLngLat);
-      });
 
       this.map.on('load', () => {
       if (this.map) {
+        this.mapReady.emit(this.map);
         this.mapLoaded = true;
       }
       this.mapHomeService.connectWebSocket();
@@ -486,7 +502,7 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
               }
 
               const carIcon = document.createElement('img');
-              carIcon.src = position.position.status
+              carIcon.src = position.device.status==="offline"
                 ? 'https://cdn-icons-png.flaticon.com/512/4042/4042715.png'
                 : 'https://cdn-icons-png.flaticon.com/512/2813/2813010.png';
               carIcon.style.width = '50px';
@@ -520,20 +536,34 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
   }
   updateCurrentDeviceMarker(marker: Marker, position: any) {
-    // Si un marqueur de l'appareil est déjà présent, on le met à jour
-    if (this.currentDeviceMarker) {
-      this.currentDeviceMarker.setLngLat([position.longitude, position.latitude]);
-    } else {
-      this.currentDeviceMarker = marker;
+    // Extraction sécurisée des coordonnées
+    const lat = Number(position?.latitude);
+    const lon = Number(position?.longitude);
+
+    // Vérification que les coordonnées sont valides
+    if (isNaN(lat) || isNaN(lon)) {
+      console.error('Coordonnées invalides :', position);
+      return; // On quitte la fonction si les coordonnées sont incorrectes
     }
 
-    // Centrer la carte sur le nouveau marqueur
-    this.map?.flyTo({
-      center: [position.longitude, position.latitude],
-      zoom: 15,
-      speed: 1.2
-    });
+    // Mise à jour ou création du marqueur
+    if (this.currentDeviceMarker) {
+      this.currentDeviceMarker.setLngLat([lon, lat]);
+    } else {
+      this.currentDeviceMarker = marker;
+      this.currentDeviceMarker.setLngLat([lon, lat]);
+    }
+
+    // Centrage de la carte sur le marqueur
+    if (this.map) {
+      this.map.flyTo({
+        center: [lon, lat],
+        zoom: 15,
+        speed: 1.2
+      });
+    }
   }
+
 
 
 

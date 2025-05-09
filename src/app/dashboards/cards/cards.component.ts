@@ -1,4 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+/*
+updateEnrichedPos(event: EnrichedPosition[]) {
+    this.installedDevice = event;
+  }
+ */
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MapHomeService } from '../../services/map-home.service';
 import { Device, VehiculeService } from '../../services/vehicule.service';
 import { forkJoin, of, Subscription } from 'rxjs';
@@ -6,6 +11,7 @@ import { catchError } from 'rxjs/operators';
 import { Superviseur, SuperviseurService } from '../../services/superviseur.service';
 import { ConducteursService, Driver } from '../../services/conducteurs.service';
 import {EnrichedPosition} from '../../models/models.model';
+import {GeofenceComponent} from '../../drawers/geofence/geofence.component';
 
 @Component({
   selector: 'app-cards',
@@ -14,19 +20,21 @@ import {EnrichedPosition} from '../../models/models.model';
   styleUrls: ['./cards.component.scss']
 })
 export class CardsComponent implements OnInit, OnDestroy {
+  map: any;
+
   deviceCount = 0;
   supervisorCount = 0;
   driverCount = 0;
-  AppareilInstaller = 0;
   reinitialiserMap = false;
   modalVisible = false;
-  selectedPosition: any = null;
   geofenceDrawerVisible = false;
   installedDevice: EnrichedPosition[] = [];
+  geofenceVisible= false;
   selectedDevice: EnrichedPosition | null = null;
   mapEnrichedSelectedDevice!: EnrichedPosition;
   private positionSub: Subscription | undefined;
   markerLngLat: any;
+
 
   constructor(
     private mapHomeService: MapHomeService,
@@ -36,7 +44,7 @@ export class CardsComponent implements OnInit, OnDestroy {
   ) {}
 
 
-  ngOnInit() {
+    ngOnInit() {
     console.log('CardsComponent chargé !');
     this.fetchData();
     this.mapHomeService.fullData$.subscribe(data => {
@@ -48,9 +56,12 @@ export class CardsComponent implements OnInit, OnDestroy {
   }
   onMarkerClicked(position: EnrichedPosition) {
     console.log('Marqueur cliqué !', position);
+
     this.mapEnrichedSelectedDevice = position;
     this.selectedDevice = position;
     this.modalVisible = true;
+    this.geofenceVisible = true;
+
   }
 
 
@@ -68,11 +79,11 @@ export class CardsComponent implements OnInit, OnDestroy {
     this.reinitialiserMap = true;
   }
 
-
-
   onDeviceSelected(device: EnrichedPosition) {
-    this.selectedDevice = device;
+
+    this.selectedDevice = { ...device }; //stocke toute les attributs du device dans selectedDevice
   }
+
 
   fetchData() {
     this.vehiculeService.getDevices()
@@ -107,13 +118,19 @@ export class CardsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.positionSub?.unsubscribe();
   }
-
+ MarkerVisible= false;
   markZone() {
-
+  this.MarkerVisible = !this.MarkerVisible;
+  console.log("mark",this.MarkerVisible);
   }
 
+  geofenceFormDirectVisible = false;
+
   confirmZone() {
-    this.geofenceDrawerVisible = true;
+    this.geofenceDrawerVisible= true;
+    this.geofenceFormDirectVisible = true;
+    this.MarkerVisible = false;
+
   }
 
   updateMarkerLoc(event: any) {
@@ -121,7 +138,5 @@ export class CardsComponent implements OnInit, OnDestroy {
     this.markerLngLat = event;
   }
 
-  updateEnrichedPos(event: EnrichedPosition[]) {
-    this.installedDevice = event;
-  }
+
 }

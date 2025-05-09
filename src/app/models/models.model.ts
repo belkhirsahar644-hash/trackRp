@@ -45,6 +45,7 @@ export class PositionAttributes {
   distance!: number;
   totalDistance!: number;
   motion!: boolean;
+  batteryLevel!: number;
 }
 
 export class Device {

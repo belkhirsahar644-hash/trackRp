@@ -15,7 +15,6 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
   @Output() addEvent = new EventEmitter<void>();
   @Output() cancelEvent = new EventEmitter<void>();
   @Input() isVisibleS = true;
-  message = '';
   private destroy$ = new Subject<void>();
   superviseurForm: FormGroup;
 
@@ -75,10 +74,8 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
     this.addsupervieurService.addSuperviseur(SuperviseurrData).subscribe({
       next: () => {
         this.addEvent.emit();
-        this.message = 'Superviseur ajouté avec succès!';
-      },
+        },
       error: (error) => {
-        this.message = 'Erreur lors de l\'ajout du superviseur.';
         console.error(error);
       }
     });
