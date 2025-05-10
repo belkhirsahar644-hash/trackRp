@@ -8,29 +8,20 @@ nzCancelText="Annuler">
 
   <ng-container *nzModalContent>
     <!--formulaire-->
-    <form nz-form [nzAutoTips]="autoTips" [formGroup]="conducteurForm" (ngSubmit)="submitForm()">
+    <form nz-form  [formGroup]="conducteurForm" (ngSubmit)="submitForm()">
+
+
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Username</nz-form-label>
         <nz-form-control [nzSpan]="12" nzValidatingTip="Validating...">
           <input nz-input formControlName="name" placeholder="Username" />
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSpan]="7" nzRequired>Mobile</nz-form-label>
-        <nz-form-control [nzSpan]="12">
-          <input nz-input formControlName="phone" placeholder="Mobile" />
-        </nz-form-control>
-      </nz-form-item>
+
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>E-mail</nz-form-label>
         <nz-form-control [nzSpan]="12" nzDisableAutoTips nzErrorTip="Please input your email!">
           <input nz-input formControlName="email" placeholder="email" type="email" autocomplete="off" />
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSpan]="7">Matricule de voiture</nz-form-label>
-        <nz-form-control [nzSpan]="12">
-          <input nz-input formControlName="carNumber" placeholder="Matricule du voiture" />
         </nz-form-control>
       </nz-form-item>
 
@@ -40,25 +31,29 @@ nzCancelText="Annuler">
           <input nz-input type="password" formControlName="password" placeholder="password"  autocomplete="new-password" />
         </nz-form-control>
       </nz-form-item>
-      <!--<nz-form-item>
-        <nz-form-label [nzSpan]="7" nzRequired>Confirm Password</nz-form-label>
-        <nz-form-control [nzSpan]="12" nzDisableAutoTips [nzErrorTip]="passwordErrorTpl">
-          <input nz-input type="password" formControlName="confirm" placeholder="confirm your password" />
-          <ng-template #passwordErrorTpl let-control>
-            @if (control.errors?.['required']) {
-              Please confirm your password!
-            }
-            @if (control.errors?.['confirm']) {
-              Password is inconsistent!
-            }
-          </ng-template>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Mobile</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="phone" placeholder="Mobile" />
         </nz-form-control>
-      </nz-form-item>-->
-      <!--<nz-form-item>
-        <nz-form-control [nzOffset]="7" [nzSpan]="12">
-          <button nz-button nzType="primary">Submit</button>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7">Matricule de voiture</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="carNumber" placeholder="Matricule du voiture" />
         </nz-form-control>
-      </nz-form-item>-->
+      </nz-form-item>
+
+
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Region</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzValidatingTip="Validating...">
+          <input nz-input formControlName="region" placeholder="Region" />
+        </nz-form-control>
+      </nz-form-item>
     </form>
   </ng-container>
 </nz-modal>

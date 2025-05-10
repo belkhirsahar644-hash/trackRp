@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MapHomeComponent } from './map-home/map-home.component';
-import { InfoComponent } from './info/info.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
@@ -24,10 +23,10 @@ import { ToastrModule } from 'ngx-toastr';
 @NgModule({
     declarations: [
         MapHomeComponent,
-        InfoComponent
+
     ],
     exports: [
-        MapHomeComponent, InfoComponent,
+        MapHomeComponent,
     ],
   imports: [
     BrowserAnimationsModule,

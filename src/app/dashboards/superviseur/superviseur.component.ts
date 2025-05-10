@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Superviseur, SuperviseurService } from '../../services/superviseur.service';
-
+import { SuperviseurService } from '../../services/superviseur.service';
+import { Superviseur} from '../../models/models.model';
+import { createDefaultSuperviseur } from '../../utils/create-default-superviseur';
 
 @Component({
   selector: 'app-superviseur',
@@ -8,27 +9,25 @@ import { Superviseur, SuperviseurService } from '../../services/superviseur.serv
   templateUrl: './superviseur.component.html',
   styleUrl: './superviseur.component.scss'
 })
-export class SuperviseurComponent implements OnInit{
-  selectedSup: Superviseur  = {
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    supervisor: true
-  }
+export class SuperviseurComponent implements OnInit {
+
+  selectedSup = createDefaultSuperviseur();
   superviseurs: Superviseur[] = [];
   showForm: boolean = false;
   searchValue = '';
   visible = false;
   listOfData = [...this.superviseurs];
+
   constructor(
     private superviseurService: SuperviseurService,
-  ){}
+  ) {}
 
 
   ngOnInit(): void {
     this.loadSuperviseur();
   }
+
+
 
   editSup(superviseurs: Superviseur) {
     this.selectedSup = {...superviseurs};
@@ -37,6 +36,7 @@ export class SuperviseurComponent implements OnInit{
     console.log("Formulaire affiché:", this.showForm);
 
   }
+
   loadSuperviseur(){
     this.superviseurService.getSuperviseur().subscribe(
       {
@@ -51,6 +51,7 @@ export class SuperviseurComponent implements OnInit{
     )
   }
 
+
   reset(): void {
     this.searchValue = '';
     this.search();
@@ -62,14 +63,7 @@ export class SuperviseurComponent implements OnInit{
   }
 
 toggleForm(): void {
-  this.selectedSup ={
-    id:0,
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    supervisor: true
-  }
+  this.selectedSup =createDefaultSuperviseur();
   this.showForm = !this.showForm;
 }
 

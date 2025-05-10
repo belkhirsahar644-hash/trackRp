@@ -84,12 +84,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   // Charger les données de trajet
   private loadRoute(): void {
     if (!this.deviceId) {
-      console.error("❌ Aucun ID de véhicule fourni.");
+      console.error(" Aucun ID de véhicule fourni.");
       return;
     }
 
     if (!this.map || !this.map.isStyleLoaded()) {
-      console.warn("⚠️ Carte non prête.");
+      console.warn(" Carte non prête.");
       return;
     }
 
@@ -104,11 +104,11 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     // Appel du service pour récupérer les données de trajet
     this.mapService.getRouteReport(this.deviceId, from, to).subscribe((positions: any[]) => {
       if (!positions || positions.length === 0) {
-        alert("🚫 Aucune position trouvée pour cette période.");
+        alert(" Aucune position trouvée pour cette période.");
         return;
       }
 
-      console.log("📍 Positions reçues ");
+      console.log(" Positions reçues ");
 
       // Marqueur personnalisé
       const carIcon = document.createElement('img');

@@ -6,13 +6,13 @@ updateEnrichedPos(event: EnrichedPosition[]) {
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MapHomeService } from '../../services/map-home.service';
 import { Device, VehiculeService } from '../../services/vehicule.service';
-import { forkJoin, of, Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Superviseur, SuperviseurService } from '../../services/superviseur.service';
-import { ConducteursService, Driver } from '../../services/conducteurs.service';
+import { SuperviseurService } from '../../services/superviseur.service';
+import { ConducteursService } from '../../services/conducteurs.service';
 import {EnrichedPosition} from '../../models/models.model';
-import {GeofenceComponent} from '../../drawers/geofence/geofence.component';
 import {AuthentificationsService} from '../../services/authentifications.service';
+import {Superviseur, Driver} from '../../models/models.model';
 
 @Component({
   selector: 'app-cards',

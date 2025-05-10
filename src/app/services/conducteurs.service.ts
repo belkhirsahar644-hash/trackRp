@@ -1,17 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
-export interface Driver {
-  "id"?: number;
-  name: string;
-  email: string;
-  phone: string;
-  password: string;
-  driver: true;
-  attributes:{
-    carNumber: string;
-  },
-}
+import {Driver} from '../models/models.model';
 
 @Injectable({
   providedIn: 'root'

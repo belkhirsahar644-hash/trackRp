@@ -35,7 +35,7 @@
   </div>
   </div>
 
-<div>
+<div  *ngIf="authentificationsService.getUser()?.administrator || authentificationsService.getUser()?.supervisor">
   <div class="row">
     <div class="col-3">
       Appareil sélectionné
@@ -48,14 +48,17 @@
       </nz-select>
     </div>
 
-    <div class="col-3" *ngIf="selectedDevice">
+    <div class="col-3" >
       <a (click)="markZone()">Marquer une zone geofence</a>
     </div>
-    <div class="col-3" *ngIf="selectedDevice">
+    <div class="col-3">
       <a (click)="confirmZone()">confirmer</a>
     </div>
   </div>
+</div>
 
+
+<div>
   <app-map-home
 
     [showMarker]="MarkerVisible"
@@ -67,10 +70,10 @@
     (IconClicked)="onMarkerClicked($event)">
   </app-map-home>
 
-  <app-geofence
+  <app-geofence *ngIf= " geofenceDrawerVisible && map"
 
     #geoComp
-    *ngIf="geofenceDrawerVisible && map"
+
     [map]="map"
     [visible]="geofenceDrawerVisible"
     [markerLngLat]="markerLngLat"

@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy, EventEmitter, Output } from '@angu
 import { FormGroup, FormControl, Validators, NonNullableFormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { AddsupervieurService } from '../../services/addsupervieur.service';
-import { Superviseur } from '../../services/superviseur.service';
+import { createDefaultSuperviseur } from '../../utils/create-default-superviseur';
 
 @Component({
   standalone: false,
@@ -11,15 +11,17 @@ import { Superviseur } from '../../services/superviseur.service';
   styleUrls: ['./add-superviseur.component.scss']
 })
 export class AddSuperviseurComponent implements OnInit, OnDestroy {
-  @Input() superviseur: Superviseur = { name: '', email: '', phone: '', password: '', supervisor: true };
+  @Input() superviseur= createDefaultSuperviseur();
+  @Input() isVisibleS = true;
   @Output() addEvent = new EventEmitter<void>();
   @Output() cancelEvent = new EventEmitter<void>();
-  @Input() isVisibleS = true;
+
   private destroy$ = new Subject<void>();
   superviseurForm: FormGroup;
 
   constructor(private addsupervieurService: AddsupervieurService, private fb: NonNullableFormBuilder) {
     this.superviseurForm = this.fb.group({
+      region: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl('', [Validators.required]),
@@ -32,6 +34,7 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
   ngOnInit(): void{
 
     this.superviseurForm.patchValue({
+      region: this.superviseur?.attributes.region,
       name: this.superviseur?.name || '',
       email: this.superviseur?.email || '',
       phone: this.superviseur?.phone || '',
@@ -56,22 +59,25 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
     this.cancelEvent.emit();
     console.log('Button cancel clicked!');
   }
+
+
   addSuperviseur(): void {
     console.log('ID du conducteur:', this.superviseur.id);
 
           const formData = this.superviseurForm.value;
-          const SuperviseurrData = {
+          const SuperviseurData = {
             id: this.superviseur.id,
             name: formData.name,
             email: formData.email,
             password: formData.password,
             phone: formData.phone,
-            supervisor: true as true
+            supervisor: true as true,
+            attributes:formData.attributes.region,
           };
 
-    console.log('Superviseur data to send:', SuperviseurrData);
+    console.log('Superviseur data to send:', SuperviseurData);
 
-    this.addsupervieurService.addSuperviseur(SuperviseurrData).subscribe({
+    this.addsupervieurService.addSuperviseur(SuperviseurData).subscribe({
       next: () => {
         this.addEvent.emit();
         },

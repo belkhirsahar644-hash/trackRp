@@ -12,6 +12,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { AddNotificationComponent } from './add-notification/add-notification.component';
 import {NzOptionComponent, NzSelectComponent} from "ng-zorro-antd/select";
 import { AddGeofenceComponent } from './add-geofence/add-geofence.component';
+import { AssocierConducteurComponent } from './associer-conducteur/associer-conducteur.component';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 
 @NgModule({
   declarations: [
@@ -20,9 +22,11 @@ import { AddGeofenceComponent } from './add-geofence/add-geofence.component';
     AddSuperviseurComponent,
     AddNotificationComponent,
     AddGeofenceComponent,
+    AssocierConducteurComponent,
 
   ],
     imports: [
+      NzRadioModule,
         CommonModule,
         ReactiveFormsModule,
         FormsModule,
@@ -39,7 +43,8 @@ import { AddGeofenceComponent } from './add-geofence/add-geofence.component';
         AddVehiculeComponent,
         AddSuperviseurComponent,
         AddNotificationComponent,
-      AddGeofenceComponent
+        AddGeofenceComponent,
+        AssocierConducteurComponent
     ],
 
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Driver } from './conducteurs.service';
+import {Driver} from '../models/models.model';
 import { environment } from '../../environments/environment.development';
 @Injectable({
   providedIn: 'root'

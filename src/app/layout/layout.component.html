@@ -12,18 +12,28 @@
         <nz-icon nzType="user"/>
         <a routerLink="/superviseur"> Gestion des superviseurs</a>
       </li>
-      <li nz-menu-item>
+
+      <li nz-menu-item  *ngIf="authentificationsService.getUser()?.administrator">
         <nz-icon nzType="user"/>
         <a routerLink="/conducteur"> Gestion des conducteurs</a>
       </li>
-      <li nz-menu-item>
+
+      <li nz-menu-item *ngIf="authentificationsService.getUser()?.administrator || authentificationsService.getUser()?.supervisor">
         <nz-icon nzType="user"/>
         <a routerLink="/vehicule">  Gestion des appareils </a>
       </li>
-      <li nz-menu-item>
+
+      <li nz-menu-item *ngIf="authentificationsService.getUser()?.administrator">
         <nz-icon nzType="user"/>
         <a routerLink="/notif">  Gestion des Notifications</a>
       </li>
+
+      <li nz-menu-item *ngIf="authentificationsService.getUser()?.driver"  >
+        <nz-icon nzType="user"/>
+        <a (click)="goToDriverHistory()" >  Historique</a>
+      </li>
+
+
 
     </ul>
   </nz-sider>

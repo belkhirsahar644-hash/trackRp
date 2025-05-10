@@ -7,6 +7,9 @@ import {Subscription} from 'rxjs';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import { Howl } from 'howler';
 import {AuthentificationsService} from '../services/authentifications.service';
+import {Device, VehiculeService} from '../services/vehicule.service';
+
+
 @Component({
   selector: 'app-layout',
   standalone: false,
@@ -21,12 +24,17 @@ export class LayoutComponent implements OnInit, OnDestroy {
   private positionsSubscription: Subscription | undefined;
   startDate: Date | null = null;
   endDate: Date | null = null;
+  notifications: any[]= [];
   private sound: Howl;
+
+
   constructor(
-    private layoutService: LayoutService, private router: Router,
+    private layoutService: LayoutService,
+    private router: Router,
     private mapHomeService: MapHomeService,
     private notification: NzNotificationService,
-    public authentificationsService: AuthentificationsService
+    public authentificationsService: AuthentificationsService,
+    private vehiculeService: VehiculeService,
   ) {
     this.sound = new Howl({
       src: ['assets/mixkit-correct-answer-tone-2870.wav'],
@@ -46,6 +54,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
         this.router.navigate(['/login']);
       }
     );
+
     this.mapHomeService.connectWebSocket();
     this.positionsSubscription = this.mapHomeService.socketEvents.subscribe(
       (notifications: any[]) => {
@@ -78,9 +87,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   // Méthode à appeler quand l'utilisateur change la date
-  notifications: any[]= [
 
-  ];
   onCustomDateSelected(): void {
     if (this.startDate && this.endDate) {
       const start = dayjs(this.startDate).startOf('day').toISOString(); // 00:00:00
@@ -108,6 +115,35 @@ export class LayoutComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.mapHomeService.disconnectWebSocket();
   }
+
+  goToDriverHistory() {
+    this.vehiculeService.getDevices().subscribe((devices: Device[]) => {
+
+      if (devices.length === 1) {
+        const deviceId = devices[0].id; // Le seul device du conducteur
+        this.router.navigate(['/map', deviceId]);
+      } else {
+        console.error('Aucun device trouvé .');
+      }
+    });
+  }
+  /*
+   goToDriverHistory() {
+    const user = this.authentificationsService.getUser();
+
+    this.vehiculeService.getDevices().subscribe((devices: Device[]) => {
+      const device = devices.find(d =>
+        d.attributes?.nameDriver === user?.username // ou autre propriété unique du conducteur
+      );
+
+      if (device) {
+        this.router.navigate(['/map', device.id]); // Navigue vers l’historique
+      } else {
+        console.error("Aucun véhicule associé à ce conducteur");
+      }
+    });
+  }
+   */
 
 
 }

@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Device, VehiculeService} from '../../services/vehicule.service';
+import {AuthentificationsService} from '../../services/authentifications.service';
 
 @Component({
   selector: 'app-vehicule',
@@ -24,8 +25,9 @@ export class VehiculeComponent implements OnInit{
   visible = false;
   listOfDisplayData = [...this.device];
 
-  constructor(
+   constructor(
     private vehiculeService: VehiculeService,
+    public authentificationsService : AuthentificationsService,
   ) {}
 
 
@@ -91,6 +93,15 @@ export class VehiculeComponent implements OnInit{
         }
       }
     )
+  }
+
+
+  associerForm: boolean = false;
+  deviceToAssociate!: Device;
+
+  associerConducteur(device: Device): void {
+    this.deviceToAssociate = { ...device };
+    this.associerForm = true;
   }
 
 

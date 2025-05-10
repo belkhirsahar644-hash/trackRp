@@ -1,5 +1,8 @@
 import { Component, OnInit  } from '@angular/core';
-import { ConducteursService, Driver } from '../../services/conducteurs.service';
+import { ConducteursService } from '../../services/conducteurs.service';
+import {AuthentificationsService} from '../../services/authentifications.service';
+import {Driver} from '../../models/models.model';
+import {createDefaultConducteur} from '../../utils/create-default-conducteur';
 
 @Component({
   selector: 'app-conducteurs',
@@ -9,24 +12,16 @@ import { ConducteursService, Driver } from '../../services/conducteurs.service';
 })
 export class ConducteursComponent implements OnInit{
 
-  selectedDriver: Driver =  {
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    driver: true,
-    attributes:{
-      carNumber: '',
-    },
-
-  }
+  selectedDriver =  createDefaultConducteur();
   driver: Driver[] = [];
   showForm: boolean = false;
   searchValue = '';
   visible = false;
   listOfDisplayData = [...this.driver];
 
-  constructor(private conducteursService: ConducteursService ) {}
+  constructor(private conducteursService: ConducteursService,
+              public authentificationsService: AuthentificationsService
+  ) {}
 
 
   ngOnInit(): void {
@@ -74,18 +69,10 @@ export class ConducteursComponent implements OnInit{
     this.visible = false;
     this.listOfDisplayData = this.driver.filter((item: Driver) => item.name.indexOf(this.searchValue) !== -1);
   }
+
   toggleForm(): void {
-    this.selectedDriver ={
-      name: '',
-      email: '',
-      phone: '',
-      password: '',
-      driver: true,
-      attributes:{
-        carNumber: '',
-      },
-    }
+    this.selectedDriver = createDefaultConducteur()
   this.showForm = !this.showForm;
-}
+  }
 
 }

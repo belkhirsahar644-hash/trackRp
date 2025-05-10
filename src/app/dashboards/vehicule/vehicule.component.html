@@ -1,22 +1,21 @@
 <div class=" d-flex justify-content-between">
   <h3>Liste des Appareils</h3>
-  <button nz-button nzType="dashed" (click)="toggleForm()">Ajouter</button>
+  <button nz-button nzType="dashed" (click)="toggleForm()"  *ngIf="authentificationsService.getUser()?.administrator">Ajouter</button>
   <br/><br/>
 </div>
 
 <nz-table #nzTable [nzData]="listOfDisplayData" nzTableLayout="fixed">
   <thead>
   <tr>
-    <th nzCustomFilter>
+    <th nzCustomFilter >
       Identifiant
       <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
         <nz-icon nzType="search"/>
       </nz-filter-trigger>
     </th>
-    <th>Modèle</th>
-    <th> Limite de vitesse (km/h)</th>
-    <th>Matricule du voiture</th>
-    <th> Nom du conducteur</th>
+    <th >Modèle</th>
+    <th s> Limite de vitesse (km/h)</th>
+
 
     <th nzCellControl="action">Action</th>
   </tr>
@@ -27,12 +26,26 @@
         <td>{{ data.uniqueId }}</td>
         <td>{{ data.name }}</td>
         <td>{{ data.attributes.speedLimit }}</td>
-        <td> {{data.attributes.carNumber}}</td>
-        <td> {{data.attributes.nameDriver}}</td>
+
         <td nzCellControl="action">
-          <button nz-button nzType="dashed" (click)="editVehicle(data)"> Modifier</button>
-          <nz-divider nzType="vertical"></nz-divider>
           <button
+            nz-button
+            nzType="dashed"
+            (click)="associerConducteur(data)"
+            *ngIf="authentificationsService.getUser()?.administrator"> Associer à un conducteur</button>
+          <nz-divider nzType="vertical"></nz-divider>
+
+          <button
+            *ngIf="authentificationsService.getUser()?.administrator"
+            nz-button
+            nzType="dashed"
+            (click)="editVehicle(data)"
+          > Modifier
+          </button>
+          <nz-divider nzType="vertical"></nz-divider>
+
+          <button
+            *ngIf="authentificationsService.getUser()?.administrator"
             nz-button
             nz-popconfirm
             nzPopconfirmTitle="Voulez vous vraiment supprimer ?"
@@ -41,6 +54,7 @@
             (nzOnConfirm)="deleteVehicle(data)">
             Supprimer
           </button>
+
           <nz-divider nzType="vertical"></nz-divider>
           <button nz-button nzType="dashed" [routerLink]="['/map', data.id]">Historique</button>
       </tr>
@@ -56,7 +70,23 @@
     </div>
   </div>
 </nz-dropdown-menu>
+
 <div *ngIf="showForm">
-  <app-add-vehicule [isVisibleV]="showForm" [device]="selectedDevice" (addEvent)="loadVehicule(); showForm=false "
-                    (cancelEvent)="showForm = false"></app-add-vehicule>
+  <app-add-vehicule
+    [isVisibleV]="showForm"
+    [device]="selectedDevice"
+    (addEvent)="loadVehicule(); showForm=false "
+    (cancelEvent)="showForm = false">
+
+  </app-add-vehicule>
 </div>
+
+<div *ngIf="associerForm">
+  <app-associer-conducteur
+    [deviceId]="deviceToAssociate.id"
+    (cancelEvent)="associerForm = false"
+  >
+  </app-associer-conducteur>
+</div>
+
+

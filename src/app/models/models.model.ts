@@ -1,11 +1,3 @@
-export interface Driver {
-  id?: number;       // ID optionnel, généré par le backend
-  name: string;      // Nom du conducteur
-  email: string;     // Email du conducteur
-  phone: string;     // Numéro de téléphone
-  vehicleId: number; // ID du véhicule attribué au conducteur
-}
-
 export class Position {
   id!: number;
   attributes!: PositionAttributes;
@@ -70,12 +62,40 @@ export class DeviceAttributes {
   nameDriver!: string;
   carNumber!: string;
   speedLimit!: string;
+  region!: string
 }
 
 export class EnrichedPosition {
   position!: Position;
   device!: Device;
 }
+
+export interface Driver {
+  id: number
+  attributes: {
+    carNumber: string
+    region: string
+  }
+  name: string
+  email: string
+  phone: string
+  driver: true
+  password: any
+}
+
+
+export interface Superviseur {
+  id: number
+  attributes: {
+    region: string
+  }
+  name: string
+  email: string
+  phone: string
+  supervisor: boolean
+  password: any
+}
+
 
 export interface User {
   id: number
@@ -111,3 +131,4 @@ export interface User {
 export interface UserAttributes {
   carNumber: string
 }
+
