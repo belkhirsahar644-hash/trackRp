@@ -21,7 +21,7 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
 
   constructor(private addsupervieurService: AddsupervieurService, private fb: NonNullableFormBuilder) {
     this.superviseurForm = this.fb.group({
-      region: new FormControl(''),
+      region: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl('', [Validators.required]),
@@ -34,7 +34,7 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
   ngOnInit(): void{
 
     this.superviseurForm.patchValue({
-      region: this.superviseur?.attributes.region,
+      region: this.superviseur?.attributes.region || '',
       name: this.superviseur?.name || '',
       email: this.superviseur?.email || '',
       phone: this.superviseur?.phone || '',
@@ -72,8 +72,8 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
             password: formData.password,
             phone: formData.phone,
             supervisor: true as true,
-            attributes:{
-              region:formData.attributes.region,
+            attributes: {
+              region:formData.region,
             }
           };
 

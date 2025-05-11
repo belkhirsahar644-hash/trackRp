@@ -15,6 +15,7 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
     name: '',
     uniqueId: '',
     attributes:{
+      region:'' ,
       nameDriver:'',
       carNumber:'' ,
       speedLimit:'',
@@ -35,6 +36,7 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
       carNumber: new FormControl(''),
       nameDriver: new FormControl(''),
       speedLimit: new FormControl(''),
+      region: new FormControl('', [Validators.required]),
 
     })
   }
@@ -45,6 +47,7 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
       nameDriver: this.device?.attributes?.nameDriver || '',
       carNumber: this.device?.attributes?.carNumber || '',
       speedLimit: this.device?.attributes?.speedLimit || '',
+      region: this.device?.attributes?.region || '',
     });
   }
   ngOnDestroy(): void {
@@ -74,6 +77,7 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
         nameDriver: formData.nameDriver,
         carNumber:formData.carNumber,
         speedLimit: formData.speedLimit,
+        region: formData.region,
 
       }
     };

@@ -14,6 +14,7 @@ export class VehiculeComponent implements OnInit{
     name: '',
     uniqueId: '',
     attributes:{
+      region: '' ,
       nameDriver:'',
       carNumber:'' ,
       speedLimit:'',
@@ -75,6 +76,7 @@ export class VehiculeComponent implements OnInit{
       name: '',
       uniqueId: '',
       attributes:{
+        region: '' ,
         nameDriver:'',
         carNumber:'' ,
         speedLimit:'',

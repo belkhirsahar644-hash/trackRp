@@ -35,6 +35,7 @@ export class CardsComponent implements OnInit, OnDestroy {
   mapEnrichedSelectedDevice!: EnrichedPosition;
   private positionSub: Subscription | undefined;
   markerLngLat: any;
+  Visible= false;
 
 
   constructor(
@@ -82,6 +83,7 @@ export class CardsComponent implements OnInit, OnDestroy {
   }
 
   onDeviceSelected(device: EnrichedPosition) {
+    this.Visible=true;
 
     this.selectedDevice = { ...device }; //stocke toute les attributs du device dans selectedDevice
   }
@@ -121,7 +123,10 @@ export class CardsComponent implements OnInit, OnDestroy {
     this.positionSub?.unsubscribe();
   }
  MarkerVisible= false;
+  confVisible= false;
   markZone() {
+    this.confVisible = true;
+
   this.MarkerVisible = !this.MarkerVisible;
   console.log("mark",this.MarkerVisible);
   }

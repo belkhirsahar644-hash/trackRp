@@ -9,7 +9,8 @@ export interface Device {
   uniqueId: string;
   attributes: {
     nameDriver: string;
-    carNumber:string ,
+    carNumber:string ;
+    region: string;
     speedLimit: string;
 
   };

@@ -8,24 +8,27 @@
   <thead>
     <tr>
       <th nzCustomFilter>
-        Region
+        Nom
         <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
           <nz-icon nzType="search" />
         </nz-filter-trigger>
       </th>
-      <th>Nom</th>
+
+
       <th>Email</th>
       <th>Téléphone</th>
+      <th >Region</th>
       <th nzCellControl="action">Action</th>
     </tr>
   </thead>
   <tbody>
     @for (data of nzTable.data; track data.id) {
       <tr>
-        <td>{{ data.attributes.region }}</td>
+
         <td>{{ data.name }}</td>
         <td>{{ data.email }}</td>
         <td>{{ data.phone }}</td>
+        <td>{{ data.attributes.region }}</td>
         <td nzCellControl="action">
           <button nz-button nzType="dashed" (click)="editSup(data)">   Modifier </button>
           <nz-divider nzType="vertical"></nz-divider>

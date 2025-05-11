@@ -8,14 +8,15 @@
   <thead>
     <tr>
       <th nzCustomFilter>
-        Region
+        Nom
         <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
           <nz-icon nzType="search" />
         </nz-filter-trigger>
       </th>
-      <th>Nom</th>
+
       <th>Email</th>
       <th>Téléphone</th>
+      <th>Region</th>
 
       <th nzCellControl="action">Action</th>
     </tr>
@@ -23,15 +24,23 @@
   <tbody>
     @for (data of nzTable.data; track data.id) {
       <tr>
-        <td> {{data.attributes.region}}</td>
         <td>{{ data.name }}</td>
         <td>{{ data.email }}</td>
         <td>{{ data.phone}}</td>
+        <td> {{data.attributes.region}}</td>
+
 
         <td nzCellControl="action">
-          <button nz-button  nzType="dashed"   *ngIf="authentificationsService.getUser()?.administrator" (click)="updateDriver(data)">   Modifier </button>
+          <button
+            *ngIf="authentificationsService.getUser()?.administrator" (click)="updateDriver(data)"
+            nz-button
+            nzType="dashed"
+          >   Modifier </button>
+
           <nz-divider nzType="vertical"></nz-divider>
-          <button  *ngIf="authentificationsService.getUser()?.administrator"
+
+          <button
+            *ngIf="authentificationsService.getUser()?.administrator"
             nz-button
             nz-popconfirm
             nzPopconfirmTitle="Voulez vous vraiment supprimer ?"
@@ -60,6 +69,5 @@
       [driver]= "selectedDriver"
       (addEvent)="loadDriver(); showForm=false"
       (cancelEvent)="showForm =false">
-
     </app-addconducteur>
 </div>

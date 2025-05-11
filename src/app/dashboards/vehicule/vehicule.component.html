@@ -14,7 +14,8 @@
       </nz-filter-trigger>
     </th>
     <th >Modèle</th>
-    <th s> Limite de vitesse (km/h)</th>
+    <th > Limite de vitesse (km/h)</th>
+    <th >Region</th>
 
 
     <th nzCellControl="action">Action</th>
@@ -26,6 +27,7 @@
         <td>{{ data.uniqueId }}</td>
         <td>{{ data.name }}</td>
         <td>{{ data.attributes.speedLimit }}</td>
+        <td> {{data.attributes.region}}</td>
 
         <td nzCellControl="action">
           <button
