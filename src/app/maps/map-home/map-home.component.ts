@@ -537,8 +537,8 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
   updateCurrentDeviceMarker(marker: Marker, position: any) {
     // Extraction sécurisée des coordonnées
-    const lat = Number(position?.latitude);
-    const lon = Number(position?.longitude);
+    const lat = Number(position?.position?.latitude);
+    const lon = Number(position?.position?.longitude);
 
     // Vérification que les coordonnées sont valides
     if (isNaN(lat) || isNaN(lon)) {

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import {LoginService} from '../services/login.service';
 import {AuthentificationsService} from '../services/authentifications.service';
-import { User } from '../models/models.model';  // Assurez-vous d'importer l'interface User
+import { User } from '../models/models.model';
+import {NzNotificationService} from 'ng-zorro-antd/notification';  // Assurez-vous d'importer l'interface User
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,9 @@ import { User } from '../models/models.model';  // Assurez-vous d'importer l'int
 export class LoginComponent {
   constructor(private loginService: LoginService,
               private router: Router,
-              private authentificationsService: AuthentificationsService) {}
+              private authentificationsService: AuthentificationsService,
+              private notification: NzNotificationService,
+  ) {}
   email: string= '';
   password: string= '';
   errorMessage: string= '';
@@ -41,7 +44,15 @@ export class LoginComponent {
         error: (err) => {
           console.error('Erreur:', err);
           this.errorMessage = 'Vérifier votre mot de passe ou Email';
-          alert('Erreur de connexion');
+
+          this.notification.create(
+            'error',
+            'Erreur de connexion',
+            'Vérifier votre mot de passe ou Email',
+            {nzDuration: 4000}
+
+
+          );
         },
       });
     }

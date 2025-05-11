@@ -21,7 +21,7 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
 
   constructor(private addsupervieurService: AddsupervieurService, private fb: NonNullableFormBuilder) {
     this.superviseurForm = this.fb.group({
-      region: new FormControl('', [Validators.required]),
+      region: new FormControl(''),
       name: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl('', [Validators.required]),
@@ -72,7 +72,9 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
             password: formData.password,
             phone: formData.phone,
             supervisor: true as true,
-            attributes:formData.attributes.region,
+            attributes:{
+              region:formData.attributes.region,
+            }
           };
 
     console.log('Superviseur data to send:', SuperviseurData);
@@ -86,16 +88,5 @@ export class AddSuperviseurComponent implements OnInit, OnDestroy {
       }
     });
   }
-  submitForm(): void {
-    if (this.superviseurForm.valid) {
-      console.log('Formulaire soumis:', this.superviseurForm.value);
-    } else {
-      Object.values(this.superviseurForm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-    }
-  }
+
 }

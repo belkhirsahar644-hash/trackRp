@@ -72,7 +72,6 @@ export class HistoriqueNotificationComponent implements OnInit{
        }
      )
    }
-
   }
 
   reset(): void {
@@ -90,8 +89,4 @@ export class HistoriqueNotificationComponent implements OnInit{
       this.router.navigate(['/map', this.deviceId]);
     }
   }
-
-
-
-
 }

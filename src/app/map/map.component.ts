@@ -5,6 +5,7 @@ import { LayoutService } from '../services/layout.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
 
 
 
@@ -29,7 +30,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     private mapService: MapService,
     private layoutService: LayoutService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private notification: NzNotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -104,7 +106,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     // Appel du service pour récupérer les données de trajet
     this.mapService.getRouteReport(this.deviceId, from, to).subscribe((positions: any[]) => {
       if (!positions || positions.length === 0) {
-        alert(" Aucune position trouvée pour cette période.");
+        this.notification.create(
+          'warning',
+          'Aucune position trouvée pour cette période.',
+          '',
+          {nzDuration: 4000}
+        );
         return;
       }
 

@@ -28,6 +28,7 @@ export class ConducteursComponent implements OnInit{
     this.loadDriver();
 
   }
+
   updateDriver(driver: Driver){
     this.selectedDriver= {...driver};
     console.log("Conducteur sélectionné:", this.selectedDriver);
@@ -72,7 +73,7 @@ export class ConducteursComponent implements OnInit{
 
   toggleForm(): void {
     this.selectedDriver = createDefaultConducteur()
-  this.showForm = !this.showForm;
+    this.showForm = !this.showForm;
   }
 
 }

@@ -53,6 +53,13 @@
     </div>
   </div>
 </nz-dropdown-menu>
+
 <div *ngIf="showForm">
-    <app-addconducteur [isVisibleC]="showForm" [driver]= "selectedDriver" (addEvent)="loadDriver(); showForm=false" (cancelEvent)="showForm =false"></app-addconducteur>
+    <app-addconducteur
+      [isVisibleC]="showForm"
+      [driver]= "selectedDriver"
+      (addEvent)="loadDriver(); showForm=false"
+      (cancelEvent)="showForm =false">
+
+    </app-addconducteur>
 </div>

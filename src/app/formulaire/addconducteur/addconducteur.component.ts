@@ -12,9 +12,9 @@ import {createDefaultConducteur} from '../../utils/create-default-conducteur';
 })
 export class AddconducteurComponent implements OnInit, OnDestroy {
   @Input() driver= createDefaultConducteur();
+  @Input() isVisibleC = true;
   @Output() cancelEvent = new EventEmitter<void>();
   @Output() addEvent = new EventEmitter<any>();
-  @Input() isVisibleC = true;
 
   message: string= '';
   private destroy$ = new Subject<void>();
@@ -30,6 +30,7 @@ export class AddconducteurComponent implements OnInit, OnDestroy {
       carNumber: new FormControl('',)
     })
   }
+
   ngOnInit(): void {
     this.conducteurForm.patchValue({
       region: this.driver?.attributes.region,
@@ -40,16 +41,15 @@ export class AddconducteurComponent implements OnInit, OnDestroy {
       carNumber: this.driver?.attributes.carNumber || '',
     });
   }
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+
+
 
   handleOk(): void {
     console.log('Button ok clicked!');
     this.addCon();
 
   }
+
   handleCancel(): void {
     console.log('Button cancel clicked!');
     this.cancelEvent.emit();
@@ -57,48 +57,40 @@ export class AddconducteurComponent implements OnInit, OnDestroy {
 
 
 
-        addCon(): void {
-          console.log('ID du conducteur:', this.driver.id);
 
-          const formData = this.conducteurForm.value;
-          const driverData = {
-            id: this.driver.id,
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-            phone: formData.phone,
-            driver: true as true,
-            attributes: {
-              carNumber:formData.carNumber,
-              region:formData.region,
+  addCon(): void {
+    console.log('ID du conducteur:', this.driver.id);
+    const formData = this.conducteurForm.value;
+    const driverData = {
+      id: this.driver.id,
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      phone: formData.phone,
+      driver: true as true,
+      attributes: {
+        carNumber:formData.carNumber,
+        region:formData.region,
+      }
+    };
+    console.log('Driver data to send:', driverData);
+    this.addconducteurService.addConducteur(driverData).subscribe({
 
-            }
-         };
+      next: () => {
+        this.addEvent.emit();
+        this.message = 'Conducteur ajouté avec succès!';
+        },
 
-          console.log('Driver data to send:', driverData);
+      error: (error) => {
+        this.message = 'Erreur lors de l\'ajout du conducteur.';
+        console.error(error);
+      }
+    });
+  }
 
-          this.addconducteurService.addConducteur(driverData).subscribe({
-            next: () => {
-              this.addEvent.emit();
-              this.message = 'Conducteur ajouté avec succès!';
-            },
-            error: (error) => {
-              this.message = 'Erreur lors de l\'ajout du conducteur.';
-              console.error(error);
-            }
-          });
-        }
 
-  submitForm(): void {
-    if (this.conducteurForm.valid) {
-      console.log('submit', this.conducteurForm.value);
-    } else {
-      Object.values(this.conducteurForm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-    }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
