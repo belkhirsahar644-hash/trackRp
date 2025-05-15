@@ -25,7 +25,7 @@
 
 
 
-<div style="margin-top: 11px"  *ngIf="authentificationsService.getUser()?.administrator || authentificationsService.getUser()?.supervisor">
+<div style="margin-top: 11px"  *ngIf="authentificationsService.getUser()?.administrator || authentificationsService.getUser()?.supervisor ">
 
   <div class="row">
     <div class="col-3">
@@ -50,7 +50,7 @@
 
     </div>
 
-    <div class="col-3" *ngIf="Visible" >
+    <div class="col-3" *ngIf="Visible && authentificationsService.getUser()?.administrator " >
       <a (click)="markZone()">Marquer une zone geofence</a>
     </div>
     <div class="col-3" *ngIf="confVisible">

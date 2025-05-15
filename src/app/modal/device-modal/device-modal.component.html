@@ -2,6 +2,8 @@
   [(nzVisible)]="Modalvisible"
   nzTitle="Informations de l'appareil"
   (nzOnCancel)="handleCancel()"
+nzFooter=" "
+
 >
   <ng-container *nzModalContent>
 
@@ -16,7 +18,8 @@
     <p *ngIf="position.attributes.distance">Distance totale : {{ position.attributes.distance }} m</p>
     <p *ngIf="position.attributes.batteryLevel"> Batterie : {{position.attributes.batteryLevel}} %</p>
 
-    <a  (click)="openGeofenceDrawer()">Zone geofence</a>
+    <a  (click)="openGeofenceDrawer()"   *ngIf="authentificationsService.getUser()?.administrator "
+    >Zone geofence</a>
   </ng-container>
 </nz-modal>
 

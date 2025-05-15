@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output,  OnChanges} from '@angular/core';
 import {Device, Position} from '../../models/models.model';
+import {AuthentificationsService} from '../../services/authentifications.service';
 
 @Component({
   selector: 'app-device-modal',
@@ -15,6 +16,7 @@ export class DeviceModalComponent  {
   @Input() position!: Position;
   @Output() openGeofence = new EventEmitter<number>();
 
+  constructor(public authentificationsService: AuthentificationsService) {}
   handleCancel() {
     this.close.emit();
   }

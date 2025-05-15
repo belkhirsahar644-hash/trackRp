@@ -24,6 +24,7 @@ export class AssocierConducteurComponent implements OnInit{
   constructor(private conducteursService: ConducteursService,
               private associerService: AssocierService,
               private superviseurService:SuperviseurService,
+
   ) {}
 
   get utilisateursAffiches(): Driver[] {
@@ -74,6 +75,7 @@ export class AssocierConducteurComponent implements OnInit{
         if (this.step === 1) {
           this.step = 2;
           this.selectedUserId = undefined; // Reset pour l'étape suivante
+
         } else {
           this.cancelEvent.emit();
           this.step = 1;

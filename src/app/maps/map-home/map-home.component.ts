@@ -425,7 +425,7 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   resetToInitialView(): void {
-    const initialState = { lng: 10.1729, lat: 36.8702, zoom: 5 };
+    const initialState = { lng: 9.5375, lat: 33.8869, zoom: 5.4 };
     this.map?.flyTo({
       center: [initialState.lng, initialState.lat],
       zoom: initialState.zoom,
@@ -469,7 +469,7 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
   mapLoaded = false;
 
   ngAfterViewInit() {
-    const initialState = { lng: 10.1729, lat: 36.8702, zoom: 5 };
+    const initialState = {lng: 9.5375, lat: 33.8869, zoom: 5.4 };
     if (this.mapContainer.nativeElement instanceof HTMLElement) {
     this.map = new MapLibreMap({
       container: this.mapContainer.nativeElement as HTMLDivElement,

@@ -6,7 +6,7 @@
 >
   <ng-container *nzDrawerContent>
     <div *ngIf="formDirectVisible">
-    {{markerLngLat|json}}
+
        <div *ngIf="FormVisible">
       <form nz-form [formGroup]="validateForm" (ngSubmit)="AjouterForm()">
         <nz-form-item>
@@ -27,9 +27,9 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="5" nzFor="radius" nzRequired>Rayon (en mètres)</nz-form-label>
+          <nz-form-label [nzSpan]="5" nzFor="radius" nzRequired>Rayon </nz-form-label>
           <nz-form-control [nzSpan]="12" nzErrorTip="Ajouter un rayon pour la zone">
-            <input id="radius" type="number" nz-input formControlName="radius" min="1" />
+            <input id="radius" type="number" nz-input formControlName="radius" min="1" nzPlaceHolder="en mètres" />
           </nz-form-control>
         </nz-form-item>
 

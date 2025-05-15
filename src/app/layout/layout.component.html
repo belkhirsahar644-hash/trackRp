@@ -1,35 +1,38 @@
 <nz-layout class="layout">
-  <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
-    <div class="logo"></div>
+  <nz-sider class="custom-sider" nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
+    <div class="logo">
+  <img src="assets/l.jpg" alt="Logo La Poste" class="poste-logo" />
+</div>
+
     <ul nz-menu nzTheme="dark" nzMode="inline">
 
       <li nz-menu-item>
-        <nz-icon nzType="user"/>
+        <nz-icon nzType="home" nzTheme="outline" />
         <a routerLink="/home"> Accueil</a>
 
       </li>
       <li nz-menu-item *ngIf="authentificationsService.getUser()?.administrator">
-        <nz-icon nzType="user"/>
+        <nz-icon nzType="team" nzTheme="outline" />
         <a routerLink="/superviseur"> Gestion des superviseurs</a>
       </li>
 
       <li nz-menu-item  *ngIf="authentificationsService.getUser()?.administrator">
-        <nz-icon nzType="user"/>
+        <nz-icon nzType="team" nzTheme="outline" />
         <a routerLink="/conducteur"> Gestion des conducteurs</a>
       </li>
 
       <li nz-menu-item *ngIf="authentificationsService.getUser()?.administrator || authentificationsService.getUser()?.supervisor">
-        <nz-icon nzType="user"/>
+        <nz-icon nzType="mobile" nzTheme="outline" />
         <a routerLink="/vehicule">  Gestion des appareils </a>
       </li>
 
       <li nz-menu-item *ngIf="authentificationsService.getUser()?.administrator">
-        <nz-icon nzType="user"/>
+        <nz-icon nzType="bell" />
         <a routerLink="/notif">  Gestion des Notifications</a>
       </li>
 
       <li nz-menu-item *ngIf="authentificationsService.getUser()?.driver"  >
-        <nz-icon nzType="user"/>
+        <nz-icon nzType="bar-chart" nzTheme="outline" />
         <a (click)="goToDriverHistory()" >  Historique</a>
       </li>
 

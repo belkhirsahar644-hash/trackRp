@@ -16,8 +16,6 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
     uniqueId: '',
     attributes:{
       region:'' ,
-      nameDriver:'',
-      carNumber:'' ,
       speedLimit:'',
     },
   };
@@ -33,8 +31,6 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
     this.VehiculForm = this.fb.group({
       uniqueId: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
-      carNumber: new FormControl(''),
-      nameDriver: new FormControl(''),
       speedLimit: new FormControl(''),
       region: new FormControl('', [Validators.required]),
 
@@ -44,8 +40,6 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
     this.VehiculForm.patchValue({
       uniqueId: this.device?.uniqueId || '',
       name: this.device?.name || '',
-      nameDriver: this.device?.attributes?.nameDriver || '',
-      carNumber: this.device?.attributes?.carNumber || '',
       speedLimit: this.device?.attributes?.speedLimit || '',
       region: this.device?.attributes?.region || '',
     });
@@ -74,8 +68,6 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
       uniqueId: formData.uniqueId,
       name: formData.name,
       attributes: {
-        nameDriver: formData.nameDriver,
-        carNumber:formData.carNumber,
         speedLimit: formData.speedLimit,
         region: formData.region,
 

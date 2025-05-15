@@ -57,19 +57,29 @@ nz-header {
 }
 
 
-
-
 .layout {
   min-height: 100vh;
 }
 
 .logo {
-  height: 32px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px;
+  margin-top: 17px;
+  width: 100%;
+  height: 90px;
+  padding: 0;
+
+  background:#fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #fff;
 }
 
-
+.logo img.poste-logo {
+  width: 75%;
+  height: auto;    
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
 nz-content {
   margin: 24px 16px 0;
 }
