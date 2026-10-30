@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Input, Output, EventEmitter, model } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AddvehiculeService } from '../../services/addvehicule.service';
 import { Device } from '../../services/vehicule.service';
 import {FormGroup,FormControl,NonNullableFormBuilder,Validators} from '@angular/forms';
@@ -32,7 +32,7 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
       uniqueId: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
       speedLimit: new FormControl(''),
-      region: new FormControl('', [Validators.required]),
+      region: new FormControl('', ),
 
     })
   }
@@ -70,7 +70,6 @@ export class AddVehiculeComponent implements OnInit, OnDestroy {
       attributes: {
         speedLimit: formData.speedLimit,
         region: formData.region,
-
       }
     };
 

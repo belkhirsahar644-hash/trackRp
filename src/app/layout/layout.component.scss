@@ -6,6 +6,7 @@ nz-header {
   height: 64px;
 }
 
+
 .header-container {
   width: 100%;
   display: flex;
@@ -76,7 +77,7 @@ nz-header {
 
 .logo img.poste-logo {
   width: 75%;
-  height: auto;    
+  height: auto;
   object-fit: contain;
   transition: transform 0.3s ease;
 }
@@ -86,7 +87,7 @@ nz-content {
 
 .inner-content {
   padding: 24px;
-  background: #fff;
+  //background: #fff;
   min-height: 360px;
 }
 

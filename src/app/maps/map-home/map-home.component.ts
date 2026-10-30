@@ -502,9 +502,9 @@ export class MapHomeComponent implements AfterViewInit, OnChanges, OnDestroy {
               }
 
               const carIcon = document.createElement('img');
-              carIcon.src = position.device.status==="offline"
-                ? 'https://cdn-icons-png.flaticon.com/512/4042/4042715.png'
-                : 'https://cdn-icons-png.flaticon.com/512/2813/2813010.png';
+              carIcon.src = position.device.status==="online"
+                ?  'https://cdn-icons-png.flaticon.com/512/2813/2813010.png'
+                : 'https://cdn-icons-png.flaticon.com/512/4042/4042715.png';
               carIcon.style.width = '50px';
               carIcon.style.height = '50px';
               carIcon.style.cursor = 'pointer';

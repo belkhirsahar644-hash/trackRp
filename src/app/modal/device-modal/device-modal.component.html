@@ -7,12 +7,9 @@ nzFooter=" "
 >
   <ng-container *nzModalContent>
 
-    <p >ID  : {{ position.deviceId }}</p>
     <p >Identifiant unique : {{ device.uniqueId }}</p>
     <p >Modèle : {{ device.name }}</p>
     <p >Status : {{ device.status }}</p>
-    <p *ngIf="device.attributes.nameDriver" >Conducteur : {{ device.attributes.nameDriver }}</p>
-    <p *ngIf="device.attributes.carNumber"> Matricule de voiture : {{device.attributes.carNumber}}</p>
     <p *ngIf="device.attributes.speedLimit"> Limite de vitesse : {{device.attributes.speedLimit}} km/h</p>
     <p *ngIf="position.speed">Vitesse : {{ position.speed }} km/h</p>
     <p *ngIf="position.attributes.distance">Distance totale : {{ position.attributes.distance }} m</p>
